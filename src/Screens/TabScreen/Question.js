@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, SafeAreaView, ImageBackground, Dimensions, Text, TouchableOpacity, FlatList,StatusBar } from 'react-native'
+import { View, Image, SafeAreaView, ImageBackground, Dimensions, Text, TouchableOpacity, FlatList } from 'react-native'
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 import styles from '../../style/styles'
@@ -11,18 +11,18 @@ class Question extends Component {
             data: [
                 {
                     id: 1,
-                    text: 'New Questionnaires',
+                    text: 'New Surveys',
                     navigation: 'Week1Questionaires'
                 },
                 {
                     id: 2,
-                    text: 'Pending Questionnaires',
+                    text: 'Pending Surveys',
                     count: '(2)',
                     navigation: 'Week1PendingQue'
                 },
                 {
                     id: 3,
-                    text: 'Completed Questionnaires',
+                    text: 'Completed Surveys',
                     count: '(2)',
                     navigation: 'CompletedQuestion'
                 },
@@ -32,9 +32,8 @@ class Question extends Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <StatusBar backgroundColor="#FFFFFF" barStyle="dark-content" />
                 <Header leftImagePress={() => { this.props.navigation.openDrawer() }} />
-                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Questionnaires</Text>
+                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Surveys</Text>
 
                 <View style={{ flex: 1 }}>
                     <FlatList

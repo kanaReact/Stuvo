@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Image, SafeAreaView, ImageBackground, Dimensions, Text, TouchableOpacity,StatusBar } from 'react-native'
+import { View, Image, SafeAreaView, ImageBackground, Dimensions, Text, TouchableOpacity,ScrollView } from 'react-native'
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 import styles from '../style/styles'
@@ -7,28 +7,39 @@ export default class DrawerContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            activeTab: true,
+            activeTab: false,
             activeTab1: true,
             activeTab2: true
         }
     }
     changeTab(i) {
         if (i == 1) {
-            this.props.navigation.navigate('TabMain')
+            this.props.navigation.navigate('Question')
             this.setState({ activeTab: false, activeTab1: true, activeTab2: true })
+            this.props.navigation.closeDrawer()
         } else if (i == 2) {
             this.props.navigation.navigate('Guidance')
             this.setState({ activeTab1: false, activeTab2: true, activeTab: true })
+            this.props.navigation.closeDrawer()
         } else if (i == 3) {
             this.props.navigation.navigate('TechnicalSupport')
             this.setState({ activeTab1: true, activeTab2: false, activeTab: true })
+            this.props.navigation.closeDrawer()
+        }
+        else if (i == 4) {
+            this.props.navigation.navigate('MyProfile')
+            this.props.navigation.closeDrawer()
+        }
+        else if (i == 5) {
+            this.props.navigation.navigate('About_Student_Voice')
+            this.props.navigation.closeDrawer()
         }
     }
     
     render() {
         return (
             <SafeAreaView style={[styles.container, { backgroundColor: '#000000', }]}>
-                <StatusBar backgroundColor="#FFF" barStyle="dark-content"  />
+                <ScrollView contentContainerStyle={{ paddingBottom:height/2, }}>
                 <View style={{ flexDirection: 'row', paddingTop: 50 }}>
                     <TouchableOpacity onPress={() => { this.props.navigation.closeDrawer() }}>
                         <View style={{ justifyContent: 'center', flex: 1, flexDirection: 'column', marginLeft: 26 }}>
@@ -41,10 +52,22 @@ export default class DrawerContainer extends Component {
                 </View>
 
                 <View style={{ paddingTop: 45 }}>
-                    <TouchableOpacity onPress={() => this.changeTab(1)}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate("Welcome")}>
                         <View style={this.state.activeTab == false ? styles.activeDrawer : styles.inActiveDrawer}>
                             <Image source={require('../images/sideMenu/home.png')} style={{ width: 18, height: 18, marginLeft: 14 }} />
                             <Text style={{ color: '#FFFFFF', fontSize: 14, fontFamily: 'Gotham-Medium', paddingLeft: 15 }}>Home</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.changeTab(4)}>
+                        <View style={this.state.activeTab == false ? styles.activeDrawer : styles.inActiveDrawer}>
+                            <Image source={require('../images/sideMenu/My-Profile.png')} style={{ width: 18, height: 18, marginLeft: 14 }} />
+                            <Text style={{ color: '#FFFFFF', fontSize: 14, fontFamily: 'Gotham-Medium', paddingLeft: 15 }}>My Profile</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.changeTab(5)}>
+                        <View style={this.state.activeTab == false ? styles.activeDrawer : styles.inActiveDrawer}>
+                            <Image source={require('../images/sideMenu/About-Student-Voice.png')} style={{ width: 18, height: 18, marginLeft: 14 }} />
+                            <Text style={{ color: '#FFFFFF', fontSize: 14, fontFamily: 'Gotham-Medium', paddingLeft: 15 }}>About Student Voice</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.changeTab(2)}>
@@ -60,14 +83,15 @@ export default class DrawerContainer extends Component {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginBottom: 50 }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('Splash')}>
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginBottom: 50,position: 'absolute',bottom:40 }}>
+                    <TouchableOpacity>
                         <View style={{ flexDirection: 'row' }}>
                             <Image source={require('../images/sideMenu/Log_out.png')} style={{ width: 18, height: 18, marginLeft: 26 }} />
                             <Text style={{ color: '#FFFFFF', fontSize: 14, fontFamily: 'Gotham-Medium', paddingLeft: 15 }}>Log Out</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
+                </ScrollView>
             </SafeAreaView>
         );
     }

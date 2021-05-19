@@ -15,7 +15,7 @@ class Splash extends Component {
                 </View>
                 <View style={{ alignItems: 'center' }}>
                     <View style={{ position: 'absolute', bottom: 50, width: '90%' }}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('Welcome')} activeOpacity={0.6}>
+                        <TouchableOpacity onPress={() => this.props.navigation.replace('Welcome')} activeOpacity={0.6}>
                             <View style={{ alignItems: 'center', height: 47, justifyContent: 'center', backgroundColor: '#FFFFFF', borderRadius: 50 }}>
                                 <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>Sign in</Text>
                             </View>

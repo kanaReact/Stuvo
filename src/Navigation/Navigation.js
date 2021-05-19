@@ -1,5 +1,5 @@
-import React,{ useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, Dimensions,ScrollView } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TouchableOpacity, Image, Dimensions, ScrollView } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -27,6 +27,8 @@ import FAQ from '../Screens/DrawerScreen/FAQ'
 import Help from '../Screens/DrawerScreen/Help&Support'
 import CompletedQuestion from '../Screens/TabScreen/CompletedQuestion'
 import CompletedList from '../Screens/TabScreen/CompletedList'
+import MyProfile from '../Screens/TabScreen/MyProfile'
+import About_Student_Voice from '../Screens/TabScreen/About_Student_Voice'
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -35,186 +37,184 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 function Navigation() {
-    return (
-        <NavigationContainer>
-            <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, animationEnabled: false }}>
-                <Stack.Screen name="Splash" component={Splash} />
-                <Stack.Screen name="Welcome" component={Welcome} />
-                <Stack.Screen name="Que1" component={Que1} />
-                <Stack.Screen name="Que2" component={Que2} />
-                <Stack.Screen name="Que25" component={Que25} />
-                <Stack.Screen name="CompletedList" component={CompletedList} />
-                <Stack.Screen name="QueSubmit" component={QueSubmit} />
-                <Stack.Screen name="ReviewAnswer" component={ReviewAnswer} />
-                <Stack.Screen name="tabs" component={tabs} />
-                
-            </Stack.Navigator>
-        </NavigationContainer>
-    );
+  return (
+    <NavigationContainer>
+      <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, animationEnabled: false }}>
+        <Stack.Screen name="Splash" component={Splash} />
+        <Stack.Screen name="Welcome" component={Welcome} />
+        <Stack.Screen name="Que1" component={Que1} />
+        <Stack.Screen name="Que2" component={Que2} />
+        <Stack.Screen name="Que25" component={Que25} />
+        <Stack.Screen name="CompletedList" component={CompletedList} />
+        <Stack.Screen name="QueSubmit" component={QueSubmit} />
+        <Stack.Screen name="ReviewAnswer" component={ReviewAnswer} />
+        <Stack.Screen name="tabs" component={tabs} />
+
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
 }
 function Navigator() {
-    return (
-        <Stack.Navigator screenOptions={{ headerShown: false,gestureEnabled: false, animationEnabled: false }} initialRouteName="Question" >
-            <Stack.Screen name="Question" component={Question} />
-            <Stack.Screen name="Week1Questionaires" component={Week1Questionaires} />
-            <Stack.Screen name="Week1PendingQue" component={Week1PendingQue} />
-            <Stack.Screen name="Notification" component={Notification} />
-            <Stack.Screen name="Guidance" component={Guidance} />
-            <Stack.Screen name="TechnicalSupport" component={TechnicalSupport} />
-            <Stack.Screen name="Result" component={Result} />
-            <Stack.Screen name="Week1Result" component={Week1Result} />
-            <Stack.Screen name="Week2Result" component={Week2Result} />
-            <Stack.Screen name="ResultProgress" component={ResultProgress} />
-            <Stack.Screen name="FAQ" component={FAQ} />
-            <Stack.Screen name="Help" component={Help} />
-            <Stack.Screen name="CompletedQuestion" component={CompletedQuestion} />
-        </Stack.Navigator>
-    );
+  return (
+    <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, animationEnabled: false }} initialRouteName="Question" >
+      <Stack.Screen name="Question" component={Question} />
+      <Stack.Screen name="Week1Questionaires" component={Week1Questionaires} />
+      <Stack.Screen name="Week1PendingQue" component={Week1PendingQue} />
+      <Stack.Screen name="Notification" component={Notification} />
+      <Stack.Screen name="Guidance" component={Guidance} />
+      <Stack.Screen name="TechnicalSupport" component={TechnicalSupport} />
+      <Stack.Screen name="Result" component={Result} />
+      <Stack.Screen name="Week1Result" component={Week1Result} />
+      <Stack.Screen name="Week2Result" component={Week2Result} />
+      <Stack.Screen name="ResultProgress" component={ResultProgress} />
+      <Stack.Screen name="FAQ" component={FAQ} />
+      <Stack.Screen name="Help" component={Help} />
+      <Stack.Screen name="CompletedQuestion" component={CompletedQuestion} />
+      <Stack.Screen name="MyProfile" component={MyProfile} />
+      <Stack.Screen name="About_Student_Voice" component={About_Student_Voice} />
+    </Stack.Navigator>
+  );
 }
 function drawer() {
-    return (
-        <Drawer.Navigator  drawerContent={props => <DrawerContainer {...props} />} drawerStyle={{ width: '95%' }} statusBarAnimation="none">
-            <Drawer.Screen name="drawer" component={Navigator} />
-        </Drawer.Navigator>
-    );
+  return (
+    <Drawer.Navigator drawerContent={props => <DrawerContainer {...props} />} drawerStyle={{ width: '95%' }}>
+      <Drawer.Screen name="drawer" component={Navigator} />
+    </Drawer.Navigator>
+  );
 }
 
-function tabs()
-{
-    return(
-        <TabBottom.Navigator tabBar={props => <MyTabBar {...props} />} tabBarOptions={{
-            backgroundColor:'#00AFF0'
-          }}>
-            <TabBottom.Screen name="main" component={drawer} />
-          </TabBottom.Navigator>
-    );
+function tabs() {
+  return (
+    <TabBottom.Navigator tabBar={props => <MyTabBar {...props} />} tabBarOptions={{
+      backgroundColor: '#00AFF0'
+    }}>
+      <TabBottom.Screen name="main" component={drawer} />
+    </TabBottom.Navigator>
+  );
 }
 
 function MyTabBar({ state, descriptors, navigation }) {
-    const focusedOptions = descriptors[state.routes[state.index].key].options;
-    const [activeIndex, setactiveIndex] = useState(0);
-  
-  
-    if (focusedOptions.tabBarVisible === false) {
-      return null;
-    }
-  
-    return (
-      <View style={{ flexDirection: 'row' }}>
-        {state.routes.map((route, index) => {
-          console.log('Navigation::', route)
-          const { options } = descriptors[route.key];
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-                ? options.title
-                : route.name;
-  
-          const isFocused = state.index === index;
-  
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
-  
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
-            }
-          };
-  
-          const onLongPress = () => {
-            navigation.emit({
-              type: 'tabLongPress',
-              target: route.key,
-            });
-          };
-          if (label == "main") {
-            return (
-              
-              <View style={{
-                flexDirection: 'row', alignItems: 'center', height: 69, backgroundColor: '#00AFF0', width: width, justifyContent: 'space-evenly', paddingTop: 8,
-              }}>
-                <TouchableOpacity
-                  accessibilityRole="button"
-                  accessibilityStates={isFocused ? ['selected'] : []}
-                  accessibilityLabel={options.tabBarAccessibilityLabel}
-                  testID={options.tabBarTestID}
-                  onPress={() => { navigation.navigate('Question'); setactiveIndex(0) }}
-                  style={{ height: 68, width: width / 5, alignItems: "center", justifyContent: "center", }}>
-                  {
-                    activeIndex == 0 ?
-                      <View>
-                        <Image source={require('../images/Tabbar/Questionaires.png')} style={{ width: 22, height: 24, resizeMode: "contain", tintColor: '#FFFFFF',alignSelf: 'center', }} />
-                        <Text style={{ color: "#FFFFFF", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Questionnaires</Text>
-                      </View>
-                      :
-                      <View>
-                        <Image source={require('../images/Tabbar/Questionaires.png')} style={{ width: 22, height: 24, resizeMode: "contain", tintColor: "rgba(255,255,255,0.75)",alignSelf:'center' }} />
-                        <Text style={{ color: "rgba(255,255,255,0.75)", fontSize: 8, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Questionnaires</Text>
-                      </View>
-                  }
-  
-  
-                </TouchableOpacity>
-  
-                <TouchableOpacity
-                  accessibilityRole="button"
-                  accessibilityStates={isFocused ? ['selected'] : []}
-                  accessibilityLabel={options.tabBarAccessibilityLabel}
-                  testID={options.tabBarTestID}
-                  onPress={() => { navigation.navigate('Result'); setactiveIndex(1) }}
-                  style={{ height: 68, width: width / 5, alignItems: "center", justifyContent: "center" }}>
-                  {
-                    activeIndex == 1 ?
-                    <View>
-                    <Image source={require('../images/Tabbar/Results.png')} style={{ width: 25, height: 24, resizeMode: "contain", tintColor: '#FFFFFF',alignSelf: 'center', }} />
-                    <Text style={{ color: "#FFFFFF", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Results</Text>
-                  </View>
-                  :
-                  <View>
-                    <Image source={require('../images/Tabbar/Results.png')} style={{ width: 25, height: 24, resizeMode: "contain", tintColor: "rgba(255,255,255,0.75)",alignSelf:'center' }} />
-                    <Text style={{ color: "rgba(255,255,255,0.75)", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Results</Text>
-                  </View>
-                  }
-  
-                </TouchableOpacity>
-  
-                <TouchableOpacity
-                  accessibilityRole="button"
-                  accessibilityStates={isFocused ? ['selected'] : []}
-                  accessibilityLabel={options.tabBarAccessibilityLabel}
-                  testID={options.tabBarTestID}
-                  onPress={() => { navigation.navigate('Notification'); setactiveIndex(2) }}
-                  style={{ height: 68, width: width / 5, alignItems: "center", justifyContent: "center" }}>
-                  {
-                    activeIndex == 2 ?
-                    <View>
-                    <Image source={require('../images/Tabbar/notifications.png')} style={{ width: 22, height: 20, resizeMode: "contain", tintColor: '#FFFFFF',alignSelf:"center" }} />
-                    <Text style={{ color: "#FFFFFF", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Notifications</Text>
-                  </View>
-                  :
-                  <View>
-                    <Image source={require('../images/Tabbar/notifications.png')} style={{ width: 22, height: 20, resizeMode: "contain", tintColor: "rgba(255,255,255,0.75)",alignSelf:"center" }} />
-                    <Text style={{ color: "rgba(255,255,255,0.75)", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Notifications</Text>
-                  </View>
-                  }
-  
-  
-                </TouchableOpacity>
-  
+  const focusedOptions = descriptors[state.routes[state.index].key].options;
+  const [activeIndex, setactiveIndex] = useState(0);
 
-  
-              </View>
-              
-            );
-          }
-        })}
-      </View>
-    );
+
+  if (focusedOptions.tabBarVisible === false) {
+    return null;
   }
+
+  return (
+    <View style={{ flexDirection: 'row' }}>
+      {state.routes.map((route, index) => {
+        console.log('Navigation::', route)
+        const { options } = descriptors[route.key];
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+              ? options.title
+              : route.name;
+
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name);
+          }
+        };
+
+        const onLongPress = () => {
+          navigation.emit({
+            type: 'tabLongPress',
+            target: route.key,
+          });
+        };
+        if (label == "main") {
+          return (
+
+            <View style={{
+              flexDirection: 'row', alignItems: 'center', height: 69, backgroundColor: '#00AFF0', width: width, justifyContent: 'center', paddingTop: 8,
+            }}>
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityStates={isFocused ? ['selected'] : []}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
+                testID={options.tabBarTestID}
+                onPress={() => { navigation.navigate('Question'); setactiveIndex(0) }}
+                style={{ height: 68, width: width / 3.3, alignItems: "center", justifyContent: "center" }}>
+                {
+                  activeIndex == 0 ?
+                    <View>
+                      <Image source={require('../images/Tabbar/Questionaires.png')} style={{ width: 22, height: 24, resizeMode: "contain", tintColor: '#FFFFFF', alignSelf: 'center', }} />
+                      <Text style={{ color: "#FFFFFF", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Surveys</Text>
+                    </View>
+                    :
+                    <View>
+                      <Image source={require('../images/Tabbar/Questionaires.png')} style={{ width: 22, height: 24, resizeMode: "contain", tintColor: "rgba(255,255,255,0.75)", alignSelf: 'center' }} />
+                      <Text style={{ color: "rgba(255,255,255,0.75)", fontSize: 8, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Surveys</Text>
+                    </View>
+                }
+
+
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityStates={isFocused ? ['selected'] : []}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
+                testID={options.tabBarTestID}
+                onPress={() => { navigation.navigate('Result'); setactiveIndex(1) }}
+                style={{ height: 68, width: width / 3.3, alignItems: "center", justifyContent: "center" }}>
+                {
+                  activeIndex == 1 ?
+                    <View>
+                      <Image source={require('../images/Tabbar/Results.png')} style={{ width: 25, height: 24, resizeMode: "contain", tintColor: '#FFFFFF', alignSelf: 'center', }} />
+                      <Text style={{ color: "#FFFFFF", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Results</Text>
+                    </View>
+                    :
+                    <View>
+                      <Image source={require('../images/Tabbar/Results.png')} style={{ width: 25, height: 24, resizeMode: "contain", tintColor: "rgba(255,255,255,0.75)", alignSelf: 'center' }} />
+                      <Text style={{ color: "rgba(255,255,255,0.75)", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Results</Text>
+                    </View>
+                }
+
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                accessibilityRole="button"
+                accessibilityStates={isFocused ? ['selected'] : []}
+                accessibilityLabel={options.tabBarAccessibilityLabel}
+                testID={options.tabBarTestID}
+                onPress={() => { navigation.navigate('Notification'); setactiveIndex(2) }}
+                style={{ height: 68, width: width / 3.3, alignItems: "center", justifyContent: "center" }}>
+                {
+                  activeIndex == 2 ?
+                    <View>
+                      <Image source={require('../images/Tabbar/notifications.png')} style={{ width: 25, height: 24, resizeMode: "contain", tintColor: '#FFFFFF', alignSelf: "center" }} />
+                      <Text style={{ color: "#FFFFFF", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Notifications</Text>
+                    </View>
+                    :
+                    <View>
+                      <Image source={require('../images/Tabbar/notifications.png')} style={{ width: 25, height: 24, resizeMode: "contain", tintColor: "rgba(255,255,255,0.75)", alignSelf: "center" }} />
+                      <Text style={{ color: "rgba(255,255,255,0.75)", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Notifications</Text>
+                    </View>
+                }
+
+
+              </TouchableOpacity>
+            </View>
+
+          );
+        }
+      })}
+    </View>
+  );
+}
 
 
 export default Navigation

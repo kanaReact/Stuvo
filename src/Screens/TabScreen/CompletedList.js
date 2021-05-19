@@ -13,13 +13,13 @@ class CompletedList extends Component {
                     id: 1,
                     question_no: 'Question 1',
                     question: 'Lorem ipsum dolor sit amet, consectetur adipis cing elit, sed do eiusmod?',
-                    answer: 'a.  Yes'
+                    answer: 'a.   Yes'
                 },
                 {
                     id: 2,
                     question_no: 'Question 2',
                     question: 'Lorem ipsum dolor sit amet, consectetur adipis cing elit, sed do eiusmod?',
-                    answer: 'a.  Yes'
+                    answer: 'a.   Yes'
                 },
                 {
                     id: 3,
@@ -31,20 +31,20 @@ class CompletedList extends Component {
                     id: 4,
                     question_no: 'Question 4',
                     question: 'Lorem ipsum dolor sit amet, consectetur adipis cing elit, sed do eiusmod?',
-                    answer: 'b.  No',
+                    answer: 'b.   No',
                 },
                 {
                     id: 5,
                     question_no: 'Question 5',
                     question: 'Lorem ipsum dolor sit amet, consectetur adipis cing elit, sed do eiusmod?',
-                    answer: 'a.  Yes'
+                    answer: 'a.   Yes'
                 },
             ]
         }
     }
     render() {
         return (
-            <SafeAreaView style={[styles.container]}>
+            <SafeAreaView style={[styles.container,{ backgroundColor:'white' }]}>
                 <Header lefttxt={{ color: '#919191' }} btn={true} leftPress={() => this.props.navigation.goBack()} />
                 <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Anti-bullying</Text>
                 <FlatList
@@ -56,7 +56,7 @@ class CompletedList extends Component {
                             </View>
 
                             <View>
-                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 13, paddingLeft: 13, paddingTop: 16,paddingHorizontal:10,lineHeight:21 }}>{item.question}</Text>
+                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 13, paddingLeft: 13, paddingTop: 16,paddingHorizontal:10 }}>{item.question}</Text>
                             </View>
 
                             <View>

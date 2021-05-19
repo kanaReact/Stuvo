@@ -44,7 +44,7 @@ class Week1Questionaires extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <Header lefttxt={{ color: '#919191' }} btn={true} leftPress={() => this.props.navigation.goBack()} />
-                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Questionnaires</Text>
+                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Surveys</Text>
 
                 <View>
                     <FlatList
@@ -90,7 +90,7 @@ class Week1Questionaires extends Component {
 
                                 <Text style={{ fontSize: 20, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>Before you proceed</Text>
 
-                                <Text style={{ fontSize: 14, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#272727',  textAlign: 'center',lineHeight:21 }}>This new set of questions are strictly{'\n'}time-based. You only have 7 days to{'\n'}submit your answers.</Text>
+                                <Text style={{ fontSize: 14, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#272727',  textAlign: 'center',lineHeight:22 }}>This new set of questions are strictly{'\n'}time-based. You only have 7 days to{'\n'}submit your answers.</Text>
 
                                 <TouchableOpacity onPress={() => { this.props.navigation.navigate('Que1');this.setState({ isVisible:false }) }} activeOpacity={0.6}>
                                     <View style={{ backgroundColor: '#00AFF0', marginTop: 30, height: 47, justifyContent: 'center', paddingHorizontal: 40, borderRadius: 50, marginBottom: 33 }}>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { SafeAreaView, View, Text, Image, TouchableOpacity, TextInput } from 'react-native'
+import { SafeAreaView, View, Text, Image, TouchableOpacity, TextInput,ScrollView } from 'react-native'
 import styles from '../../style/styles'
 import Header from '../../Components/Header'
 class Help extends Component {
@@ -35,6 +35,7 @@ class Help extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <Header btn={true} leftPress={() => this.props.navigation.goBack()} />
+                <ScrollView>
                 <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16 }}>Technical Help & Support</Text>
 
                 <Text style={{ marginTop: 22, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', marginLeft: 16, lineHeight: 20 }}>Lorem ipsum dolor sit amet, consectetur adipis cing elit, sed do eiusmod</Text>
@@ -62,19 +63,20 @@ class Help extends Component {
                         style={{ paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14 }}
                         placeholder="Write something..."
                         multiline={true}
-                        returnKeyLabel="Done"
+                        blurOnSubmit={true}
                         returnKeyType="done"
                         
                     />
                 </View>
 
-                <View style={{ flex: 1, justifyContent: 'flex-end', marginHorizontal: 27 }}>
+                <View style={{ justifyContent: 'flex-end', marginHorizontal: 27 }}>
                     <TouchableOpacity onPress={() => { }} activeOpacity={0.6}>
-                        <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50 }}>
+                        <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50,marginTop:50 }}>
                             <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Submit</Text>
                         </View>
                     </TouchableOpacity>
                 </View>
+                </ScrollView>
             </SafeAreaView>
         );
     }

@@ -11,13 +11,15 @@ class Week1PendingQue extends Component {
                     id: 1,
                     text: 'Anti-bullying',
                     timeToComplete:'24 hours left to complete',
-                    color:'#E10000'
+                    color:'#E10000',
+                    navigation:'Que25'
                 },
                 {
                     id: 2,
                     text: 'University Life',
                     timeToComplete:'24 hours left to complete',
-                    color:'#E10000'
+                    color:'#E10000',
+                    navigation:''
                 }
             ]
         }
@@ -27,14 +29,14 @@ class Week1PendingQue extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <Header lefttxt={{ color: '#919191' }} btn={true} leftPress={() => this.props.navigation.goBack()} />
-                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Pending Questionnaires</Text>
+                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Pending Surveys</Text>
 
                 <View style={{ flex: 1 }}>
                     <FlatList
                         data={this.state.data}
                         renderItem={({ item, index }) => (
                             <View style={{ borderBottomWidth: 1, borderBottomColor: '#E0E0E066' }}>
-                                <TouchableOpacity activeOpacity={0.6} onPress={() => { }}>
+                                <TouchableOpacity activeOpacity={0.6} onPress={() => { this.props.navigation.navigate(item.navigation) }}>
                                 <View style={{ flexDirection: 'row', paddingVertical: 10, marginLeft: 16, marginRight: 24, justifyContent: 'center', alignItems: 'center' }}>
                                         <View style={{ flexDirection:'column',width:"85%" }}>
                                             <Text style={{  fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium' }}>{item.text}</Text>

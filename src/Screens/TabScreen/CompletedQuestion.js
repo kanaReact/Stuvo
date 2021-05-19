@@ -29,7 +29,7 @@ class CompletedQuestion extends Component {
         return (
             <SafeAreaView style={styles.container}>
                 <Header lefttxt={{ color: '#919191' }} btn={true} leftPress={() => this.props.navigation.goBack()} />
-                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Completed Questionnaires</Text>
+                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Completed Surveys</Text>
 
                 <View style={{ flex: 1 }}>
                     <FlatList

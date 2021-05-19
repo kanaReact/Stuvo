@@ -53,7 +53,7 @@ class Tabmain extends Component {
                             
                         </View>
                         <View style={{ flex: 4, alignItems: 'center', justifyContent: 'flex-start', marginTop: 7 }}>
-                            <Text style={{ color: '#FFFFFFBF', fontSize: 10, fontFamily: 'Gotham-Medium' }}>Questionnaires</Text>
+                            <Text style={{ color: '#FFFFFFBF', fontSize: 10, fontFamily: 'Gotham-Medium' }}>Surveys</Text>
                         </View>
                     </View>
                     </TouchableOpacity>

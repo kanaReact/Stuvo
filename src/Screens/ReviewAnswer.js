@@ -119,7 +119,7 @@ class ReviewAnswer extends Component {
 
                                 <Text style={{ fontSize: 14, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#272727' }}>Your answers have been submitted.</Text>
 
-                                <TouchableOpacity onPress={() => { this.setState({ isVisible:false },()=>{this.props.navigation.navigate('Question')}) }} activeOpacity={0.6}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('Question')} activeOpacity={0.6}>
                                     <View style={{ backgroundColor: '#00AFF0', marginTop: 25, height: 47, justifyContent: 'center', paddingHorizontal: 50, borderRadius: 50, marginBottom: 28 }}>
                                         <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Close</Text>
                                     </View>

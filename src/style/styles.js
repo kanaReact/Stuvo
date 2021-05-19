@@ -80,7 +80,7 @@ export default StyleSheet.create({
     activeDrawer: {
         flexDirection: 'row',
         marginTop: 35,
-        backgroundColor: '#00AFF0',
+        backgroundColor: '#000',//#00AFF0
         height: 40,
         width: '65%',
         marginLeft: 12,
@@ -96,4 +96,25 @@ export default StyleSheet.create({
         marginLeft: 12,
         backgroundColor: '#000000'
     },
+    myProfileView:{
+        flexDirection:'row',
+        height:60,
+        justifyContent:'space-between',
+        alignItems:"center",
+        borderBottomWidth:1,
+        borderColor:'#E0E0E066',
+        marginHorizontal:16
+    },
+    myProfileTxt:{
+        color:'#919191',
+        fontSize:13,
+        fontFamily:'Poppins-Regular'
+    },
+    myProfileText:{
+        color:'#222222',
+        fontSize:13,
+        fontFamily:'Poppins-Regular'
+    },
+    
+
 })

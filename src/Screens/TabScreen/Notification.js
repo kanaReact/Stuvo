@@ -10,19 +10,19 @@ class Notification extends Component {
                 {
                     id: 1,
                     img: require('../../images/Notification_list_icon.png'),
-                    text: 'You have 24h left to complete your answer.',
+                    text: 'You have 24h left to complete\nyour answer.',
                     time: 'now'
                 },
                 {
                     id: 2,
                     img: require('../../images/Notification_list_icon.png'),
-                    text: 'You have 3 days left to complete your answer.',
+                    text: 'You have 3 days left to complete\nyour answer.',
                     time: '16:00'
                 },
                 {
                     id: 3,
                     img: require('../../images/Notification_list_icon.png'),
-                    text: 'You have 5 days left to complete your answer.',
+                    text: 'You have 5 days left to complete\nyour answer.',
                     time: 'Mon'
                 },
 
@@ -40,7 +40,7 @@ class Notification extends Component {
                     </View>
 
                     <View style={{ flex: 1, marginHorizontal: 20, justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium', }}>{text}</Text>
+                        <Text style={{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium',lineHeight:16 }}>{text}</Text>
                         <TouchableOpacity style={{ alignSelf: 'flex-start' }} activeOpacity={0.6}>
                             <Text style={{ fontSize: 10, color: '#919191', fontFamily: 'Gotham-Medium', marginTop: 5 }}>View now</Text>
                         </TouchableOpacity>

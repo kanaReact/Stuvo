@@ -53,31 +53,31 @@ export default class DrawerContainer extends Component {
 
                 <View style={{ paddingTop: 45 }}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate("Welcome")}>
-                        <View style={this.state.activeTab == false ? styles.activeDrawer : styles.inActiveDrawer}>
+                        <View style={styles.activeDrawer}>
                             <Image source={require('../images/sideMenu/home.png')} style={{ width: 18, height: 18, marginLeft: 14 }} />
                             <Text style={{ color: '#FFFFFF', fontSize: 14, fontFamily: 'Gotham-Medium', paddingLeft: 15 }}>Home</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.changeTab(4)}>
-                        <View style={this.state.activeTab == false ? styles.activeDrawer : styles.inActiveDrawer}>
+                        <View style={styles.activeDrawer}>
                             <Image source={require('../images/sideMenu/My-Profile.png')} style={{ width: 18, height: 18, marginLeft: 14 }} />
                             <Text style={{ color: '#FFFFFF', fontSize: 14, fontFamily: 'Gotham-Medium', paddingLeft: 15 }}>My Profile</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.changeTab(5)}>
-                        <View style={this.state.activeTab == false ? styles.activeDrawer : styles.inActiveDrawer}>
+                        <View style={styles.activeDrawer}>
                             <Image source={require('../images/sideMenu/About-Student-Voice.png')} style={{ width: 18, height: 18, marginLeft: 14 }} />
                             <Text style={{ color: '#FFFFFF', fontSize: 14, fontFamily: 'Gotham-Medium', paddingLeft: 15 }}>About Student Voice</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.changeTab(2)}>
-                        <View style={this.state.activeTab1 == false ? styles.activeDrawer : styles.inActiveDrawer}>
+                        <View style={styles.activeDrawer}>
                             <Image source={require('../images/sideMenu/Guidance.png')} style={{ width: 18, height: 18, marginLeft: 14 }} />
                             <Text style={{ color: '#FFFFFF', fontSize: 14, fontFamily: 'Gotham-Medium', paddingLeft: 15 }}>Guidance</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={() => this.changeTab(3)}>
-                        <View style={this.state.activeTab2 == false ? styles.activeDrawer : styles.inActiveDrawer}>
+                        <View style={styles.activeDrawer}>
                             <Image source={require('../images/sideMenu/Technical_Support.png')} style={{ width: 18, height: 18, marginLeft: 14 }} />
                             <Text style={{ color: '#FFFFFF', fontSize: 14, fontFamily: 'Gotham-Medium', paddingLeft: 15 }}>Technical Support</Text>
                         </View>

@@ -82,7 +82,7 @@ export default StyleSheet.create({
         marginTop: 35,
         backgroundColor: '#000',//#00AFF0
         height: 40,
-        width: '65%',
+        //width: '65%',
         marginLeft: 12,
         alignItems: 'center',
         borderRadius: 12
@@ -98,12 +98,12 @@ export default StyleSheet.create({
     },
     myProfileView:{
         flexDirection:'row',
-        height:60,
+        height:50,
         justifyContent:'space-between',
         alignItems:"center",
         borderBottomWidth:1,
         borderColor:'#E0E0E066',
-        marginHorizontal:16
+        marginHorizontal:16,
     },
     myProfileTxt:{
         color:'#919191',

@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, SafeAreaView, TouchableOpacity, Modal } from 'react-native'
 import styles from '../../../style/styles'
 import Header from '../../../Components/Header'
+import ConfettiCannon from 'react-native-confetti-cannon';
 export class QueSubmit extends Component {
     constructor(props) {
         super(props);
@@ -12,13 +13,14 @@ export class QueSubmit extends Component {
 
     toggleModal = () => {
         this.setState({ isVisible: !this.state.isVisible })
+        this.explosion.start()
     }
 
     render() {
         return (
             <SafeAreaView style={styles.container}>
                 <Header lefttxt={{ color: '#919191' }} btn={true} leftPress={() => this.props.navigation.goBack()} />
-                <Text style={{ marginTop: 30, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', marginLeft: 16, marginRight: 24, lineHeight: 20 }}>You have now completed all question, please now submit your answers.</Text>
+                <Text style={{ marginTop: 30, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', marginLeft: 16, marginRight: 24, lineHeight: 20 }}>You have now completed all questions, now submit your answers</Text>
 
                 <View style={{ flex: 1, justifyContent: 'flex-end', marginHorizontal: 27 }}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate('ReviewAnswer')} activeOpacity={0.6} style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', alignItems: 'center', marginBottom: 27 }}>
@@ -30,6 +32,12 @@ export class QueSubmit extends Component {
                         </View>
                     </TouchableOpacity>
                 </View>
+                <ConfettiCannon
+                    count={200}
+                    origin={{ x: -10, y: 0 }}
+                    autoStart={false}
+                    ref={ref => (this.explosion = ref)}
+                />
 
                 <View>
                     <Modal
@@ -53,6 +61,7 @@ export class QueSubmit extends Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
+
                     </Modal>
                 </View>
             </SafeAreaView>

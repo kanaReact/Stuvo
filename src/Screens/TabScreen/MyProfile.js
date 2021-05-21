@@ -33,39 +33,25 @@ class MyProfile extends Component
 
                     <View style={styles.myProfileView}>
                         <View>
-                            <Text style={styles.myProfileTxt}>School</Text>
+                            <Text style={styles.myProfileTxt}>Academy</Text>
                         </View>
                         <View>
                             <Text style={styles.myProfileText}>Abbey College Cambridge</Text>
                         </View>
                     </View>
 
-                    <View style={styles.myProfileView}>
-                        <View>
-                            <Text style={styles.myProfileTxt}>Age</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.myProfileText}>18</Text>
-                        </View>
-                    </View>
+                    
 
                     <View style={styles.myProfileView}>
                         <View>
-                            <Text style={styles.myProfileTxt}>Email</Text>
+                            <Text style={styles.myProfileTxt}>Academy Email</Text>
                         </View>
                         <View>
                             <Text style={styles.myProfileText}>selenamartin@mail.com</Text>
                         </View>
                     </View>
 
-                    <View style={styles.myProfileView}>
-                        <View>
-                            <Text style={styles.myProfileTxt}>Contact number</Text>
-                        </View>
-                        <View>
-                            <Text style={styles.myProfileText}>+44 712 345 6789</Text>
-                        </View>
-                    </View>
+                    
 
                     <View style={styles.myProfileView}>
                         <View>

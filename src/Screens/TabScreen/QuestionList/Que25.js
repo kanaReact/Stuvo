@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity, Image, SafeAreaView } from 'react-native'
 import styles from '../../../style/styles'
+
 class Que25 extends Component {
     constructor(props) {
         super(props);

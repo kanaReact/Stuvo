@@ -27,8 +27,8 @@ class Notification extends Component {
             <SafeAreaView style={styles.container}>
                 <Header leftImagePress={() => { this.props.navigation.openDrawer() }} />
                 <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, }}>Technical Support</Text>
-                <Text style={{  fontSize: 14, fontFamily: 'Gotham-Medium', color: '#919191', marginLeft: 16,paddingTop:22  }}>Lorem ipsum dolor sit amet, consectetur adipis cing elit, sed do eiusmod</Text>
-                <View style={{ flex: 1 }}>
+                <Text style={{  fontSize: 14, fontFamily: 'Gotham-Medium', color: '#919191', marginLeft: 16,paddingTop:22,lineHeight:20,  }}>Lorem ipsum dolor sit amet, consectetur adipis cing elit, sed do eiusmod</Text>
+                <View style={{ flex: 1,paddingTop:20 }}>
                     <FlatList
                         data={this.state.data}
                         renderItem={({ item, index }) => (

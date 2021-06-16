@@ -12,8 +12,8 @@ export class QueSubmit extends Component {
     }
 
     toggleModal = () => {
-        this.setState({ isVisible: !this.state.isVisible })
         this.explosion.start()
+        setTimeout(() => {this.setState({ isVisible: !this.state.isVisible })}, 3000)
     }
 
     render() {
@@ -33,7 +33,7 @@ export class QueSubmit extends Component {
                     </TouchableOpacity>
                 </View>
                 <ConfettiCannon
-                    count={200}
+                    count={500}
                     origin={{ x: -10, y: 0 }}
                     autoStart={false}
                     ref={ref => (this.explosion = ref)}

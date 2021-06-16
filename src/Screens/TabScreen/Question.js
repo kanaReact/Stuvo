@@ -32,6 +32,13 @@ class Question extends Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
+                <ImageBackground 
+                  style={{ height: '100%',
+                  width: '100%',
+                  resizeMode: 'stretch',}}
+                  resizeMode='stretch'
+                  source={require('../../images/mainback.png')}
+                >
                 <Header leftImagePress={() => { this.props.navigation.openDrawer() }} />
                 <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Surveys</Text>
 
@@ -52,6 +59,7 @@ class Question extends Component {
                         showsVerticalScrollIndicator={false}
                     />
                 </View>
+                </ImageBackground>
             </SafeAreaView>
         );
     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { SafeAreaView, View, Text, FlatList } from 'react-native'
+import { SafeAreaView, View, Text, FlatList, ImageBackground } from 'react-native'
 import styles from '../../style/styles'
 import Header from '../../Components/Header'
 class Guidance extends Component {
@@ -35,17 +35,26 @@ class Guidance extends Component {
     render() {
         return (
             <SafeAreaView style={styles.container}>
-                <Header leftImagePress={() => { this.props.navigation.openDrawer() }} />
-                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 6 }}>Guidance</Text>
-
-                <View style={{ flex: 1 }}>
-                    <FlatList
-                        data={this.state.data}
-                        renderItem={this._renderItem}
-                        keyExtractor={item => item.id.toString()}
-                        showsVerticalScrollIndicator={false}
-                    />
-                </View>
+                <ImageBackground
+                    style={{
+                        height: '100%',
+                        width: '100%',
+                        resizeMode: 'stretch',
+                    }}
+                    resizeMode='stretch'
+                    source={require('../../images/mainback.png')}
+                >
+                    <Header leftImagePress={() => { this.props.navigation.openDrawer() }} />
+                    <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 6 }}>Guidance</Text>
+                    <View style={{ flex: 1 }}>
+                        <FlatList
+                            data={this.state.data}
+                            renderItem={this._renderItem}
+                            keyExtractor={item => item.id.toString()}
+                            showsVerticalScrollIndicator={false}
+                        />
+                    </View>
+                </ImageBackground>
             </SafeAreaView>
         );
     }

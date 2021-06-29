@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { SafeAreaView, View, Text, Image, TouchableOpacity, FlatList, ImageBackground } from 'react-native'
 import styles from '../../style/styles'
 import Header from '../../Components/Header'
+import SVGImg from '../../Source/SVGImg'
 class Week1Result extends Component {
     constructor(props) {
         super(props);
@@ -53,7 +54,7 @@ class Week1Result extends Component {
                                     <TouchableOpacity activeOpacity={0.6} onPress={() => this.props.navigation.navigate(item.navigation)}>
                                         <View style={{ flexDirection: 'row', paddingVertical: 18, marginLeft: 16, marginRight: 24, justifyContent: 'center', alignItems: 'center' }}>
                                             <Text style={{ flex: 1, fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium' }}>{item.text}</Text>
-                                            <Image style={{ height: 10, width: 11, resizeMode: 'contain', tintColor: "#919191" }} source={require('../../images/arrow.png')} />
+                                            <SVGImg.Arrow />
                                         </View>
                                     </TouchableOpacity>
                                 </View>

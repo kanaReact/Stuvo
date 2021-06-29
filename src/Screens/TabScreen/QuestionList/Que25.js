@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity, Image, SafeAreaView } from 'react-native'
 import styles from '../../../style/styles'
+import SVGImg from '../../../Source/SVGImg';
 
 class Que25 extends Component {
     constructor(props) {
@@ -26,7 +27,7 @@ class Que25 extends Component {
                         </TouchableOpacity>
                     </View>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginLeft: 16 }}>
-                        <Image source={require('../../../images/HomeLogotopImg.png')} style={{ width: 134, height: 37, resizeMode: 'contain' }} />
+                        <SVGImg.HeaderLogo />
                     </View>
                     <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('Week1Questionaires')} activeOpacity={0.6}>
@@ -34,9 +35,7 @@ class Que25 extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-
                 <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16 }}>Question 25 of 25</Text>
-
                 <View style={{ marginLeft: 16, marginRight: 24 }}>
                     <Text style={{ marginTop: 15, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', lineHeight: 20 }}>Lorem ipsum dolor sit amet, consectetur adipis cing elit, sed do eiusmod?</Text>
 

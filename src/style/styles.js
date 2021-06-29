@@ -79,7 +79,7 @@ export default StyleSheet.create({
     },
     activeDrawer: {
         flexDirection: 'row',
-        marginTop: 35,
+        marginTop: 20,
         backgroundColor: '#000',//#00AFF0
         height: 40,
         //width: '65%',

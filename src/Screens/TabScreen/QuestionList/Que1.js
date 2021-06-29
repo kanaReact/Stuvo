@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, TouchableOpacity, Image, SafeAreaView, TextInput } from 'react-native'
 import styles from '../../../style/styles'
 import Header from '../../../Components/Header'
+import SVGImg from '../../../Source/SVGImg'
 class Que1 extends Component {
     constructor(props) {
         super(props);
@@ -24,7 +25,7 @@ class Que1 extends Component {
                     :
                     <View style={[styles.headerMain, { marginTop: 20, marginHorizontal: 16 }]}>
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginLeft: 32 }}>
-                            <Image source={require('../../../images/HomeLogotopImg.png')} style={{ width: 134, height: 37, resizeMode: 'contain' }} />
+                            <SVGImg.HeaderLogo />
                         </View>
                         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                             <TouchableOpacity onPress={() => this.props.navigation.goBack()} activeOpacity={0.6}>

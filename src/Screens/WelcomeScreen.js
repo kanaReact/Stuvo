@@ -6,7 +6,6 @@ class WelcomeScreen extends Component {
     state = {
         btn: true
     }
-
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -19,7 +18,8 @@ class WelcomeScreen extends Component {
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 24, marginTop: 30 }}>
                     <TouchableOpacity onPress={() => this.setState({ btn: !this.state.btn })}>
                         {this.state.btn ?
-                            <View style={{ height: 16, width: 16, borderWidth: 2, borderColor: '#00AFF0' }} /> :
+                            <View style={{ height: 16, width: 16, borderWidth: 2, borderColor: '#00AFF0' }} /> 
+                            :
                             <View style={{ height: 16, width: 16, backgroundColor: '#00AFF0', alignItems: 'center', justifyContent: 'center' }}>
                                 <Image
                                     style={{ height: 12, width: 10, resizeMode: 'contain', tintColor: 'white' }}

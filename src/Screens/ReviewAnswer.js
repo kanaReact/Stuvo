@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, Dimensions, TouchableOpacity, FlatList, Image, SafeAreaView, Modal } from 'react-native'
 const { height, width } = Dimensions.get('window');
 import styles from '../style/styles'
+import SVGImg from '../Source/SVGImg';
 
 class ReviewAnswer extends Component {
     constructor(props) {
@@ -79,10 +80,7 @@ class ReviewAnswer extends Component {
                                     <Text style={{ flex: 1, fontSize: 13, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>Question {item.num}</Text>
                                     <TouchableOpacity onPress={() => this.props.navigation.navigate(item.navigation, { btn: 'true' })} activeOpacity={0.6}>
                                         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                            <Image
-                                                style={{ height: 12, width: 12, resizeMode: 'contain' }}
-                                                source={require('../images/pen.png')}
-                                            />
+                                           <SVGImg.Edit />
                                         </View>
                                     </TouchableOpacity>
                                 </View>

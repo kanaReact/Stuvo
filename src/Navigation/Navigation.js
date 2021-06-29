@@ -7,7 +7,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Splash from '../Screens/Splash'
 import Welcome from '../Screens/WelcomeScreen'
 import ReviewAnswer from '../Screens/ReviewAnswer'
-import Tabmain from '../Screens/TabScreen/Tabmain'
 import Question from '../Screens/TabScreen/Question'
 import Week1Questionaires from '../Screens/TabScreen/Week1Questionaires'
 import Week1PendingQue from '../Screens/TabScreen/Week1PendingQue'
@@ -29,6 +28,7 @@ import CompletedQuestion from '../Screens/TabScreen/CompletedQuestion'
 import CompletedList from '../Screens/TabScreen/CompletedList'
 import MyProfile from '../Screens/TabScreen/MyProfile'
 import About_Student_Voice from '../Screens/TabScreen/About_Student_Voice'
+import SVGImg from '../Source/SVGImg';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -149,13 +149,13 @@ function MyTabBar({ state, descriptors, navigation }) {
                 style={{ height: 68, width: width / 3.3, alignItems: "center", justifyContent: "center" }}>
                 {
                   activeIndex == 0 ?
-                    <View>
-                      <Image source={require('../images/Tabbar/Questionaires.png')} style={{ width: 22, height: 24, resizeMode: "contain", tintColor: '#FFFFFF', alignSelf: 'center', }} />
+                    <View style={{ alignItems: 'center' }}>
+                      <SVGImg.TabServeyWhite />
                       <Text style={{ color: "#FFFFFF", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Surveys</Text>
                     </View>
                     :
-                    <View>
-                      <Image source={require('../images/Tabbar/Questionaires.png')} style={{ width: 22, height: 24, resizeMode: "contain", tintColor: "rgba(255,255,255,0.75)", alignSelf: 'center' }} />
+                    <View style={{ alignItems: 'center' }}>
+                      <SVGImg.TabSurvey />
                       <Text style={{ color: "rgba(255,255,255,0.75)", fontSize: 8, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Surveys</Text>
                     </View>
                 }
@@ -172,13 +172,13 @@ function MyTabBar({ state, descriptors, navigation }) {
                 style={{ height: 68, width: width / 3.3, alignItems: "center", justifyContent: "center" }}>
                 {
                   activeIndex == 1 ?
-                    <View>
-                      <Image source={require('../images/Tabbar/Results.png')} style={{ width: 25, height: 24, resizeMode: "contain", tintColor: '#FFFFFF', alignSelf: 'center', }} />
+                    <View style={{ alignItems: 'center' }}>
+                      <SVGImg.TabResultWhite />
                       <Text style={{ color: "#FFFFFF", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Results</Text>
                     </View>
                     :
-                    <View>
-                      <Image source={require('../images/Tabbar/Results.png')} style={{ width: 25, height: 24, resizeMode: "contain", tintColor: "rgba(255,255,255,0.75)", alignSelf: 'center' }} />
+                    <View style={{ alignItems: 'center' }}>
+                      <SVGImg.TabResult />
                       <Text style={{ color: "rgba(255,255,255,0.75)", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Results</Text>
                     </View>
                 }
@@ -194,13 +194,13 @@ function MyTabBar({ state, descriptors, navigation }) {
                 style={{ height: 68, width: width / 3.3, alignItems: "center", justifyContent: "center" }}>
                 {
                   activeIndex == 2 ?
-                    <View>
-                      <Image source={require('../images/Tabbar/notifications.png')} style={{ width: 25, height: 24, resizeMode: "contain", tintColor: '#FFFFFF', alignSelf: "center" }} />
+                  <View style={{ alignItems: 'center' }}>
+                     <SVGImg.TabNotWhite />
                       <Text style={{ color: "#FFFFFF", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Notifications</Text>
                     </View>
                     :
-                    <View>
-                      <Image source={require('../images/Tabbar/notifications.png')} style={{ width: 25, height: 24, resizeMode: "contain", tintColor: "rgba(255,255,255,0.75)", alignSelf: "center" }} />
+                    <View style={{ alignItems: 'center' }}>
+                      <SVGImg.TaBNot />
                       <Text style={{ color: "rgba(255,255,255,0.75)", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Notifications</Text>
                     </View>
                 }

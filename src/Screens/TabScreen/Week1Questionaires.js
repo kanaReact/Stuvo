@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { SafeAreaView, View, Text, Image, TouchableOpacity, FlatList, Modal, Platform, ImageBackground } from 'react-native'
 import styles from '../../style/styles'
 import Header from '../../Components/Header'
+import SVGImg from '../../Source/SVGImg'
 class Week1Questionaires extends Component {
     constructor(props) {
         super(props);
@@ -68,7 +69,7 @@ class Week1Questionaires extends Component {
                                             </View>
 
                                             <View style={{ flexDirection: 'column', width: "15%", alignItems: 'flex-end' }}>
-                                                <Image style={{ height: 9, width: 11, resizeMode: 'contain', tintColor: '#919191' }} source={require('../../images/arrow.png')} />
+                                                <SVGImg.Arrow />
                                             </View>
                                         </View>
                                     </TouchableOpacity>
@@ -91,10 +92,7 @@ class Week1Questionaires extends Component {
                             <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', alignItems: 'center', justifyContent: 'center' }}>
                                 <View style={{ backgroundColor: '#FFFFFF', borderRadius: 20, width: '90%', alignItems: 'center', paddingHorizontal: 23 }}>
                                     <View style={{ marginTop: 45 }}>
-                                        <Image
-                                            style={{ height: 47, width: 170, resizeMode: 'contain' }}
-                                            source={require('../../images/Notification_logo_black.png')}
-                                        />
+                                        <SVGImg.QATBlack />
                                     </View>
 
                                     <Text style={{ fontSize: 20, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>Before you proceed</Text>

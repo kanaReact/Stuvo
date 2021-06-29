@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { SafeAreaView, View, Text, Image, TouchableOpacity, FlatList, ImageBackground } from 'react-native'
 import styles from '../../style/styles'
 import Header from '../../Components/Header'
+import SVGImg from '../../Source/SVGImg'
 class Notification extends Component {
     constructor(props) {
         super(props);
@@ -50,7 +51,7 @@ class Notification extends Component {
                                             </View>
 
                                             <View style={{ flexDirection: 'column', width: "15%", alignItems: 'flex-end' }}>
-                                                <Image style={{ height: 10, width: 11, resizeMode: 'contain', tintColor: "#919191" }} source={require('../../images/arrow.png')} />
+                                                <SVGImg.Arrow />
                                             </View>
                                         </View>
                                     </TouchableOpacity>

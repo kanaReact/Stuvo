@@ -3,6 +3,7 @@ import { View, Image, SafeAreaView, Dimensions, Text, TouchableOpacity, StatusBa
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 import styles from '../style/styles'
+import SVGImg from '../Source/SVGImg';
 
 class Splash extends Component {
     render() {
@@ -11,7 +12,7 @@ class Splash extends Component {
                 <StatusBar backgroundColor="#00AFF0" barStyle={'dark-content'} />
 
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
-                    <Image style={{ width: 136, height: 251, resizeMode: 'contain' }} source={require('../images/splash_logo.png')} />
+                    <SVGImg.SplashLogo />
                 </View>
                 <View style={{ alignItems: 'center' }}>
                     <View style={{ position: 'absolute', bottom: 50, width: '90%' }}>

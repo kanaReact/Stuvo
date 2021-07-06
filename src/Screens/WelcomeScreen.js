@@ -1,10 +1,36 @@
 import React, { Component } from 'react';
 import { View, SafeAreaView, Image, Text, TouchableOpacity, StatusBar } from 'react-native'
 import styles from '../style/styles'
-
+import { connect } from 'react-redux'
+import { rememberMe,removerememberMe } from '../Redux/Action'
 class WelcomeScreen extends Component {
-    state = {
-        btn: true
+    constructor(props)
+    {
+        super(props);
+        this.state = {
+            btn: true
+        }
+    }
+    navigate()
+    {
+        if(this.props.isLoggedIn == true)
+        {
+            this.props.navigation.replace('tabs')
+        }
+        else
+        {
+            this.props.navigation.navigate('Login')
+        }
+    }
+    check_rememberme()
+    {
+        if(this.state.btn == false)
+        {
+            this.props.rememberMe()
+        }
+        else{
+            this.props.removerememberMe()
+        }
     }
     render() {
         return (
@@ -16,7 +42,7 @@ class WelcomeScreen extends Component {
                 <Text style={{ marginTop: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', lineHeight: 20, marginHorizontal: 24 }}>
                     Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</Text>
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginHorizontal: 24, marginTop: 30 }}>
-                    <TouchableOpacity onPress={() => this.setState({ btn: !this.state.btn })}>
+                    <TouchableOpacity onPress={() => { this.setState({ btn: !this.state.btn },()=>{ this.check_rememberme() }); }}>
                         {this.state.btn ?
                             <View style={{ height: 16, width: 16, borderWidth: 2, borderColor: '#00AFF0' }} /> 
                             :
@@ -32,7 +58,7 @@ class WelcomeScreen extends Component {
                 </View>
 
                 <View style={{ flex: 1, marginHorizontal: 24, justifyContent: 'flex-end', marginBottom: 50 }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate('tabs')} activeOpacity={0.6}>
+                    <TouchableOpacity onPress={() => { this.navigate() }} activeOpacity={0.6}>
                         <View style={{ alignItems: 'center', height: 47, justifyContent: 'center', backgroundColor: '#00AFF0', borderRadius: 50 }}>
                             <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Let's begin!</Text>
                         </View>
@@ -42,5 +68,10 @@ class WelcomeScreen extends Component {
         );
     }
 }
-
-export default WelcomeScreen
+const mapStateToProps = (state) => {
+    const isLoggedIn = state.LoginData.isLoggedIn;
+    return {  isLoggedIn }
+  }
+  
+  
+  export default connect(mapStateToProps, { rememberMe,removerememberMe })(WelcomeScreen)

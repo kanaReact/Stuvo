@@ -4,7 +4,9 @@ const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 import styles from '../style/styles'
 import SVGImg from '../Source/SVGImg';
-export default class DrawerContainer extends Component {
+import { logout } from '../Redux/Action'
+import { connect } from 'react-redux';
+class DrawerContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -95,7 +97,7 @@ export default class DrawerContainer extends Component {
                         </TouchableOpacity>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginTop : 200 }}>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>{ this.props.logout();this.props.navigation.replace('Login') }}>
                             <View style={{ flexDirection: 'row' }}>
                             <View style={{ marginLeft: 26 }}>
                                     <SVGImg.LogOut />
@@ -109,3 +111,8 @@ export default class DrawerContainer extends Component {
         );
     }
 }
+const mapStateToProps = (state) => {
+    const AUTH = state.LoginData.token
+    return { AUTH }
+}
+export default connect(mapStateToProps,{ logout })(DrawerContainer)

@@ -1,40 +1,66 @@
-
+import { LoginSuccess, LoginFailed, UserDetailSuccess, UserDetailFailed, Rememberme, LogoutSuccess, RemoveRememberMe } from '../Action/ActionTypes'
 const INITIAL_STATE = {
-    id: '',
-    password: '',
     isLoggedIn: false,
-    passChanged: false,
     errormsg: '',
-    action: '',
-    ProfileData: [],
-    update: false
+    status: '',
+    name: '',
+    token: '',
+    userdetailData: [],
+    rememberMe: false,
 };
 
 const LoginReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case 'LoginSuccess':
+        case LoginSuccess:
             console.log('Reducers Data', action.payload.responseJson.data[0].id)
             return {
+                ...state,
                 isLoggedIn: true,
-                wrongID: false,
-                passChanged: false,
-                ProfileData: action.payload.responseJson.data[0],
-                action: 'success'
+                errormsg: action.payload.responseJson.data.message,
+                status: 1,
+                name: action.payload.responseJson.data[0].name,
+                token: action.payload.responseJson.data[0].access_token,
             }
-        case 'LoginFailed':
+        case LoginFailed:
             return {
-                ...state, isLoggedIn: false, error_message: action.payload.error, wrongID: true
+                isLoggedIn: false,
+                errormsg: '',
+                status: 0,
+                name: '',
+                token: '',
             }
-        case 'LogoutSuccess':
-            console.log('LogOut API Call', action)
+        case UserDetailSuccess:
             return {
-                ...state, isLoggedIn: false, email: '', pass: '',
-                wrongID: false, ProfileData: []
+                ...state,
+                userdetailData: action.payload.responseJson.data[0]
             }
-        case 'ServerError':
+        case UserDetailFailed:
             return {
-                ...state, isLoggedIn: false, error_message: action.payload.error, ServerError: true, wrongID: false
+                ...state,
+                userdetailData: []
             }
+        case Rememberme:
+            return {
+                ...state,
+                rememberMe: true
+            }
+        case RemoveRememberMe:
+            return {
+                ...state,
+                rememberMe:false
+            }
+        case LogoutSuccess: {
+            return {
+                ...state,
+                isLoggedIn: false,
+                errormsg: '',
+                status: '',
+                name: '',
+                token: '',
+                userdetailData: [],
+                rememberMe:false
+            }
+        }
 
         default:
             return state

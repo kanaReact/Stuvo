@@ -1,48 +1,99 @@
 import {
     LoginSuccess, LogoutSuccess, LoginFailed, ServerError,
+    UserDetailSuccess,UserDetailFailed,Rememberme,RemoveRememberMe
 } from './ActionTypes';
 // import API from '../../Api/API';
 import constant from "../config/constant";
 import { doPost } from "../config/request";
-
-
+import axios from 'axios';
 export function loginSuccess(responseJson) {
     return dispatch => {
         dispatch({ type: LoginSuccess, payload: { responseJson } });
     };
 }
 
-export function loginError(error) {
-    return { type: LoginFailed, payload: { error } };
+export function loginFailed(responseJson) {
+    return dispatch => {
+        dispatch({ type: LoginFailed, payload: { responseJson } });
+    };
 }
 
 export function NetworkError(error) {
     return { type: ServerError, payload: { error } };
 }
 
+export const login = (email, password) => {
+    return (dispatch) => {
+        let url = constant.BASE_URL+'login'
+        let data = new URLSearchParams();
+        data.append('email',email);
+        data.append('password',password);
+        console.log(data)
+        axios.post(url, data, {
+            headers: { 'Content-Type': "application/x-www-form-urlencoded" },
+        }).then(responseJson => {
+            if (responseJson.data.status == 1) {
+                console.log('Response login:', responseJson.data)
+                dispatch(loginSuccess(responseJson.data))
+            }
+            else {
+                dispatch(loginFailed(responseJson.data))
+            }
+        }).catch((error) => { dispatch(loginFailed(error)) })
+        
+    };
+};
+
+
+export function userDetailSuccess(responseJson) {
+    return dispatch => {
+        dispatch({ type: UserDetailSuccess, payload: { responseJson } });
+    };
+}
+
+export function userDetailFailed(responseJson) {
+    return dispatch => {
+        dispatch({ type: UserDetailFailed, payload: { responseJson } });
+    };
+}
+
+
+export const userDetail = (AUTH) => {
+    return (dispatch) => {
+        let url = constant.BASE_URL+'user_detail'
+       
+        axios.get(url,{
+            headers:{ 'Authorization':'Bearer '+AUTH }
+        }).then(responseJson=>{
+            if(responseJson.data.status == 1)
+            {
+                dispatch(userDetailSuccess(responseJson.data))
+            }
+            else
+            {
+                dispatch(userDetailFailed(responseJson.data))
+            }
+        })
+        .catch(error=>{ dispatch(userDetailFailed(error)) })
+        
+    };
+};
+
 export const logout = () => {
     return (dispatch) => {
-        console.log("logout");
-        dispatch({ type: LogoutSuccess, payload: {} });
-    };
-};
+        dispatch({ type: LogoutSuccess })
+    }
+}
 
-export const userLogin = (username, password) => {
+export const rememberMe = () => {
     return (dispatch) => {
-        console.log("Came here in the action:", username, password);
-        let data = new FormData()
-        data.append('email',username)
-        data.append('password',password)
-        doPost(constant.LOGIN_URL, data).then((res) => {
-            if (res.status == 1) {
-                // dispatch(loginSuccess(responseJson));
-                console.log("Response of login is : ", res);
-            } else {
-                // dispatch(loginError(responseJson.error_msg));
-                console.log("Response of login fail: ", res);
-            }
-        }).catch((e) => console.log('error', e));
-    };
-};
+        dispatch({ type: Rememberme })
+    }
+}
 
 
+export const removerememberMe = () => {
+    return (dispatch) => {
+        dispatch({ type: RemoveRememberMe })
+    }
+}

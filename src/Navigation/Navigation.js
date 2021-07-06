@@ -29,6 +29,7 @@ import CompletedList from '../Screens/TabScreen/CompletedList'
 import MyProfile from '../Screens/TabScreen/MyProfile'
 import About_Student_Voice from '../Screens/TabScreen/About_Student_Voice'
 import SVGImg from '../Source/SVGImg';
+import Login from '../Screens/Login';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -42,6 +43,7 @@ function Navigation() {
       <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, animationEnabled: false }}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Welcome" component={Welcome} />
+        <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Que1" component={Que1} />
         <Stack.Screen name="Que2" component={Que2} />
         <Stack.Screen name="Que25" component={Que25} />

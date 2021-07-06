@@ -115,6 +115,16 @@ export default StyleSheet.create({
         fontSize:13,
         fontFamily:'Poppins-Regular'
     },
+    textInput:{
+        width: '90%', height: 50, borderWidth: 0.5, borderColor: 'gray', borderRadius: 30, paddingLeft: 10
+    },
+    textInputPassword:{
+        width: '90%', height: 50, borderWidth: 0.5, borderColor: 'gray', borderRadius: 30, paddingLeft: 10,marginTop:15
+    },
+    loginBtn:{
+        width:'90%',height:50,backgroundColor:'#00AFF0',alignItems:'center',justifyContent:'center',marginTop:15,borderRadius:30 
+    }
+    
     
 
 })

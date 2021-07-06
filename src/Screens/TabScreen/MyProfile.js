@@ -3,12 +3,38 @@ import { Text, View, TouchableOpacity, Image, SafeAreaView, TextInput,ScrollView
 import styles from '../../style/styles'
 import Header from '../../Components/Header'
 import SVGImg from '../../Source/SVGImg'
+import { connect } from 'react-redux'
+import { userDetail } from '../../Redux/Action'
+import Spinner from '../../Components/Spinner'
+
 class MyProfile extends Component
 {
+    constructor(props)
+    {
+        super(props);
+        this.state={
+            userdetailData:[],
+            loading:false
+        }
+    }
+    componentWillMount()
+    {
+        this.setState({ loading:true })
+        this.props.userDetail(this.props.AUTH)
+    }
+    componentWillReceiveProps(nextProps)
+    {
+        this.setState({ loading:false })
+        if(nextProps.userdetailData != this.state.userdetailData)
+        {
+            this.setState({ userdetailData:nextProps.userdetailData })
+        }
+    }
     render()
     {
         return(
             <SafeAreaView style={styles.container}>
+                <Spinner visible={this.state.loading} />
                 <View style={[styles.headerMain, { marginTop: 20, marginHorizontal: 16 }]}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginLeft: 16 }}>
                      <SVGImg.HeaderLogo />
@@ -27,7 +53,7 @@ class MyProfile extends Component
                             <Text style={styles.myProfileTxt}>Name</Text>
                         </View>
                         <View>
-                            <Text style={styles.myProfileText}>Katie Smith</Text>
+                            <Text style={styles.myProfileText}>{this.state.userdetailData.name}</Text>
                         </View>
                     </View>
 
@@ -47,7 +73,7 @@ class MyProfile extends Component
                             <Text style={styles.myProfileTxt}>Age</Text>
                         </View>
                         <View>
-                            <Text style={styles.myProfileText}>18</Text>
+                            <Text style={styles.myProfileText}>{this.state.userdetailData.age}</Text>
                         </View>
                     </View>
 
@@ -56,7 +82,7 @@ class MyProfile extends Component
                             <Text style={styles.myProfileTxt}>Email</Text>
                         </View>
                         <View>
-                            <Text style={styles.myProfileText}>selenamartin@mail.com</Text>
+                            <Text style={styles.myProfileText}>{this.state.userdetailData.email}</Text>
                         </View>
                     </View>
 
@@ -65,7 +91,7 @@ class MyProfile extends Component
                             <Text style={styles.myProfileTxt}>Contact number</Text>
                         </View>
                         <View>
-                            <Text style={styles.myProfileText}>+44 712 345 6789</Text>
+                            <Text style={styles.myProfileText}>{this.state.userdetailData.mobile}</Text>
                         </View>
                     </View>
 
@@ -76,7 +102,7 @@ class MyProfile extends Component
                             <Text style={styles.myProfileTxt}>Total number of{'\n'}Surveys Completed</Text>
                         </View>
                         <View>
-                            <Text style={styles.myProfileText}>10</Text>
+                            <Text style={styles.myProfileText}>{this.state.userdetailData.Total_surveys_completed}</Text>
                         </View>
                     </View>
                 </View>
@@ -85,4 +111,9 @@ class MyProfile extends Component
         );
     }
 }
-export default MyProfile
+const mapStateToProps = (state) => {
+    const AUTH = state.LoginData.token
+    const userdetailData = state.LoginData.userdetailData
+    return { AUTH, userdetailData }
+  }
+export default connect(mapStateToProps,{ userDetail })(MyProfile)

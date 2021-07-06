@@ -1,4 +1,3 @@
 export default{
-    BASE_URL:"https://connectinc.app/APPDATA/public/api/v2/", //example
-    LOGIN_URL:'login'
+    BASE_URL:"https://appworkdemo.com/STUVO/public/api/v1/", //example
 }

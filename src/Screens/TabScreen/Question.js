@@ -13,19 +13,22 @@ class Question extends Component {
                 {
                     id: 1,
                     text: 'New Surveys',
-                    navigation: 'Week1Questionaires'
+                    navigation: 'Week1Questionaires',
+                    param:'new'
                 },
                 {
                     id: 2,
                     text: 'Pending Surveys',
                     count: '(2)',
-                    navigation: 'Week1PendingQue'
+                    navigation: 'Week1Questionaires',
+                    param:'pandding'
                 },
                 {
                     id: 3,
                     text: 'Completed Surveys',
                     count: '(2)',
-                    navigation: 'CompletedQuestion'
+                    navigation: 'CompletedQuestion',
+                    param:'completed'
                 },
             ]
         }
@@ -49,7 +52,7 @@ class Question extends Component {
                             data={this.state.data}
                             renderItem={({ item, index }) => (
                                 <View style={{ borderBottomWidth: 1, borderBottomColor: '#E0E0E066' }}>
-                                    <TouchableOpacity activeOpacity={0.6} onPress={() => this.props.navigation.navigate(item.navigation)}>
+                                    <TouchableOpacity activeOpacity={0.6} onPress={() => this.props.navigation.navigate(item.navigation,{ type:item.param })}>
                                         <View style={{ flexDirection: 'row', paddingVertical: 18, marginLeft: 16, marginRight: 24, justifyContent: 'center', alignItems: 'center' }}>
                                             <Text style={{ flex: 1, fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium' }}>{item.text} <Text style={{ color: '#00AFF0' }}>{item.count}</Text></Text>
                                             <SVGImg.Arrow />

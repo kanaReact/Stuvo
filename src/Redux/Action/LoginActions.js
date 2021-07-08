@@ -1,6 +1,9 @@
 import {
     LoginSuccess, LogoutSuccess, LoginFailed, ServerError,
-    UserDetailSuccess,UserDetailFailed,Rememberme,RemoveRememberMe
+    UserDetailSuccess,UserDetailFailed,
+    Rememberme,RemoveRememberMe,
+    SchoolDataSuccess,SchoolDataFailed,
+    ClearMessage
 } from './ActionTypes';
 // import API from '../../Api/API';
 import constant from "../config/constant";
@@ -18,16 +21,13 @@ export function loginFailed(responseJson) {
     };
 }
 
-export function NetworkError(error) {
-    return { type: ServerError, payload: { error } };
-}
 
-export const login = (email, password) => {
+export const login = (id, otp) => {
     return (dispatch) => {
-        let url = constant.BASE_URL+'login'
+        let url = constant.BASE_URL+'otp_verify'
         let data = new URLSearchParams();
-        data.append('email',email);
-        data.append('password',password);
+        data.append('id',id);
+        data.append('otp',otp);
         console.log(data)
         axios.post(url, data, {
             headers: { 'Content-Type': "application/x-www-form-urlencoded" },
@@ -85,6 +85,12 @@ export const logout = () => {
     }
 }
 
+export const clearMessage = () => {
+    return (dispatch) => {
+        dispatch({ type: ClearMessage })
+    }
+}
+
 export const rememberMe = () => {
     return (dispatch) => {
         dispatch({ type: Rememberme })
@@ -97,3 +103,4 @@ export const removerememberMe = () => {
         dispatch({ type: RemoveRememberMe })
     }
 }
+

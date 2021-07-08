@@ -6,14 +6,34 @@ import styles from '../style/styles'
 import SVGImg from '../Source/SVGImg';
 import { logout } from '../Redux/Action'
 import { connect } from 'react-redux';
+import constant from '../Redux/config/constant';
+import axios from 'axios';
+import Spinner from './Spinner';
 class DrawerContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
             activeTab: false,
             activeTab1: true,
-            activeTab2: true
+            activeTab2: true,
+            loading:false
         }
+    }
+    call_logout_API()
+    {
+        this.setState({ loading:true })
+        let url = constant.BASE_URL+'logout';
+        axios({
+            url:url,
+            method:'POST',
+            headers:{
+                'Authorization':'Bearer '+this.props.AUTH
+            }
+        }).then(responseJson=>{
+            this.setState({ loading:false })
+            console.log('res:',responseJson.data)
+            this.props.navigation.replace('Login')
+        })
     }
     changeTab(i) {
         if (i == 1) {
@@ -42,6 +62,7 @@ class DrawerContainer extends Component {
     render() {
         return (
             <SafeAreaView style={[styles.container, { backgroundColor: '#000000', }]}>
+                <Spinner visible={this.state.loading} />
                 <ScrollView contentContainerStyle={{ paddingBottom: height / 2, }}>
                     <View style={{ flexDirection: 'row', paddingTop: 50 }}>
                         <TouchableOpacity onPress={() => { this.props.navigation.closeDrawer() }}>
@@ -97,7 +118,7 @@ class DrawerContainer extends Component {
                         </TouchableOpacity>
                     </View>
                     <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginTop : 200 }}>
-                        <TouchableOpacity onPress={()=>{ this.props.logout();this.props.navigation.replace('Login') }}>
+                        <TouchableOpacity onPress={()=>{ this.props.logout();this.call_logout_API() }}>
                             <View style={{ flexDirection: 'row' }}>
                             <View style={{ marginLeft: 26 }}>
                                     <SVGImg.LogOut />

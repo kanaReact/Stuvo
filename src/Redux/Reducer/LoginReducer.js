@@ -1,4 +1,10 @@
-import { LoginSuccess, LoginFailed, UserDetailSuccess, UserDetailFailed, Rememberme, LogoutSuccess, RemoveRememberMe } from '../Action/ActionTypes'
+import { LoginSuccess,LoginFailed, 
+     UserDetailSuccess, UserDetailFailed, 
+     Rememberme, LogoutSuccess,
+     RemoveRememberMe,
+     SchoolDataSuccess,SchoolDataFailed,
+     ClearMessage
+    } from '../Action/ActionTypes'
 const INITIAL_STATE = {
     isLoggedIn: false,
     errormsg: '',
@@ -7,6 +13,7 @@ const INITIAL_STATE = {
     token: '',
     userdetailData: [],
     rememberMe: false,
+    schoolList:[]
 };
 
 const LoginReducer = (state = INITIAL_STATE, action) => {
@@ -24,7 +31,7 @@ const LoginReducer = (state = INITIAL_STATE, action) => {
         case LoginFailed:
             return {
                 isLoggedIn: false,
-                errormsg: '',
+                errormsg: action.payload.responseJson.message,
                 status: 0,
                 name: '',
                 token: '',
@@ -49,6 +56,11 @@ const LoginReducer = (state = INITIAL_STATE, action) => {
                 ...state,
                 rememberMe:false
             }
+        case ClearMessage:
+            return {
+                ...state,
+                errormsg: '',
+            }
         case LogoutSuccess: {
             return {
                 ...state,
@@ -58,7 +70,8 @@ const LoginReducer = (state = INITIAL_STATE, action) => {
                 name: '',
                 token: '',
                 userdetailData: [],
-                rememberMe:false
+                rememberMe:false,
+                schoolList:[]
             }
         }
 

@@ -12,6 +12,10 @@ class Splash extends Component {
     }
     check_navigation()
     {
+        if(this.props.rememberMe == undefined)
+        {
+            this.props.navigation.replace('Welcome')
+        }
         if(this.props.isLoggedIn == false && this.props.rememberMe == false)
         {
             this.props.navigation.replace('Welcome')

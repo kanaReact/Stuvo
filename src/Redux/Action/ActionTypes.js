@@ -11,3 +11,8 @@ export const UserDetailFailed='UserDetailFailed';
 
 export const Rememberme='Rememberme';
 export const RemoveRememberMe='RemoveRememberMe';
+
+export const ClearMessage='ClearMessage';
+
+export const SurveyListSuccess='SurveyListSuccess';
+export const SurveyListFailed='SurveyListFailed';

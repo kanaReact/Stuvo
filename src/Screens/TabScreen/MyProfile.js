@@ -32,6 +32,7 @@ class MyProfile extends Component
     }
     render()
     {
+        console.log('data::',this.state.userdetailData.School)
         return(
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -62,7 +63,8 @@ class MyProfile extends Component
                             <Text style={styles.myProfileTxt}>School</Text>
                         </View>
                         <View>
-                            <Text style={styles.myProfileText}>Abbey College Cambridge</Text>
+                            {this.state.userdetailData.School != undefined ? <Text style={styles.myProfileText}>{this.state.userdetailData.School.name}</Text> :null}
+                            
                         </View>
                     </View>
 

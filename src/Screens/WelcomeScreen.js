@@ -8,7 +8,7 @@ class WelcomeScreen extends Component {
     {
         super(props);
         this.state = {
-            btn: true
+            btn: this.props.rememberme == true ? false : true
         }
     }
     navigate()
@@ -70,7 +70,8 @@ class WelcomeScreen extends Component {
 }
 const mapStateToProps = (state) => {
     const isLoggedIn = state.LoginData.isLoggedIn;
-    return {  isLoggedIn }
+    const rememberme = state.LoginData.rememberMe
+    return {  isLoggedIn,rememberme }
   }
   
   

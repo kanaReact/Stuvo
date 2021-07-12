@@ -54,7 +54,7 @@ class WelcomeScreen extends Component {
                             </View>
                         }
                     </TouchableOpacity>
-                    <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', marginLeft: 16 }}>Do not show again</Text>
+                    <Text onPress={() => { this.setState({ btn: !this.state.btn },()=>{ this.check_rememberme() }); }} style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', marginLeft: 16 }}>Do not show again</Text>
                 </View>
 
                 <View style={{ flex: 1, marginHorizontal: 24, justifyContent: 'flex-end', marginBottom: 50 }}>

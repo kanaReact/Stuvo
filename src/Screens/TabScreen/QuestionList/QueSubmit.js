@@ -3,11 +3,16 @@ import { Text, View, SafeAreaView, TouchableOpacity, Modal, ImageBackground } fr
 import styles from '../../../style/styles'
 import Header from '../../../Components/Header'
 import ConfettiCannon from 'react-native-confetti-cannon';
-export class QueSubmit extends Component {
+import { connect } from 'react-redux'
+import axios from 'axios';
+import constant from '../../../Redux/config/constant';
+import Spinner from '../../../Components/Spinner';
+class QueSubmit extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isVisible: false
+            isVisible: false,
+            loading:false
         }
     }
 
@@ -15,10 +20,38 @@ export class QueSubmit extends Component {
         this.explosion.start()
         setTimeout(() => { this.setState({ isVisible: !this.state.isVisible }) }, 3000)
     }
+    submitQuestion()
+    {
+        this.setState({ loading:true })
+        let url = constant.BASE_URL+'survey_form_submit'
+        let data = new URLSearchParams()
+        data.append('ans_array',JSON.stringify(this.props.answerArray));
+        axios.post(url,data,{
+            headers: { 
+                'Content-Type': "application/x-www-form-urlencoded",
+                "Authorization":"Bearer "+this.props.AUTH
+             },
+        }).then(responseJson=>{
+            console.log('res;',responseJson.data)
+            this.setState({ loading:false })
+            if(responseJson.data.status == 1)
+            {
+                this.toggleModal()
+            }
+            else{
+                console.log('error')
+            }
+        }).catch(error=>{
+            console.log('error:',error)
+            this.setState({ loading:false })
+        })
+        
+    }
 
     render() {
         return (
             <SafeAreaView style={styles.container}>
+                <Spinner visible={this.state.loading} />
                 <ImageBackground
                     style={{
                         height: '100%',
@@ -35,7 +68,7 @@ export class QueSubmit extends Component {
                         <TouchableOpacity onPress={() => this.props.navigation.navigate('ReviewAnswer')} activeOpacity={0.6} style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', alignItems: 'center', marginBottom: 27 }}>
                             <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>{this.state.isVisible ? '' : 'Review answers'}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity onPress={this.toggleModal} activeOpacity={0.6}>
+                        <TouchableOpacity onPress={()=>{ this.submitQuestion() }} activeOpacity={0.6}>
                             <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50 }}>
                                 <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Submit</Text>
                             </View>
@@ -78,5 +111,10 @@ export class QueSubmit extends Component {
         )
     }
 }
-
-export default QueSubmit
+const mapStateToProps = (state) => {
+    console.log('check ::',JSON.stringify(state.SurveyData.answerArray))
+    const AUTH = state.LoginData.token
+    const answerArray = state.SurveyData.answerArray
+    return { AUTH, answerArray }
+}
+export default connect(mapStateToProps,null)(QueSubmit)

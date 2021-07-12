@@ -6,6 +6,14 @@ import SVGImg from '../../Source/SVGImg'
 import { connect } from 'react-redux'
 import { surveyList } from '../../Redux/Action'
 import Spinner from '../../Components/Spinner'
+import moment from 'moment'
+var periods = {
+    month: 30 * 24 * 60 * 60 * 1000,
+    week: 7 * 24 * 60 * 60 * 1000,
+    day: 24 * 60 * 60 * 1000,
+    hour: 60 * 60 * 1000,
+    minute: 60 * 1000
+};
 class Week1Questionaires extends Component {
     constructor(props) {
         super(props);
@@ -39,7 +47,33 @@ class Week1Questionaires extends Component {
             isVisible: false,
             surveyData: [],
             loading: false,
-            noData: false
+            noData: false,
+            id:''
+        }
+    }
+    formatTime(timeCreated) {
+        var diff = Date.now() - moment(timeCreated).format("x");
+
+        if (diff > periods.month) {
+            // it was at least a month ago
+            return ''
+        } else if (diff > periods.week) {
+            return Math.floor(diff / periods.week) + " week left to complete";
+        } else if (diff > periods.day) {
+            return Math.floor(diff / periods.day) + " days left to complete";
+        } else if (diff > periods.hour) {
+            return Math.floor(diff / periods.hour) + " hours left to complete";
+        } 
+    }
+
+    setColor(date)
+    {
+        if(this.formatTime(date).includes("days") == true)
+        {
+            return '#E17800'
+        }
+        else{
+            return '#E10000'
         }
     }
 
@@ -63,6 +97,7 @@ class Week1Questionaires extends Component {
 
     render() {
         const { type } = this.props.route.params
+        console.log('id::',this.state.id)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -92,11 +127,11 @@ class Week1Questionaires extends Component {
                                 data={this.state.surveyData}
                                 renderItem={({ item, index }) => (
                                     <View style={{ borderBottomWidth: 1, borderBottomColor: '#E0E0E066' }}>
-                                        <TouchableOpacity activeOpacity={0.6} onPress={this.toggleModal}>
+                                        <TouchableOpacity activeOpacity={0.6} onPress={()=>{ this.setState({ isVisible:true,id:item.id }) }}>
                                             <View style={{ flexDirection: 'row', paddingVertical: 10, marginLeft: 16, marginRight: 24, justifyContent: 'center', alignItems: 'center' }}>
                                                 <View style={{ flexDirection: 'column', width: "85%", }}>
                                                     <Text style={{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium' }}>{item.title}</Text>
-                                                    <Text style={{ paddingTop: 7, fontSize: 10, color: '#E10000', fontFamily: Platform.OS == "android" ? "Gotham-BookItalic" : null, fontStyle: Platform.OS == "ios" ? "italic" : null }}>{item.descreption}</Text>
+                                                    <Text style={{ paddingTop: 7, fontSize: 10, color: this.setColor(item.created_at), fontFamily: Platform.OS == "android" ? "Gotham-BookItalic" : null, fontStyle: Platform.OS == "ios" ? "italic" : null }}>{this.formatTime(item.created_at)}</Text>
                                                 </View>
 
                                                 <View style={{ flexDirection: 'column', width: "15%", alignItems: 'flex-end' }}>
@@ -135,7 +170,7 @@ class Week1Questionaires extends Component {
 
                                     <Text style={{ fontSize: 14, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#272727', textAlign: 'center', lineHeight: 22 }}>This new set of questions are strictly{'\n'}time-based. You only have 7 days to{'\n'}submit your answers.</Text>
 
-                                    <TouchableOpacity onPress={() => { this.props.navigation.navigate('Que1'); this.setState({ isVisible: false }) }} activeOpacity={0.6}>
+                                    <TouchableOpacity onPress={() => { this.props.navigation.navigate('Que1',{ id:this.state.id }); this.setState({ isVisible: false }) }} activeOpacity={0.6}>
                                         <View style={{ backgroundColor: '#00AFF0', marginTop: 30, height: 47, justifyContent: 'center', paddingHorizontal: 40, borderRadius: 50, marginBottom: 33 }}>
                                             <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Continue</Text>
                                         </View>

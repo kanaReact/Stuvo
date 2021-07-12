@@ -99,7 +99,7 @@ class Login extends React.Component {
             headers: { 'Content-Type': "application/x-www-form-urlencoded" },
         }).then(responseJson => {
             this.setState({ loading: false })
-            console.log('response json::', responseJson.data)
+            console.log('response json::', responseJson.data.data)
             if (responseJson.data.status == 1) {
                 let id = responseJson.data.data[0].id
                 this.setState({ showOTP: true, id: id, editableInput: false, dropdownDisable: true })
@@ -112,7 +112,6 @@ class Login extends React.Component {
                 })
             }
         }).catch(error => { this.setState({ loading: false }) })
-
     }
     render() {
         console.log('check:', this.state.domainValue)
@@ -127,6 +126,7 @@ class Login extends React.Component {
                             <TextInput
                                 style={{ height: 50, paddingLeft: 15, width: '70%', }}
                                 placeholder="Enter Email"
+                                value={this.state.email}
                                 editable={this.state.editableInput}
                                 onChangeText={text => { this.setState({ email: text.trim(), emailError: '' }) }}
                             />
@@ -143,8 +143,8 @@ class Login extends React.Component {
                             style={{ height: 50, justifyContent: 'center', }}
                             dropdownStyle={{ height: 140 }}
                             onSelect={(value, item) => { this.setState({ domainValue: item, emailError: '' }); val = item }}
-                            textStyle={{ paddingRight: 10, fontFamily: 'Gotham-Medium', fontSize: 13 }}
-                            dropdownTextStyle={{ fontSize: 15, color: 'black' }}
+                            textStyle={{ paddingRight: 10, fontFamily: 'Gotham-Medium', fontSize: 15 }}
+                            dropdownTextStyle={{ fontSize: 15, color: 'black',fontFamily: 'Gotham-Medium', }}
                         />
                     </View>
                     {this.state.emailError != '' ? <Text style={{ paddingLeft: 20, marginTop: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start' }}>{this.state.emailError}</Text> : null}
@@ -155,6 +155,7 @@ class Login extends React.Component {
                                 placeholder="Enter OTP"
                                 maxLength={4}
                                 keyboardType="numeric"
+                                value={this.state.password}
                                 onChangeText={text => { this.setState({ password: text.trim(), passwordError: '' }) }}
                             />
                             : null

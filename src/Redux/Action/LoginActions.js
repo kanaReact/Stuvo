@@ -9,6 +9,7 @@ import {
 import constant from "../config/constant";
 import { doPost } from "../config/request";
 import axios from 'axios';
+/** For handle the login response */
 export function loginSuccess(responseJson) {
     return dispatch => {
         dispatch({ type: LoginSuccess, payload: { responseJson } });
@@ -21,7 +22,7 @@ export function loginFailed(responseJson) {
     };
 }
 
-
+/** Call login api */
 export const login = (id, otp) => {
     return (dispatch) => {
         let url = constant.BASE_URL+'otp_verify'
@@ -44,7 +45,7 @@ export const login = (id, otp) => {
     };
 };
 
-
+/** For handle user detail api response */
 export function userDetailSuccess(responseJson) {
     return dispatch => {
         dispatch({ type: UserDetailSuccess, payload: { responseJson } });
@@ -57,7 +58,7 @@ export function userDetailFailed(responseJson) {
     };
 }
 
-
+/** Call user detail api */
 export const userDetail = (AUTH) => {
     return (dispatch) => {
         let url = constant.BASE_URL+'user_detail'
@@ -78,19 +79,13 @@ export const userDetail = (AUTH) => {
         
     };
 };
-
+/** Handle logout */
 export const logout = () => {
     return (dispatch) => {
         dispatch({ type: LogoutSuccess })
     }
 }
-
-export const clearMessage = () => {
-    return (dispatch) => {
-        dispatch({ type: ClearMessage })
-    }
-}
-
+/** Handle Remember me */
 export const rememberMe = () => {
     return (dispatch) => {
         dispatch({ type: Rememberme })

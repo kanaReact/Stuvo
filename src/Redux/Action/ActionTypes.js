@@ -16,3 +16,8 @@ export const ClearMessage='ClearMessage';
 
 export const SurveyListSuccess='SurveyListSuccess';
 export const SurveyListFailed='SurveyListFailed';
+
+export const SurveyDetailSuccess='SurveyDetailSuccess';
+export const SurveyDetailFailed='SurveyDetailFailed';
+
+export const HadnleAnswer='HadnleAnswer';

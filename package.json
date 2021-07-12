@@ -21,6 +21,7 @@
     "moment": "^2.29.1",
     "react": "17.0.1",
     "react-native": "0.64.0",
+    "react-native-check-box": "^2.1.7",
     "react-native-confetti-cannon": "^1.5.2",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-modal-dropdown": "^1.0.1",

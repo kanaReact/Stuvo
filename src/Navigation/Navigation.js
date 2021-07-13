@@ -138,7 +138,7 @@ function MyTabBar({ state, descriptors, navigation }) {
         if (label == "main") {
           return (
 
-            <View style={{
+            <View key={index} style={{
               flexDirection: 'row', alignItems: 'center', height: 69, backgroundColor: '#00AFF0', width: width, justifyContent: 'center', paddingTop: 8,
             }}>
               <TouchableOpacity

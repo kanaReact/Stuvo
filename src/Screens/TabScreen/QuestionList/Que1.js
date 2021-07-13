@@ -29,7 +29,8 @@ class Que1 extends Component {
             answer_id: '',
             type: '',
             errorRadio: '',
-            errorInput: ''
+            errorInput: '',
+            answerArray:[]
         }
 
     }
@@ -44,7 +45,6 @@ class Que1 extends Component {
     }
     componentWillReceiveProps(nextProps) {
         this.setState({ loading: false })
-        console.log('Survey detail data::', nextProps.surveyDetailData)
         if (nextProps.surveyDetailData != this.state.surveyDetailData) {
             this.setState({ surveyDetailData: nextProps.surveyDetailData, type: '', textInputAnswer: '' })
         }
@@ -152,7 +152,7 @@ class Que1 extends Component {
     }
     nextQuestion() {
         if (this.state.surveyDetailData[this.state.index].answeroption == "textbox") {
-            if (this.state.textInputAnswer == '') {
+            if (this.state.textInputAnswer != '') {
                 const { id } = this.props.route.params
                 this.props.surveyDetail(this.props.AUTH, id)
                 let survey_id = this.state.survey_id;
@@ -162,7 +162,7 @@ class Que1 extends Component {
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
                 let answer = this.state.textInputAnswer
-                this.props.answers(survey_id, question_id, answer_id, question, answeroption, type, answer)
+                this.state.answerArray.push({ survey_id:survey_id,question_id:question_id,anstitle_id:answer_id,question:question,answeroption:answeroption,type:type,answer:answer })
                 this.setState({ index: this.state.index + 1 })
             }
             else {
@@ -180,7 +180,7 @@ class Que1 extends Component {
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
                 let answer = "true"
-                this.props.answers(survey_id, question_id, answer_id, question, answeroption, type, answer)
+                this.state.answerArray.push({ survey_id:survey_id,question_id:question_id,anstitle_id:answer_id,question:question,answeroption:answeroption,type:type,answer:answer })
                 this.setState({ index: this.state.index + 1 })
             }
             else {
@@ -191,7 +191,7 @@ class Que1 extends Component {
     }
     navigateSubmit() {
         if (this.state.surveyDetailData[this.state.index].answeroption == "textbox") {
-            if (this.state.textInputAnswer == '') {
+            if (this.state.textInputAnswer != '') {
                 const { id } = this.props.route.params
                 this.props.surveyDetail(this.props.AUTH, id);
                 let survey_id = this.state.survey_id;
@@ -201,7 +201,7 @@ class Que1 extends Component {
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
                 let answer = this.state.textInputAnswer;
-                this.props.answers(survey_id, question_id, answer_id, question, answeroption, type, answer)
+                this.state.answerArray.push({ survey_id:survey_id,question_id:question_id,anstitle_id:answer_id,question:question,answeroption:answeroption,type:type,answer:answer })
             }
             else {
                 this.setState({ errorInput: 'Please enter answer' })
@@ -218,7 +218,7 @@ class Que1 extends Component {
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
                 let answer = "true";
-                this.props.answers(survey_id, question_id, answer_id, question, answeroption, type, answer)
+                this.state.answerArray.push({ survey_id:survey_id,question_id:question_id,anstitle_id:answer_id,question:question,answeroption:answeroption,type:type,answer:answer })
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
@@ -231,6 +231,7 @@ class Que1 extends Component {
         const { currentIndex } = this.state;
         let questionCount = this.state.surveyDetailData.length
         let currentQuestion = this.state.index + 1
+        console.log('Array:',this.state.answerArray)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -257,7 +258,7 @@ class Que1 extends Component {
                                 <View>
                                     {
                                         this.state.radiobuttonArray.map((item, index) => (
-                                            <TouchableOpacity style={{
+                                            <TouchableOpacity key={index} style={{
                                                 marginTop: 30, borderRadius: 30, height: 41, justifyContent: 'center', paddingHorizontal: 18,
                                                 backgroundColor: item.set == 0 ? '#E0E0E066' : '#00AFF0'
                                             }} activeOpacity={0.6}
@@ -277,7 +278,7 @@ class Que1 extends Component {
                                     <View>
                                         {
                                             this.state.checkboxArray.map((item, index) => (
-                                                <View style={{ flexDirection: 'row' }}>
+                                                <View key={index} style={{ flexDirection: 'row' }}>
                                                     <CheckBox style={{ padding: 10, width: '50%' }}
                                                         onClick={() => { this.changeCheckboxValue(item) }}
                                                         checkBoxColor={'#00AFF0'}
@@ -292,9 +293,9 @@ class Que1 extends Component {
                                     </View>
                                     :
 
-                                    <View style={{ marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}>
+                                    <View >
                                         <TextInput
-                                            style={{ paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14 }}
+                                            style={{ paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14,marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
                                             placeholder="Write something..."
                                             multiline={true}
                                             value={this.state.textInputAnswer}
@@ -311,7 +312,7 @@ class Que1 extends Component {
                 <View style={{ flex: 1, justifyContent: 'flex-end', marginHorizontal: 27 }}>
                     {
                         currentQuestion == questionCount ?
-                            <TouchableOpacity onPress={() => { this.props.navigation.navigate('QueSubmit'); this.navigateSubmit() }} activeOpacity={0.6}>
+                            <TouchableOpacity onPress={() => { this.props.navigation.navigate('QueSubmit',{ answerArray:this.state.answerArray }); this.navigateSubmit() }} activeOpacity={0.6}>
                                 <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
                                     <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next</Text>
                                 </View>
@@ -329,7 +330,6 @@ class Que1 extends Component {
     }
 }
 const mapStateToProps = (state) => {
-    console.log('check::', state.SurveyData.answerArray)
     const AUTH = state.LoginData.token
     const surveyDetailData = state.SurveyData.surveyDetailData
     const answerArray = state.SurveyData.answerArray

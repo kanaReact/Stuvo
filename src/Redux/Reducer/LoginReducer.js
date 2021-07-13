@@ -1,10 +1,11 @@
-import { LoginSuccess,LoginFailed, 
-     UserDetailSuccess, UserDetailFailed, 
-     Rememberme, LogoutSuccess,
-     RemoveRememberMe,
-     SchoolDataSuccess,SchoolDataFailed,
-     ClearMessage
-    } from '../Action/ActionTypes'
+import {
+    LoginSuccess, LoginFailed,
+    UserDetailSuccess, UserDetailFailed,
+    Rememberme, LogoutSuccess,
+    RemoveRememberMe,
+    SchoolDataSuccess, SchoolDataFailed,
+    ClearMessage
+} from '../Action/ActionTypes'
 const INITIAL_STATE = {
     isLoggedIn: false,
     errormsg: '',
@@ -13,7 +14,8 @@ const INITIAL_STATE = {
     token: '',
     userdetailData: [],
     rememberMe: false,
-    schoolList:[]
+    schoolList: [],
+    school: ''
 };
 
 const LoginReducer = (state = INITIAL_STATE, action) => {
@@ -27,6 +29,7 @@ const LoginReducer = (state = INITIAL_STATE, action) => {
                 status: 1,
                 name: action.payload.responseJson.data[0].name,
                 token: action.payload.responseJson.data[0].access_token,
+                school: action.payload.responseJson.data[0].school_name,
             }
         case LoginFailed:
             return {
@@ -54,7 +57,7 @@ const LoginReducer = (state = INITIAL_STATE, action) => {
         case RemoveRememberMe:
             return {
                 ...state,
-                rememberMe:false
+                rememberMe: false
             }
         case ClearMessage:
             return {
@@ -70,8 +73,9 @@ const LoginReducer = (state = INITIAL_STATE, action) => {
                 name: '',
                 token: '',
                 userdetailData: [],
-                rememberMe:false,
-                schoolList:[]
+                rememberMe: false,
+                schoolList: [],
+                school: ''
             }
         }
 

@@ -21,3 +21,10 @@ export const SurveyDetailSuccess='SurveyDetailSuccess';
 export const SurveyDetailFailed='SurveyDetailFailed';
 
 export const HadnleAnswer='HadnleAnswer';
+
+export const GuidanceSuccess='GuidanceSuccess';
+export const GuidanceFailed='GuidanceFailed';
+
+export const FAQSuccess='FAQSuccess';
+export const FAQFailed='FAQFailed';
+

@@ -22,10 +22,11 @@ class QueSubmit extends Component {
     }
     submitQuestion()
     {
+        const { answerArray } = this.props.route.params
         this.setState({ loading:true })
         let url = constant.BASE_URL+'survey_form_submit'
         let data = new URLSearchParams()
-        data.append('ans_array',JSON.stringify(this.props.answerArray));
+        data.append('ans_array',JSON.stringify(answerArray));
         axios.post(url,data,{
             headers: { 
                 'Content-Type': "application/x-www-form-urlencoded",
@@ -49,6 +50,8 @@ class QueSubmit extends Component {
     }
 
     render() {
+        const { answerArray } = this.props.route.params
+        console.log('array:',answerArray)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -59,13 +62,12 @@ class QueSubmit extends Component {
                         resizeMode: 'stretch',
                     }}
                     resizeMode='stretch'
-                    source={require('../../../images/mainback.png')}
-                >
+                    source={require('../../../images/mainback.png')}>
                     <Header lefttxt={{ color: '#919191' }} btn={true} leftPress={() => this.props.navigation.goBack()} />
                     <Text style={{ marginTop: 30, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', marginLeft: 16, marginRight: 24, lineHeight: 20 }}>You have now completed all questions, now submit your answers</Text>
 
                     <View style={{ flex: 1, justifyContent: 'flex-end', marginHorizontal: 27 }}>
-                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ReviewAnswer')} activeOpacity={0.6} style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', alignItems: 'center', marginBottom: 27 }}>
+                        <TouchableOpacity onPress={() => this.props.navigation.navigate('ReviewAnswer',{ answerArray:answerArray })} activeOpacity={0.6} style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', alignItems: 'center', marginBottom: 27 }}>
                             <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>{this.state.isVisible ? '' : 'Review answers'}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity onPress={()=>{ this.submitQuestion() }} activeOpacity={0.6}>

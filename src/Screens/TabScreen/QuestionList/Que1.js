@@ -48,7 +48,7 @@ class Que1 extends Component {
         if (nextProps.surveyDetailData != this.state.surveyDetailData) {
             this.setState({ surveyDetailData: nextProps.surveyDetailData, type: '', textInputAnswer: '' })
         }
-        if (nextProps.surveyDetailData[this.state.index].answeroption == "rediobutton") {
+        if (nextProps.surveyDetailData[this.state.index].answeroption == "radiobutton") {
             let tempArrayRadioBtn = []
             nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
                 tempArrayRadioBtn.push({
@@ -58,7 +58,7 @@ class Que1 extends Component {
                     set: '',
                     id: item.id,
                     question: nextProps.surveyDetailData[this.state.index].question,
-                    answeroption: 'rediobutton',
+                    answeroption: 'radiobutton',
                 })
             })
 
@@ -254,7 +254,7 @@ class Que1 extends Component {
 
                     {
                         this.state.surveyDetailData.length != 0 ?
-                            this.state.surveyDetailData[this.state.index].answeroption == "rediobutton" ?
+                            this.state.surveyDetailData[this.state.index].answeroption == "radiobutton" ?
                                 <View>
                                     {
                                         this.state.radiobuttonArray.map((item, index) => (

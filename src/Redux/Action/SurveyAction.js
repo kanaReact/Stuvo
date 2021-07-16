@@ -26,6 +26,7 @@ export const surveyList = (AUTH,type) => {
         axios.get(url,{
             headers:{ 'Authorization':'Bearer '+AUTH }
         }).then(responseJson=>{
+            console.log('res::',responseJson.data)
             if(responseJson.data.status == 1)
             {
                 dispatch(surveyListSuccess(responseJson.data))
@@ -35,7 +36,7 @@ export const surveyList = (AUTH,type) => {
                 dispatch(surveyListFailed(responseJson.data))
             }
         })
-        .catch(error=>{ dispatch(surveyListFailed(error)) })
+        .catch(error=>{ console.log('res::',responseJson.data);dispatch(surveyListFailed(error)) })
         
     };
 };

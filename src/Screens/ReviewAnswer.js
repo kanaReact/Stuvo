@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Dimensions, TouchableOpacity, FlatList, Image, SafeAreaView, Modal } from 'react-native'
+import { Text, View, Dimensions, TouchableOpacity, FlatList, Image, SafeAreaView, Modal,TextInput } from 'react-native'
 const { height, width } = Dimensions.get('window');
 import styles from '../style/styles'
 import SVGImg from '../Source/SVGImg';
@@ -185,14 +185,15 @@ class ReviewAnswer extends Component {
                                         <View>
                                             {
                                                 this.props.surveyDetailData[this.state.index].anslist.map((item, index) => (
+                                                    console.log('item:',item),
                                                     <TouchableOpacity key={index} style={{
                                                         marginTop: 30, borderRadius: 30, height: 41, justifyContent: 'center', paddingHorizontal: 18,
-                                                        backgroundColor: item.set == 0 ? '#E0E0E066' : '#00AFF0'
+                                                        backgroundColor: item.answer_title == this.state.answerArray[this.state.index].answeroption ? '#00AFF0' : '#E0E0E066'
                                                     }} activeOpacity={0.6}
                                                         onPress={() => { this.changeRadioBtnValue(item) }}>
                                                         <Text style={{
                                                             fontSize: 14, fontFamily: 'Gotham-Medium',
-                                                            color: item.set == 0 ? '#272727' : '#FFFFFF'
+                                                            color: item.answer_title == this.state.answerArray[this.state.index].answeroption ? '#FFFFFF' : '#272727'
                                                         }}>{item.answer_title}</Text>
                                                     </TouchableOpacity>
                                                 ))

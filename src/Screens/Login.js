@@ -99,7 +99,7 @@ class Login extends React.Component {
             headers: { 'Content-Type': "application/x-www-form-urlencoded" },
         }).then(responseJson => {
             this.setState({ loading: false })
-            console.log('response json::', responseJson.data.data)
+            console.log('response json::', responseJson.data.data[0])
             if (responseJson.data.status == 1) {
                 let id = responseJson.data.data[0].id
                 this.setState({ showOTP: true, id: id, editableInput: false, dropdownDisable: true })

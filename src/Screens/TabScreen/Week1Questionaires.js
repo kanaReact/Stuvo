@@ -48,7 +48,7 @@ class Week1Questionaires extends Component {
             surveyData: [],
             loading: false,
             noData: false,
-            id:''
+            id: ''
         }
     }
     formatTime(timeCreated) {
@@ -63,18 +63,25 @@ class Week1Questionaires extends Component {
             return Math.floor(diff / periods.day) + " days left to complete";
         } else if (diff > periods.hour) {
             return Math.floor(diff / periods.hour) + " hours left to complete";
-        } 
+        }
+        else if (diff > periods.minute) {
+            return Math.floor(diff / periods.minute) + " mintues left to complete";
+        }
     }
 
-    setColor(date)
-    {
-        if(this.formatTime(date).includes("days") == true)
-        {
-            return '#E17800'
+    setColor(date) {
+        if (this.formatTime(date) !=  undefined) {
+            if (this.formatTime(date).includes("days") == true) {
+                return '#E17800'
+            }
+            else {
+                return '#E10000'
+            }
         }
         else{
             return '#E10000'
         }
+
     }
 
     toggleModal = () => {
@@ -97,7 +104,7 @@ class Week1Questionaires extends Component {
 
     render() {
         const { type } = this.props.route.params
-        console.log('id::',this.state.id)
+        console.log('id::', this.state.id)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -127,7 +134,7 @@ class Week1Questionaires extends Component {
                                 data={this.state.surveyData}
                                 renderItem={({ item, index }) => (
                                     <View style={{ borderBottomWidth: 1, borderBottomColor: '#E0E0E066' }}>
-                                        <TouchableOpacity activeOpacity={0.6} onPress={()=>{ this.setState({ isVisible:true,id:item.id }) }}>
+                                        <TouchableOpacity activeOpacity={0.6} onPress={() => { this.setState({ isVisible: true, id: item.id }) }}>
                                             <View style={{ flexDirection: 'row', paddingVertical: 10, marginLeft: 16, marginRight: 24, justifyContent: 'center', alignItems: 'center' }}>
                                                 <View style={{ flexDirection: 'column', width: "85%", }}>
                                                     <Text style={{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium' }}>{item.title}</Text>
@@ -170,7 +177,7 @@ class Week1Questionaires extends Component {
 
                                     <Text style={{ fontSize: 14, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#272727', textAlign: 'center', lineHeight: 22 }}>This new set of questions are strictly{'\n'}time-based. You only have 7 days to{'\n'}submit your answers.</Text>
 
-                                    <TouchableOpacity onPress={() => { this.props.navigation.navigate('Que1',{ id:this.state.id }); this.setState({ isVisible: false }) }} activeOpacity={0.6}>
+                                    <TouchableOpacity onPress={() => { this.props.navigation.navigate('Que1', { id: this.state.id }); this.setState({ isVisible: false }) }} activeOpacity={0.6}>
                                         <View style={{ backgroundColor: '#00AFF0', marginTop: 30, height: 47, justifyContent: 'center', paddingHorizontal: 40, borderRadius: 50, marginBottom: 33 }}>
                                             <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Continue</Text>
                                         </View>
@@ -185,6 +192,7 @@ class Week1Questionaires extends Component {
     }
 }
 const mapStateToProps = (state) => {
+    console.log('res::', state.SurveyData.surveyData)
     const AUTH = state.LoginData.token
     const surveyData = state.SurveyData.surveyData
     return { AUTH, surveyData }

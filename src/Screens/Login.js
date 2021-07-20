@@ -50,8 +50,8 @@ class Login extends React.Component {
             if (this.state.email == "") {
                 this.setState({ emailError: 'Please enter email' })
             }
-            else if (this.state.domainValue == "") {
-                this.setState({ emailError: 'Please select domain' })
+            else if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.state.email))) {
+                this.setState({ emailError: 'Please enter valid email' })
             }
             else {
                 this.call_login_API()
@@ -63,6 +63,9 @@ class Login extends React.Component {
             }
             else if (this.state.email == '') {
                 this.setState({ emailError: 'Please enter email' })
+            }
+            else if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.state.email))) {
+                this.setState({ emailError: 'Please enter valid email' })
             }
             else if (this.state.password == '') {
                 this.setState({ passwordError: 'Please enter OTP' })
@@ -93,7 +96,7 @@ class Login extends React.Component {
         this.setState({ loading: true })
         let url = constant.BASE_URL + 'LoginWithOTP'
         let data = new URLSearchParams()
-        let email = this.state.email + '@' + this.state.domainValue
+        let email = this.state.email
         data.append('email', email);
         axios.post(url, data, {
             headers: { 'Content-Type': "application/x-www-form-urlencoded" },
@@ -101,6 +104,11 @@ class Login extends React.Component {
             this.setState({ loading: false })
             console.log('response json::', responseJson.data.data[0])
             if (responseJson.data.status == 1) {
+                Toast.show('OTP sent on mail', {
+                    position: Toast.position.BOTTOM,
+                    containerStyle: { backgroundColor: 'black' },
+                    textStyle: { color: 'white' },
+                })
                 let id = responseJson.data.data[0].id
                 this.setState({ showOTP: true, id: id, editableInput: false, dropdownDisable: true })
             }
@@ -124,28 +132,13 @@ class Login extends React.Component {
                     <View style={{ flexDirection: 'row', width: '90%', borderWidth: 0.5, borderColor: 'gray', borderRadius: 30, justifyContent: 'space-between' }}>
                         <View style={{ flex: 1 }}>
                             <TextInput
-                                style={{ height: 50, paddingLeft: 15, width: '70%', }}
+                                style={{ height: 50, paddingLeft: 15, width: '100%', }}
                                 placeholder="Enter Email"
                                 value={this.state.email}
-                                editable={this.state.editableInput}
                                 onChangeText={text => { this.setState({ email: text.trim(), emailError: '' }) }}
                             />
                         </View>
-                        <ModalDropdown
-                            defaultValue={"Select Domain"}
-                            disabled={this.state.dropdownDisable}
-                            renderButtonText={() => {
-                                return (
-                                    <Text style={{ fontFamily: 'Gotham-Medium' }}>@{val}</Text>
-                                )
-                            }}
-                            options={this.state.schoolList}
-                            style={{ height: 50, justifyContent: 'center', }}
-                            dropdownStyle={{ height: 140 }}
-                            onSelect={(value, item) => { this.setState({ domainValue: item, emailError: '' }); val = item }}
-                            textStyle={{ paddingRight: 10, fontFamily: 'Gotham-Medium', fontSize: 15 }}
-                            dropdownTextStyle={{ fontSize: 15, color: 'black',fontFamily: 'Gotham-Medium', }}
-                        />
+                        
                     </View>
                     {this.state.emailError != '' ? <Text style={{ paddingLeft: 20, marginTop: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start' }}>{this.state.emailError}</Text> : null}
                     {

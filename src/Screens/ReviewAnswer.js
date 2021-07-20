@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Dimensions, TouchableOpacity, FlatList, Image, SafeAreaView, Modal,TextInput } from 'react-native'
+import { Text, View, Dimensions, TouchableOpacity, FlatList, Image, SafeAreaView, Modal, TextInput } from 'react-native'
 const { height, width } = Dimensions.get('window');
 import styles from '../style/styles'
 import SVGImg from '../Source/SVGImg';
@@ -59,7 +59,17 @@ class ReviewAnswer extends Component {
             loading: false,
             answerArray: this.props.route.params.answerArray,
             editAnsModal: false,
-            index: 0
+            index: 0,
+            radiobuttonArray: [],
+            question_id: '',
+            survey_id: '',
+            answer: '',
+            question: '',
+            textInputAnswer: '',
+            answeroption: '',
+            answer_id: '',
+            type: '',
+            checkboxAnswer: []
         }
     }
 
@@ -91,9 +101,90 @@ class ReviewAnswer extends Component {
             this.setState({ loading: false })
         })
     }
+    checkboxCheck(item) {
+        console.log('check::0', this.state.answerArray[this.state.index].answeroption.indexOf(item))
+        if (this.state.answerArray[this.state.index].answeroption.includes(item) !== false) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    async openEditAnsModal(index) {
+        let tempRadioBtn = []
+        await this.setState({ index: index, editAnsModal: true })
+        console.log('index::', this.state.index)
+        if (this.props.surveyDetailData[this.state.index].answeroption == "radiobutton") {
+            this.props.surveyDetailData[this.state.index].anslist.map((item, key) => {
+                if (item.answer_title == this.state.answerArray[this.state.index].answeroption) {
+                    tempRadioBtn.push({
+                        answer_title: item.answer_title,
+                        serve_id: item.serve_id,
+                        question_id: item.question_id,
+                        set: 1,
+                        id: item.id,
+                        question: this.props.surveyDetailData[this.state.index].question,
+                        answeroption: 'radiobutton',
+                    })
+                }
+                else {
+                    tempRadioBtn.push({
+                        answer_title: item.answer_title,
+                        serve_id: item.serve_id,
+                        question_id: item.question_id,
+                        set: 0,
+                        id: item.id,
+                        question: this.props.surveyDetailData[this.state.index].question,
+                        answeroption: 'radiobutton',
+                    })
+                }
+            })
+            this.setState({ radiobuttonArray: tempRadioBtn })
+        }
+        console.log('temp::', tempRadioBtn)
+
+    }
+    async changeRadioBtnValue(data) {
+        let array = this.state.radiobuttonArray
+        this.state.radiobuttonArray.map(async(item, index) => {
+            if (array[index].id == data.id) {
+                array[index].set = 1;
+                console.log('Array Option:::',array[index].answer_title)
+                await this.setState({
+                    survey_id: array[index].serve_id,
+                    question_id: array[index].question_id,
+                    answer_id: array[index].id,
+                    question: array[index].question,
+                    answeroption: array[index].answer_title,
+                    type: array[index].answeroption,
+                })
+            }
+            else {
+                array[index].set = 0;
+                await this.setState({
+                    survey_id: array[index].serve_id,
+                    question_id: array[index].question_id,
+                    answer_id: array[index].id,
+                    question: array[index].question,
+                    answeroption: array[index].answer_title,
+                    type: array[index].answeroption,
+                })
+            }
+        })
+        this.setState({ radiobuttonArray: array })
+    }
+    updateQuestion() {
+        let array = this.state.answerArray
+        if (this.state.answerArray[this.state.index].type == "radiobutton") {
+            array[this.state.index].anstitle_id = this.state.answer_id;
+            array[this.state.index].answeroption = this.state.answeroption;
+            console.log('array::',array)
+        }
+
+    }
     render() {
-        const { answerArray } = this.props.route.params
-        console.log('ans array:::', answerArray)
+        console.log('State Answer option::',this.state.answeroption)
+        
         let questionCount = this.props.surveyDetailData.length
         let currentQuestion = this.state.index + 1
         return (
@@ -115,7 +206,7 @@ class ReviewAnswer extends Component {
                             <View key={index} style={{ paddingHorizontal: 18, borderRadius: 10, backgroundColor: '#F3F3F3', marginTop: 10 }}>
                                 <View style={{ marginVertical: 18, flexDirection: 'row' }}>
                                     <Text style={{ flex: 1, fontSize: 13, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>Question {index + 1}</Text>
-                                    <TouchableOpacity onPress={()=>{ this.setState({ index:index,editAnsModal:true }) }} style={{ padding: 5 }} activeOpacity={0.6}>
+                                    <TouchableOpacity onPress={() => { this.openEditAnsModal(index); }} style={{ padding: 5 }} activeOpacity={0.6}>
                                         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                             <SVGImg.Edit />
                                         </View>
@@ -126,7 +217,7 @@ class ReviewAnswer extends Component {
 
                                 <View style={{ flexDirection: 'row', marginTop: 25, marginBottom: 16, alignItems: 'center' }}>
                                     <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>Answer.</Text>
-                                    <Text style={{ marginLeft: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>{item.answeroption != '' ? item.answeroption : item.answer}</Text>
+                                    <Text style={{ marginLeft: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>{item.answeroption != '' ? item.type == "checkbox" ? item.answeroption.toString() : item.answeroption : item.answer}</Text>
                                 </View>
                             </View>
                         )}
@@ -150,7 +241,7 @@ class ReviewAnswer extends Component {
 
                                 <Text style={{ fontSize: 14, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#272727' }}>Your answers have been submitted.</Text>
 
-                                <TouchableOpacity onPress={() => {this.props.navigation.navigate('Question')}} activeOpacity={0.6}>
+                                <TouchableOpacity onPress={() => { this.props.navigation.navigate('Question') }} activeOpacity={0.6}>
                                     <View style={{ backgroundColor: '#00AFF0', marginTop: 25, height: 47, justifyContent: 'center', paddingHorizontal: 50, borderRadius: 50, marginBottom: 28 }}>
                                         <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Close</Text>
                                     </View>
@@ -167,7 +258,7 @@ class ReviewAnswer extends Component {
                                 <SVGImg.HeaderLogo />
                             </View>
                             <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                <TouchableOpacity onPress={() => { this.setState({ editAnsModal:false }) }} activeOpacity={0.6}>
+                                <TouchableOpacity onPress={() => { this.setState({ editAnsModal: false }) }} activeOpacity={0.6}>
                                     <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>Close</Text>
                                 </TouchableOpacity>
                             </View>
@@ -178,22 +269,20 @@ class ReviewAnswer extends Component {
 
                         <View style={{ marginLeft: 16, marginRight: 24 }}>
                             <Text style={{ marginTop: 15, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', lineHeight: 20 }}>{this.props.surveyDetailData.length != 0 ? this.props.surveyDetailData[this.state.index].question : null}</Text>
-
                             {
                                 this.props.surveyDetailData.length != 0 ?
-                                    this.props.surveyDetailData[this.state.index].answeroption == "rediobutton" ?
+                                    this.props.surveyDetailData[this.state.index].answeroption == "radiobutton" ?
                                         <View>
                                             {
-                                                this.props.surveyDetailData[this.state.index].anslist.map((item, index) => (
-                                                    console.log('item:',item),
+                                                this.state.radiobuttonArray.map((item, index) => (
                                                     <TouchableOpacity key={index} style={{
                                                         marginTop: 30, borderRadius: 30, height: 41, justifyContent: 'center', paddingHorizontal: 18,
-                                                        backgroundColor: item.answer_title == this.state.answerArray[this.state.index].answeroption ? '#00AFF0' : '#E0E0E066'
+                                                        backgroundColor: item.set == 1 ? '#00AFF0' : '#E0E0E066'
                                                     }} activeOpacity={0.6}
                                                         onPress={() => { this.changeRadioBtnValue(item) }}>
                                                         <Text style={{
                                                             fontSize: 14, fontFamily: 'Gotham-Medium',
-                                                            color: item.answer_title == this.state.answerArray[this.state.index].answeroption ? '#FFFFFF' : '#272727'
+                                                            color: item.set == 1 ? '#FFFFFF' : '#272727'
                                                         }}>{item.answer_title}</Text>
                                                     </TouchableOpacity>
                                                 ))
@@ -208,10 +297,9 @@ class ReviewAnswer extends Component {
                                                     this.props.surveyDetailData[this.state.index].anslist.map((item, index) => (
                                                         <View key={index} style={{ flexDirection: 'row' }}>
                                                             <CheckBox style={{ padding: 10, width: '50%' }}
-                                                                onClick={() => { this.changeCheckboxValue(item) }}
                                                                 checkBoxColor={'#00AFF0'}
                                                                 checkedCheckBoxColor={'#00AFF0'}
-                                                                isChecked={item.set == 1 ? true : false}
+                                                                isChecked={this.checkboxCheck(item.answer_title)}
                                                                 rightText={item.answer_title}
                                                             />
                                                         </View>
@@ -226,7 +314,7 @@ class ReviewAnswer extends Component {
                                                     style={{ paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
                                                     placeholder="Write something..."
                                                     multiline={true}
-                                                    value={this.state.textInputAnswer}
+                                                    value={this.state.answerArray[this.state.index].answer}
                                                     onChangeText={(text) => { this.setState({ textInputAnswer: text.trimStart(), errorInput: '' }) }}
                                                 />
                                                 {this.state.errorInput != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorInput}</Text> : null}
@@ -239,15 +327,10 @@ class ReviewAnswer extends Component {
 
                         <View style={{ flex: 1, justifyContent: 'flex-end', marginHorizontal: 27 }}>
                             {
-                                currentQuestion == questionCount ?
-                                    <TouchableOpacity onPress={() => { this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray }); this.navigateSubmit() }} activeOpacity={0.6}>
+                                
+                                    <TouchableOpacity onPress={() => { this.updateQuestion() }} activeOpacity={0.6}>
                                         <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
-                                            <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next</Text>
-                                        </View>
-                                    </TouchableOpacity> :
-                                    <TouchableOpacity onPress={() => { this.nextQuestion() }} activeOpacity={0.6}>
-                                        <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
-                                            <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next Question</Text>
+                                            <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Update</Text>
                                         </View>
                                     </TouchableOpacity>
                             }

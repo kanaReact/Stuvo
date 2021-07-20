@@ -8,6 +8,8 @@ import { surveyDetail, answers } from '../../../Redux/Action'
 import Spinner from '../../../Components/Spinner'
 import CheckBox from 'react-native-check-box'
 import Toast from 'react-native-tiny-toast'
+let temp = []
+let tempid=[]
 class Que1 extends Component {
     constructor(props) {
         super(props);
@@ -30,7 +32,8 @@ class Que1 extends Component {
             type: '',
             errorRadio: '',
             errorInput: '',
-            answerArray:[]
+            answerArray: [],
+            checkboxAnswer: []
         }
 
     }
@@ -41,6 +44,7 @@ class Que1 extends Component {
     componentWillMount() {
         this.setState({ loading: true })
         const { id } = this.props.route.params
+        console.log('id::',id)
         this.props.surveyDetail(this.props.AUTH, id)
     }
     componentWillReceiveProps(nextProps) {
@@ -68,18 +72,10 @@ class Que1 extends Component {
         else if (nextProps.surveyDetailData[this.state.index].answeroption == "checkbox") {
             let tempArrayRadioBtn = []
             nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
-                tempArrayRadioBtn.push({
-                    answer_title: item.answer_title,
-                    serve_id: item.serve_id,
-                    question_id: item.question_id,
-                    set: '',
-                    id: item.id,
-                    question: nextProps.surveyDetailData[this.state.index].question,
-                    answeroption: 'checkbox',
-                })
+                this.changeCheckboxValue(index, false)
             })
 
-            this.setState({ checkboxArray: tempArrayRadioBtn })
+
         }
         else if (nextProps.surveyDetailData[this.state.index].answeroption == "textbox") {
             this.setState({
@@ -95,10 +91,10 @@ class Que1 extends Component {
     changeRadioBtnValue(data) {
         this.setState({ errorRadio: '' })
         let array = this.state.radiobuttonArray
-        this.state.radiobuttonArray.map((item, index) => {
+        this.state.radiobuttonArray.map(async(item, index) => {
             if (array[index].id == data.id) {
                 array[index].set = 1;
-                this.setState({
+                await this.setState({
                     survey_id: array[index].serve_id,
                     question_id: array[index].question_id,
                     answer_id: array[index].id,
@@ -109,7 +105,7 @@ class Que1 extends Component {
             }
             else {
                 array[index].set = 0;
-                this.setState({
+                await this.setState({
                     survey_id: array[index].serve_id,
                     question_id: array[index].question_id,
                     answer_id: array[index].id,
@@ -119,38 +115,36 @@ class Que1 extends Component {
                 })
             }
         })
+        console.log('array::',array)
         this.setState({ radiobuttonArray: array })
     }
-    changeCheckboxValue(data) {
-        this.setState({ errorRadio: '' })
-        let array = this.state.checkboxArray
-        this.state.checkboxArray.map((item, index) => {
-            if (array[index].id == data.id) {
-                array[index].set = 1;
-                this.setState({
-                    survey_id: array[index].serve_id,
-                    question_id: array[index].question_id,
-                    answer_id: array[index].id,
-                    question: array[index].question,
-                    answeroption: array[index].answer_title,
-                    type: array[index].answeroption,
-                })
-            }
-            else {
-                array[index].set = 0;
-                this.setState({
-                    survey_id: array[index].serve_id,
-                    question_id: array[index].question_id,
-                    answer_id: array[index].id,
-                    question: array[index].question,
-                    answeroption: array[index].answer_title,
-                    type: array[index].answeroption,
-                })
-            }
-        })
-        this.setState({ checkboxArray: array })
+    async changeCheckboxValue(index, item) {
+        let temp = this.state.checkboxArray;
+        await temp.splice(index, 1, item)
+        await this.setState({ checkboxArray: temp })
+        return this.state.checkboxArray
+    }
+    onCheckBoxChange(index, item) {
+        console.log('checkbox array:::', this.state.checkboxArray)
+        let value = this.state.checkboxArray[index]
+        if (value == false) {
+            this.changeCheckboxValue(index, true);
+            let que = this.state.surveyDetailData[this.state.index].question
+            tempid.push(item.id)
+            this.setState({ type: 'checkbox', survey_id: item.serve_id, question_id: item.question_id, question: que,  })
+            temp.push(item.answer_title)
+        }
+        else if (value == true) {
+            this.changeCheckboxValue(index, false);
+            temp.pop(item.answer_title)
+            tempid.pop(item.id)
+        } else {
+            this.changeCheckboxValue(index, true)
+        }
+        console.log('temp array:', temp)
     }
     nextQuestion() {
+        
         if (this.state.surveyDetailData[this.state.index].answeroption == "textbox") {
             if (this.state.textInputAnswer != '') {
                 const { id } = this.props.route.params
@@ -162,14 +156,14 @@ class Que1 extends Component {
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
                 let answer = this.state.textInputAnswer
-                this.state.answerArray.push({ survey_id:survey_id,question_id:question_id,anstitle_id:answer_id,question:question,answeroption:answeroption,type:type,answer:answer })
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
                 this.setState({ index: this.state.index + 1 })
             }
             else {
                 this.setState({ errorInput: 'Please enter answer' })
             }
         }
-        else {
+        else if (this.state.surveyDetailData[this.state.index].answeroption == "radiobutton") {
             if (this.state.type != '') {
                 const { id } = this.props.route.params
                 this.props.surveyDetail(this.props.AUTH, id)
@@ -180,8 +174,27 @@ class Que1 extends Component {
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
                 let answer = "true"
-                this.state.answerArray.push({ survey_id:survey_id,question_id:question_id,anstitle_id:answer_id,question:question,answeroption:answeroption,type:type,answer:answer })
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
                 this.setState({ index: this.state.index + 1 })
+            }
+            else {
+                this.setState({ errorRadio: 'Please select answer' })
+            }
+        } else {
+            if (temp.length != 0) {
+                const { id } = this.props.route.params
+                this.props.surveyDetail(this.props.AUTH, id)
+                let survey_id = this.state.survey_id;
+                let question_id = this.state.question_id;
+                let answer_id = tempid;
+                let question = this.state.question;
+                let answeroption = temp;
+                let type = this.state.type;
+                let answer = "true"
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                this.setState({ index: this.state.index + 1 })
+                temp = [];
+                tempid = [];
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
@@ -201,13 +214,14 @@ class Que1 extends Component {
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
                 let answer = this.state.textInputAnswer;
-                this.state.answerArray.push({ survey_id:survey_id,question_id:question_id,anstitle_id:answer_id,question:question,answeroption:answeroption,type:type,answer:answer })
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
             }
             else {
                 this.setState({ errorInput: 'Please enter answer' })
             }
         }
-        else {
+        else if (this.state.surveyDetailData[this.state.index].answeroption == "radiobutton") {
+            alert('check')
             if (this.state.type != '') {
                 const { id } = this.props.route.params
                 this.props.surveyDetail(this.props.AUTH, id)
@@ -218,12 +232,32 @@ class Que1 extends Component {
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
                 let answer = "true";
-                this.state.answerArray.push({ survey_id:survey_id,question_id:question_id,anstitle_id:answer_id,question:question,answeroption:answeroption,type:type,answer:answer })
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
             }
         }
+        else {
+            if (temp.length != 0) {
+                const { id } = this.props.route.params
+                this.props.surveyDetail(this.props.AUTH, id)
+                let survey_id = this.state.survey_id;
+                let question_id = this.state.question_id;
+                let answer_id = tempid;
+                let question = this.state.question;
+                let answeroption = temp;
+                let type = this.state.type;
+                let answer = "true"
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                this.setState({ index: this.state.index + 1 })
+                temp = []
+            }
+            else {
+                this.setState({ errorRadio: 'Please select answer' })
+            }
+        }
+
 
     }
 
@@ -231,7 +265,7 @@ class Que1 extends Component {
         const { currentIndex } = this.state;
         let questionCount = this.state.surveyDetailData.length
         let currentQuestion = this.state.index + 1
-        console.log('Array:',this.state.answerArray)
+        console.log('Answer Array:::::', this.state.answerArray)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -277,13 +311,13 @@ class Que1 extends Component {
                                 this.state.surveyDetailData[this.state.index].answeroption == "checkbox" ?
                                     <View>
                                         {
-                                            this.state.checkboxArray.map((item, index) => (
+                                            this.state.surveyDetailData[this.state.index].anslist.map((item, index) => (
                                                 <View key={index} style={{ flexDirection: 'row' }}>
                                                     <CheckBox style={{ padding: 10, width: '50%' }}
-                                                        onClick={() => { this.changeCheckboxValue(item) }}
+                                                        onClick={() => { this.onCheckBoxChange(index, item) }}
                                                         checkBoxColor={'#00AFF0'}
                                                         checkedCheckBoxColor={'#00AFF0'}
-                                                        isChecked={item.set == 1 ? true : false}
+                                                        isChecked={this.state.checkboxArray[index] == true ? true : false}
                                                         rightText={item.answer_title}
                                                     />
                                                 </View>
@@ -295,7 +329,7 @@ class Que1 extends Component {
 
                                     <View >
                                         <TextInput
-                                            style={{ paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14,marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                            style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
                                             placeholder="Write something..."
                                             multiline={true}
                                             value={this.state.textInputAnswer}
@@ -312,7 +346,7 @@ class Que1 extends Component {
                 <View style={{ flex: 1, justifyContent: 'flex-end', marginHorizontal: 27 }}>
                     {
                         currentQuestion == questionCount ?
-                            <TouchableOpacity onPress={() => { this.props.navigation.navigate('QueSubmit',{ answerArray:this.state.answerArray }); this.navigateSubmit() }} activeOpacity={0.6}>
+                            <TouchableOpacity onPress={() => { this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray }); this.navigateSubmit() }} activeOpacity={0.6}>
                                 <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
                                     <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next</Text>
                                 </View>
@@ -330,6 +364,7 @@ class Que1 extends Component {
     }
 }
 const mapStateToProps = (state) => {
+    console.log('data::',state.SurveyData.surveyDetailData)
     const AUTH = state.LoginData.token
     const surveyDetailData = state.SurveyData.surveyDetailData
     const answerArray = state.SurveyData.answerArray

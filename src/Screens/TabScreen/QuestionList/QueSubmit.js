@@ -23,6 +23,7 @@ class QueSubmit extends Component {
     submitQuestion()
     {
         const { answerArray } = this.props.route.params
+        console.log('json array::',JSON.stringify(answerArray))
         this.setState({ loading:true })
         let url = constant.BASE_URL+'survey_form_submit'
         let data = new URLSearchParams()
@@ -63,7 +64,7 @@ class QueSubmit extends Component {
                     }}
                     resizeMode='stretch'
                     source={require('../../../images/mainback.png')}>
-                    <Header lefttxt={{ color: '#919191' }} btn={true} leftPress={() => this.props.navigation.goBack()} />
+                    <Header lefttxt={{ color: '#919191' }} btn={true} leftPress={() => this.props.navigation.navigate('Question')} />
                     <Text style={{ marginTop: 30, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', marginLeft: 16, marginRight: 24, lineHeight: 20 }}>You have now completed all questions, now submit your answers</Text>
 
                     <View style={{ flex: 1, justifyContent: 'flex-end', marginHorizontal: 27 }}>

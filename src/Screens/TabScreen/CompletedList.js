@@ -2,8 +2,7 @@ import React, { Component } from 'react'
 import { SafeAreaView, View, Text, Image, TouchableOpacity, FlatList } from 'react-native'
 import styles from '../../style/styles'
 import Header from '../../Components/Header'
-
-
+import { connect } from 'react-redux'
 class CompletedList extends Component {
     constructor(props) {
         super(props);
@@ -69,4 +68,9 @@ class CompletedList extends Component {
         );
     }
 }
-export default CompletedList
+const mapStateToProps = (state) => {
+    const AUTH = state.LoginData.token
+    return { AUTH }
+}
+
+export default connect(mapStateToProps, null)(CompletedList)

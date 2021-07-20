@@ -95,27 +95,27 @@ class Que1 extends Component {
             if (array[index].id == data.id) {
                 array[index].set = 1;
                 await this.setState({
-                    survey_id: array[index].serve_id,
-                    question_id: array[index].question_id,
-                    answer_id: array[index].id,
-                    question: array[index].question,
-                    answeroption: array[index].answer_title,
-                    type: array[index].answeroption,
+                    survey_id: data.serve_id,
+                    question_id: data.question_id,
+                    answer_id: data.id,
+                    question: data.question,
+                    answeroption: data.answer_title,
+                    type: data.answeroption,
                 })
             }
-            else {
+            else  {
                 array[index].set = 0;
                 await this.setState({
-                    survey_id: array[index].serve_id,
-                    question_id: array[index].question_id,
-                    answer_id: array[index].id,
-                    question: array[index].question,
-                    answeroption: array[index].answer_title,
-                    type: array[index].answeroption,
+                    survey_id: data.serve_id,
+                    question_id: data.question_id,
+                    answer_id: data.id,
+                    question: data.question,
+                    answeroption: data.answer_title,
+                    type: data.answeroption,
                 })
             }
         })
-        console.log('array::',array)
+        
         this.setState({ radiobuttonArray: array })
     }
     async changeCheckboxValue(index, item) {
@@ -206,7 +206,7 @@ class Que1 extends Component {
         if (this.state.surveyDetailData[this.state.index].answeroption == "textbox") {
             if (this.state.textInputAnswer != '') {
                 const { id } = this.props.route.params
-                this.props.surveyDetail(this.props.AUTH, id);
+                
                 let survey_id = this.state.survey_id;
                 let question_id = this.state.question_id;
                 let answer_id = this.state.answer_id;
@@ -221,10 +221,10 @@ class Que1 extends Component {
             }
         }
         else if (this.state.surveyDetailData[this.state.index].answeroption == "radiobutton") {
-            alert('check')
+            
             if (this.state.type != '') {
                 const { id } = this.props.route.params
-                this.props.surveyDetail(this.props.AUTH, id)
+                
                 let survey_id = this.state.survey_id;
                 let question_id = this.state.question_id;
                 let answer_id = this.state.answer_id;
@@ -241,7 +241,7 @@ class Que1 extends Component {
         else {
             if (temp.length != 0) {
                 const { id } = this.props.route.params
-                this.props.surveyDetail(this.props.AUTH, id)
+                
                 let survey_id = this.state.survey_id;
                 let question_id = this.state.question_id;
                 let answer_id = tempid;
@@ -250,7 +250,6 @@ class Que1 extends Component {
                 let type = this.state.type;
                 let answer = "true"
                 this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                this.setState({ index: this.state.index + 1 })
                 temp = []
             }
             else {
@@ -266,6 +265,7 @@ class Que1 extends Component {
         let questionCount = this.state.surveyDetailData.length
         let currentQuestion = this.state.index + 1
         console.log('Answer Array:::::', this.state.answerArray)
+        console.log('answet option state::',this.state.answeroption)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />

@@ -1,12 +1,12 @@
 import {
     SurveyListSuccess,SurveyListFailed, SurveyDetailSuccess, SurveyDetailFailed,
-    HadnleAnswer
+    HadnleAnswer,
+    SurveycompletedlistSuccess,SurveycompletedlistFailed,
 } from './ActionTypes';
 import constant from '../config/constant';
 import axios from 'axios';
 /** Handle Survey List Response */
 var array = []
-console.log('satyam array::',array)
 export function surveyListSuccess(responseJson) {
     return dispatch => {
         dispatch({ type: SurveyListSuccess, payload: { responseJson } });
@@ -74,10 +74,35 @@ export const surveyDetail = (AUTH,id) => {
     };
 };
 
-export const answers = (survey_id,question_id,answer_id,question,answeroption,type,answer) => {
-    return (dispatch) => {
-        array.push({ survey_id:survey_id,question_id:question_id,anstitle_id:answer_id,question:question,answeroption:answeroption,type:type,answer:answer })
-        console.log('array action::',array)
-        dispatch({ type: HadnleAnswer,payload:{ array } })
-    }
+export function surveyCompletedListSuccess(responseJson) {
+    return dispatch => {
+        dispatch({ type: SurveycompletedlistSuccess, payload: { responseJson } });
+    };
 }
+
+export function surveyCompletedListFailed(responseJson) {
+    return dispatch => {
+        dispatch({ type: SurveycompletedlistFailed, payload: { responseJson } });
+    };
+}
+
+export const surveyComplete = (AUTH,id) => {
+    return (dispatch) => {
+        let url = constant.BASE_URL+'submit_survey_view?id='+id
+       
+        axios.get(url,{
+            headers:{ 'Authorization':'Bearer '+AUTH }
+        }).then(responseJson=>{
+            if(responseJson.data.status == 1)
+            {
+                dispatch(surveyCompletedListSuccess(responseJson.data))
+            }
+            else
+            {
+                dispatch(surveyCompletedListFailed(responseJson.data))
+            }
+        })
+        .catch(error=>{ dispatch(surveyCompletedListFailed(error)) })
+        
+    };
+};

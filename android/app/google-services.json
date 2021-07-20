@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "378353757446",
+    "project_id": "stuvo-237b2",
+    "storage_bucket": "stuvo-237b2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:378353757446:android:3ce1ed69b672fea6fb0287",
+        "android_client_info": {
+          "package_name": "com.stuvo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "378353757446-n3l58umkomd4mv4f36oo4ea416f78603.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAxj5Y8Ekb95HBmH5NiYoJxodJn2AH896s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "378353757446-n3l58umkomd4mv4f36oo4ea416f78603.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

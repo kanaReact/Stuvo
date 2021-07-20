@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { View, Image, SafeAreaView, ImageBackground, Dimensions, Text, TouchableOpacity, FlatList } from 'react-native'
+import { View, Image, SafeAreaView, ImageBackground, Dimensions, Text, TouchableOpacity, FlatList, Platform } from 'react-native'
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 import styles from '../../style/styles'
 import Header from '../../Components/Header'
 import SVGImg from '../../Source/SVGImg';
+import messaging from '@react-native-firebase/messaging';
+import PushNotification from 'react-native-push-notification'
 class Question extends Component {
     constructor(props) {
         super(props);
@@ -32,6 +34,78 @@ class Question extends Component {
                 },
             ]
         }
+    }
+    componentDidMount()
+    {
+        // Notification Manage
+        if(Platform.OS == "android")
+        {
+            this.requestUserPermission()
+        this.getToken()
+
+        messaging().onMessage(remoteMessage => {
+            console.log('A new FCM message arrived!', JSON.stringify(remoteMessage));
+            
+            
+            PushNotification.localNotification({
+                channelId: 'MyChannel',
+                title: remoteMessage.notification.title,
+                message: remoteMessage.notification.body,
+                smallIcon:'logo'
+            })
+            
+        })
+        PushNotification.configure({
+            onNotification: (notification) => { 
+                console.log('Open Notification:::',notification);
+               
+            },
+        })
+        messaging().onNotificationOpenedApp(remoteMessage => {
+            console.log(
+                'Notification caused app to open from background state:',
+                remoteMessage
+            );
+            // this.setState({ occuranceLogModal: true })
+            
+            
+        });
+
+        // Check whether an initial notification is available
+        messaging()
+            .getInitialNotification()
+            .then(remoteMessage => {
+                if (remoteMessage) {
+                    console.log(
+                        'Notification caused app to open from quit state:',
+                        remoteMessage.notification,
+                    );
+                  
+                }
+            });
+        }
+    }
+    requestUserPermission = async () => {
+        const authStatus = await messaging().requestPermission();
+        const enabled =
+            authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+            authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+        if (enabled) {
+            console.log('Authorization status:', authStatus);
+        }
+    }
+
+    getToken = async () => {
+        PushNotification.createChannel(
+            {
+                channelId: "MyChannel", // (required)
+                channelName: "My channel", // (required)
+            },
+        );
+        const token = await messaging().getToken()
+        console.log('Token2:', token)
+        return token
     }
     render() {
         return (

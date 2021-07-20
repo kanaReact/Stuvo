@@ -64,6 +64,9 @@ class CompletedQuestion extends Component {
         } else if (diff > periods.hour) {
             return Math.floor(diff / periods.hour) + " hours left to complete";
         }
+        else if (diff > periods.minute) {
+            return Math.floor(diff / periods.minute) + " mintues left to complete";
+        }
     }
 
     setColor(date) {
@@ -95,7 +98,7 @@ class CompletedQuestion extends Component {
 
     render() {
         const { type } = this.props.route.params
-        console.log('id::', this.state.id)
+        console.log('survey data::', this.state.surveyData)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -109,13 +112,7 @@ class CompletedQuestion extends Component {
                     source={require('../../images/mainback.png')}>
                     <Header lefttxt={{ color: '#919191' }} btn={true} leftPress={() => this.props.navigation.goBack()} />
                     {
-                        type == "new" ?
-                            <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Surveys</Text>
-                            :
-                            type == "pandding" ?
-                                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Pending Surveys</Text>
-                                :
-                                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Completed Surveys</Text>
+                        <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Completed Surveys</Text>
                     }
 
 
@@ -125,7 +122,7 @@ class CompletedQuestion extends Component {
                                 data={this.state.surveyData}
                                 renderItem={({ item, index }) => (
                                     <View style={{ borderBottomWidth: 1, borderBottomColor: '#E0E0E066' }}>
-                                        <TouchableOpacity activeOpacity={0.6} onPress={()=>{ this.props.navigation.navigate('CompletedList') }}>
+                                        <TouchableOpacity activeOpacity={0.6} onPress={()=>{ this.props.navigation.navigate('CompletedList',{id:item.id}) }}>
                                             <View style={{ flexDirection: 'row', paddingVertical: 10, marginLeft: 16, marginRight: 24, justifyContent: 'center', alignItems: 'center' }}>
                                                 <View style={{ flexDirection: 'column', width: "85%", }}>
                                                     <Text style={{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium' }}>{item.title}</Text>

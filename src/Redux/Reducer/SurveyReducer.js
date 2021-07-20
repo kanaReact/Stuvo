@@ -2,13 +2,15 @@ import {
     SurveyListSuccess,SurveyListFailed,
     LogoutSuccess,
     SurveyDetailSuccess,SurveyDetailFailed,
-    HadnleAnswer
+    HadnleAnswer,
+    SurveycompletedlistSuccess,SurveycompletedlistFailed
 } from '../Action/ActionTypes'
 
 const INITIAL_STATE = {
     surveyData:[],
     surveyDetailData:[],
-    answerArray:[]
+    answerArray:[],
+    surveyCompleteList:[]
 };
 
 const SurveyReducer = (state = INITIAL_STATE, action) => {
@@ -45,6 +47,16 @@ const SurveyReducer = (state = INITIAL_STATE, action) => {
                 surveyData:[],
                 surveyDetailData:[],
                 answerArray:[]
+            }
+        case SurveycompletedlistSuccess:
+            return {
+                ...state,
+                surveyCompleteList:action.payload.responseJson.data[0].Survey
+            }
+        case SurveycompletedlistFailed:
+            return {
+                ...state,
+                surveyCompleteList:[]
             }
         default:
             return state

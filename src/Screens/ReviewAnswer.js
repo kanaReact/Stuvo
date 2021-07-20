@@ -8,6 +8,8 @@ import axios from 'axios';
 import constant from '../Redux/config/constant';
 import Spinner from '../Components/Spinner';
 import CheckBox from 'react-native-check-box';
+let temp = [];
+let tempid = [];
 class ReviewAnswer extends Component {
     constructor(props) {
         super(props);
@@ -69,7 +71,10 @@ class ReviewAnswer extends Component {
             answeroption: '',
             answer_id: '',
             type: '',
-            checkboxAnswer: []
+            checkboxAnswer: [],
+            checkboxArray: [],
+            checkboxFlag: false,
+            textInputAnswer:''
         }
     }
 
@@ -77,11 +82,11 @@ class ReviewAnswer extends Component {
         this.setState({ isVisible: !this.state.isVisible })
     }
     call_submit_API() {
-        const { answerArray } = this.props.route.params
         this.setState({ loading: true })
         let url = constant.BASE_URL + 'survey_form_submit'
         let data = new URLSearchParams()
-        data.append('ans_array', JSON.stringify(answerArray));
+        console.log('ans array::',JSON.stringify(this.state.answerArray))
+        data.append('ans_array', JSON.stringify(this.state.answerArray));
         axios.post(url, data, {
             headers: {
                 'Content-Type': "application/x-www-form-urlencoded",
@@ -101,14 +106,33 @@ class ReviewAnswer extends Component {
             this.setState({ loading: false })
         })
     }
-    checkboxCheck(item) {
-        console.log('check::0', this.state.answerArray[this.state.index].answeroption.indexOf(item))
-        if (this.state.answerArray[this.state.index].answeroption.includes(item) !== false) {
+    checkboxCheck(index, item) {
+        if (this.state.answerArray[this.state.index].answeroption.includes(item.answer_title) !== false) {
             return true;
         }
         else {
             return false;
         }
+    }
+    onCheckBoxChange(index, item) {
+        this.setState({ checkboxFlag: false })
+        console.log('checkbox array:::', this.state.checkboxArray)
+        let value = this.state.checkboxArray[index]
+        if (value == false) {
+            this.changeCheckboxValue(index, true);
+            let que = this.state.answerArray[this.state.index].question
+            tempid.push(item.id)
+            this.setState({ type: 'checkbox', survey_id: item.serve_id, question_id: item.question_id, question: que, })
+            temp.push(item.answer_title)
+        }
+        else if (value == true) {
+            this.changeCheckboxValue(index, false);
+            temp.pop(item.answer_title)
+            tempid.pop(item.id)
+        } else {
+            this.changeCheckboxValue(index, true)
+        }
+        console.log('temp array:', temp)
     }
     async openEditAnsModal(index) {
         let tempRadioBtn = []
@@ -141,33 +165,57 @@ class ReviewAnswer extends Component {
             })
             this.setState({ radiobuttonArray: tempRadioBtn })
         }
+        else if (this.props.surveyDetailData[this.state.index].answeroption == "checkbox") {
+            this.props.surveyDetailData[this.state.index].anslist.map((item, index) => {
+                if (this.state.answerArray[this.state.index].answeroption.includes(item.answer_title) !== false) {
+                    this.setState({ checkboxFlag: true })
+                    this.changeCheckboxValue(index, true)
+                    temp.push(item.answer_title)
+                    tempid.push(item.id)
+                }
+                else {
+                    this.changeCheckboxValue(index, false)
+                }
+            })
+        }
+        else if(this.props.surveyDetailData[this.state.index].answeroption == "textbox")
+        {
+            this.setState({ textInputAnswer:this.state.answerArray[this.state.index].answer })
+        }
+
         console.log('temp::', tempRadioBtn)
 
     }
+    async changeCheckboxValue(index, item) {
+        let temp = this.state.checkboxArray;
+        await temp.splice(index, 1, item)
+        await this.setState({ checkboxArray: temp })
+        return this.state.checkboxArray
+    }
     async changeRadioBtnValue(data) {
         let array = this.state.radiobuttonArray
-        this.state.radiobuttonArray.map(async(item, index) => {
+        this.state.radiobuttonArray.map(async (item, index) => {
             if (array[index].id == data.id) {
                 array[index].set = 1;
-                console.log('Array Option:::',array[index].answer_title)
+                console.log('Array Option:::', array[index].answer_title)
                 await this.setState({
-                    survey_id: array[index].serve_id,
-                    question_id: array[index].question_id,
-                    answer_id: array[index].id,
-                    question: array[index].question,
-                    answeroption: array[index].answer_title,
-                    type: array[index].answeroption,
+                    survey_id: data.serve_id,
+                    question_id: data.question_id,
+                    answer_id: data.id,
+                    question: data.question,
+                    answeroption: data.answer_title,
+                    type: data.answeroption,
                 })
             }
             else {
                 array[index].set = 0;
                 await this.setState({
-                    survey_id: array[index].serve_id,
-                    question_id: array[index].question_id,
-                    answer_id: array[index].id,
-                    question: array[index].question,
-                    answeroption: array[index].answer_title,
-                    type: array[index].answeroption,
+                    survey_id: data.serve_id,
+                    question_id: data.question_id,
+                    answer_id: data.id,
+                    question: data.question,
+                    answeroption: data.answer_title,
+                    type: data.answeroption,
                 })
             }
         })
@@ -176,17 +224,44 @@ class ReviewAnswer extends Component {
     updateQuestion() {
         let array = this.state.answerArray
         if (this.state.answerArray[this.state.index].type == "radiobutton") {
-            array[this.state.index].anstitle_id = this.state.answer_id;
-            array[this.state.index].answeroption = this.state.answeroption;
-            console.log('array::',array)
+            if (this.state.answeroption != '') {
+                array[this.state.index].type = "radiobutton";
+                array[this.state.index].anstitle_id = this.state.answer_id;
+                array[this.state.index].answeroption = this.state.answeroption;
+                console.log('array::', array)
+                this.setState({ answerArray: array, editAnsModal: false })
+            }
+            else {
+                this.setState({ editAnsModal: false })
+            }
+
+        }
+        else if (this.state.answerArray[this.state.index].type == "checkbox") {
+            if (this.state.checkboxFlag == false) {
+                array[this.state.index].type = "checkbox";
+                array[this.state.index].anstitle_id = tempid
+                array[this.state.index].answeroption = temp
+                this.setState({ answerArray: array, editAnsModal: false })
+                temp = [];
+                tempid = [];
+            }
+            else {
+                this.setState({ editAnsModal: false })
+            }
+        }
+        else if(this.state.answerArray[this.state.index].type == "textbox")
+        {
+            array[this.state.index].type = "textbox";
+            array[this.state.index].answer = this.state.textInputAnswer;
+            this.setState({ answerArray:array,editAnsModal:false })
         }
 
     }
     render() {
-        console.log('State Answer option::',this.state.answeroption)
-        
+        console.log('Ans Array::', this.state.answerArray)
         let questionCount = this.props.surveyDetailData.length
         let currentQuestion = this.state.index + 1
+        let arr = this.state.answerArray[this.state.index]
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -217,7 +292,7 @@ class ReviewAnswer extends Component {
 
                                 <View style={{ flexDirection: 'row', marginTop: 25, marginBottom: 16, alignItems: 'center' }}>
                                     <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>Answer.</Text>
-                                    <Text style={{ marginLeft: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>{item.answeroption != '' ? item.type == "checkbox" ? item.answeroption.toString() : item.answeroption : item.answer}</Text>
+                                    <Text style={{ marginLeft: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>{item.answeroption != '' ? item.type == "checkbox" ? item.answeroption.toString() : item.answeroption : item.type == "textbox" ? item.answer : item.answeroption}</Text>
                                 </View>
                             </View>
                         )}
@@ -297,9 +372,10 @@ class ReviewAnswer extends Component {
                                                     this.props.surveyDetailData[this.state.index].anslist.map((item, index) => (
                                                         <View key={index} style={{ flexDirection: 'row' }}>
                                                             <CheckBox style={{ padding: 10, width: '50%' }}
+                                                                onClick={() => { this.onCheckBoxChange(index, item) }}
                                                                 checkBoxColor={'#00AFF0'}
                                                                 checkedCheckBoxColor={'#00AFF0'}
-                                                                isChecked={this.checkboxCheck(item.answer_title)}
+                                                                isChecked={this.state.checkboxArray[index] == true ? true : false}
                                                                 rightText={item.answer_title}
                                                             />
                                                         </View>
@@ -311,10 +387,11 @@ class ReviewAnswer extends Component {
 
                                             <View >
                                                 <TextInput
-                                                    style={{ paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                    style={{ textAlignVertical:'top',paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
                                                     placeholder="Write something..."
                                                     multiline={true}
-                                                    value={this.state.answerArray[this.state.index].answer}
+                                                    value={this.state.textInputAnswer}
+
                                                     onChangeText={(text) => { this.setState({ textInputAnswer: text.trimStart(), errorInput: '' }) }}
                                                 />
                                                 {this.state.errorInput != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorInput}</Text> : null}
@@ -327,12 +404,12 @@ class ReviewAnswer extends Component {
 
                         <View style={{ flex: 1, justifyContent: 'flex-end', marginHorizontal: 27 }}>
                             {
-                                
-                                    <TouchableOpacity onPress={() => { this.updateQuestion() }} activeOpacity={0.6}>
-                                        <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
-                                            <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Update</Text>
-                                        </View>
-                                    </TouchableOpacity>
+
+                                <TouchableOpacity onPress={() => { this.updateQuestion() }} activeOpacity={0.6}>
+                                    <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
+                                        <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Update</Text>
+                                    </View>
+                                </TouchableOpacity>
                             }
                         </View>
 

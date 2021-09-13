@@ -1,16 +1,22 @@
 import {
-    SurveyListSuccess,SurveyListFailed,
+    SurveyListSuccess, SurveyListFailed,
     LogoutSuccess,
-    SurveyDetailSuccess,SurveyDetailFailed,
+    SurveyDetailSuccess, SurveyDetailFailed,
     HadnleAnswer,
-    SurveycompletedlistSuccess,SurveycompletedlistFailed
+    SurveycompletedlistSuccess, SurveycompletedlistFailed,
+    NotificationListSuccess, NotificationListFailed,
+    SubmitSurveyListSuccess, SubmitSurveyListFailed,
+    AnswerGraphSuccess, AnswerGraphFailed
 } from '../Action/ActionTypes'
 
 const INITIAL_STATE = {
-    surveyData:[],
-    surveyDetailData:[],
-    answerArray:[],
-    surveyCompleteList:[]
+    surveyData: [],
+    surveyDetailData: [],
+    answerArray: [],
+    surveyCompleteList: [],
+    notificationData: [],
+    submitSurveyData: [],
+    answerGraphData: []
 };
 
 const SurveyReducer = (state = INITIAL_STATE, action) => {
@@ -18,45 +24,74 @@ const SurveyReducer = (state = INITIAL_STATE, action) => {
         case SurveyListSuccess:
             return {
                 ...state,
-                surveyData:action.payload.responseJson.data[0].Survey
+                surveyData: action.payload.responseJson.data[0].Survey
             }
         case SurveyListFailed:
             return {
                 ...state,
-                surveyData:[]
+                surveyData: []
             }
         case SurveyDetailSuccess:
             return {
                 ...state,
-                surveyDetailData:action.payload.responseJson.data[0].Question
+                surveyDetailData: action.payload.responseJson.data[0].Question
             }
         case SurveyDetailFailed:
             return {
                 ...state,
-                surveyDetailData:[]
+                surveyDetailData: []
             }
         case HadnleAnswer:
-            console.log('answer array : ',action.payload.array)
             return {
                 ...state,
-                answerArray:action.payload.array
+                answerArray: action.payload.array
             }
         case LogoutSuccess:
             return {
                 ...state,
-                surveyData:[],
-                surveyDetailData:[],
-                answerArray:[]
+                surveyData: [],
+                surveyDetailData: [],
+                answerArray: []
             }
         case SurveycompletedlistSuccess:
             return {
                 ...state,
-                surveyCompleteList:action.payload.responseJson.data[0].Survey
+                surveyCompleteList: action.payload.responseJson.data
             }
         case SurveycompletedlistFailed:
             return {
                 ...state,
-                surveyCompleteList:[]
+                surveyCompleteList: []
+            }
+        case NotificationListSuccess:
+            return {
+                ...state,
+                notificationData: action.payload.responseJson.data[0].Notification
+            }
+        case NotificationListFailed:
+            return {
+                ...state,
+                notificationData: []
+            }
+        case SubmitSurveyListSuccess:
+            return {
+                ...state,
+                submitSurveyData: action.payload.responseJson.data
+            }
+        case SubmitSurveyListFailed:
+            return {
+                ...state,
+                submitSurveyData: []
+            }
+        case AnswerGraphSuccess:
+            return {
+                ...state,
+                answerGraphData: action.payload.responseJson.data[0].answer
+            }
+        case AnswerGraphFailed:
+            return {
+                ...state,
+                answerGraphData: []
             }
         default:
             return state

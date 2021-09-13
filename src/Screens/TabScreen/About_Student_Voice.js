@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, Image, SafeAreaView, TextInput, ScrollView,ActivityIndicator } from 'react-native'
+import { Text, View, TouchableOpacity, Image, SafeAreaView, TextInput, ScrollView, ActivityIndicator } from 'react-native'
 import styles from '../../style/styles'
 import Header from '../../Components/Header'
 import SVGImg from '../../Source/SVGImg'
 import { WebView } from 'react-native-webview'
 import constant from '../../Redux/config/constant'
+import Spinner from '../../Components/Spinner'
 class About_Student_Voice extends Component {
     constructor(props) {
         super(props);
@@ -33,13 +34,7 @@ class About_Student_Voice extends Component {
                     onLoad={() => { this.hideSpinner() }}
                     source={{ uri: constant.BASE_URL + 'about_student_voice' }}
                 />
-                {this.state.visible && (
-                    <ActivityIndicator
-                        color="#00AFF0"
-                        style={{ position: "absolute", top:0,bottom:0,left:0,right:0 }}
-                        size="large"
-                    />
-                )}
+                <Spinner visible={this.state.visible} />
             </SafeAreaView>
         );
     }

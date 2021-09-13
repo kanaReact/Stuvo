@@ -24,7 +24,6 @@ export const graphDetail=(AUTH,id)=>{
         axios.get(url,{
             headers:{ 'Authorization':'Bearer '+AUTH }
         }).then(responseJson=>{
-            console.log('res::',responseJson.data)
             if(responseJson.data.status == 1)
             {
                 dispatch(grpahdetailSuccess(responseJson.data))

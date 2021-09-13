@@ -13,7 +13,7 @@ const get = slug => {
       })
       .catch(err => {
         reject(err);
-        console.log('err', err);
+       
       });
   });
 };
@@ -27,7 +27,7 @@ const getWithParams = (slug, data) => {
       })
       .catch(err => {
         reject(err);
-        console.log('err', err);
+
       });
   });
 };
@@ -52,8 +52,7 @@ const doPostWithAuth = (slug, data, token = null) => {
 
 const doPost = (slug, data) => {
   return new Promise((resolve, reject) => {
-    console.log("Slug Is : ", slug);
-    console.log("Data is : : ", data);
+ 
     axios.post(slug, data, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -87,12 +86,11 @@ const doPut = (slug, data, token) => {
         },
       })
       .then(res => {
-        console.log('DOPutRES>>>>', res);
+   
         resolve(res.data);
       })
       .catch(error => {
-        console.log('DOPOSTERR>>>', error.data);
-        console.log('DOPOSTERR>>>', error.message);
+       
         reject(error);
       });
   });
@@ -107,11 +105,11 @@ const doDelete = (slug, token) => {
         },
       })
       .then(res => {
-        console.log('AXIODELETE>>>>', res);
+       
         resolve(res.data);
       })
       .catch(error => {
-        console.log('ERROR >> "', error);
+        
         reject(error);
       });
   });

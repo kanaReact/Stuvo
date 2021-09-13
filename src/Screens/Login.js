@@ -31,32 +31,19 @@ class Login extends React.Component {
     componentWillMount() {
         this.getSchoolList()
     }
-    componentWillReceiveProps(nextProps) {
-        this.setState({ loading: false })
-        if (nextProps.status == 1) {
-            this.props.navigation.replace('tabs')
+
+    validate() {
+
+        if (this.state.email == "") {
+            this.setState({ emailError: 'Please enter email address' })
+        }
+        else if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.state.email))) {
+            this.setState({ emailError: 'Please enter valid email address' })
         }
         else {
-            Toast.show(nextProps.errormsg, {
-                position: Toast.position.BOTTOM,
-                containerStyle: { backgroundColor: 'black' },
-                textStyle: { color: 'white' },
-            })
+            this.call_login_API()
         }
 
-    }
-    validate() {
-      
-            if (this.state.email == "") {
-                this.setState({ emailError: 'Please enter email' })
-            }
-            else if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.state.email))) {
-                this.setState({ emailError: 'Please enter valid email' })
-            }
-            else {
-                this.call_login_API()
-            }
-       
     }
     getSchoolList() {
         let url = constant.BASE_URL + 'schoollist'
@@ -84,15 +71,19 @@ class Login extends React.Component {
             headers: { 'Content-Type': "application/x-www-form-urlencoded" },
         }).then(responseJson => {
             this.setState({ loading: false })
-            console.log('response json::', responseJson.data.data[0])
+
+            console.log('res:', responseJson)
             if (responseJson.data.status == 1) {
-                Toast.show('OTP sent on mail', {
+                Toast.show('OTP sent successfully', {
                     position: Toast.position.BOTTOM,
                     containerStyle: { backgroundColor: 'black' },
                     textStyle: { color: 'white' },
                 })
-                this.props.navigation.navigate('VerifyOTP')
+                let id = responseJson.data.data[0].id
+                this.props.navigation.navigate('VerifyOTP', { id: id })
+
             }
+
             else {
                 Toast.show(responseJson.data.message, {
                     position: Toast.position.BOTTOM,
@@ -100,10 +91,9 @@ class Login extends React.Component {
                     textStyle: { color: 'white' },
                 })
             }
-        }).catch(error => { this.setState({ loading: false }) })
+        }).catch(error => { this.setState({ loading: false }); console.log('erro:', error) })
     }
     render() {
-        console.log('check:', this.state.domainValue)
         var val = ''
         return (
             <SafeAreaView style={[styles.container, { alignItems: 'center', }]}>
@@ -122,25 +112,30 @@ class Login extends React.Component {
                     <View style={styles.signinLabelView}>
                         <Text style={styles.emailAddressLabel}>Email address</Text>
                     </View>
-                    <View style={{ width:'100%' }}>
-                        <TextInput
-                            style={styles.textinputemail}
-                            placeholder="Enter email"
-                            placeholderTextColor="#919191"
-                            value={this.state.email}
-                            onChangeText={(text)=>{ this.setState({ email:text.trim(),emailError:'' }) }}
-                        />
+                    <View style={{ width: '100%' }}>
+                        <View style={styles.textinputemail}>
+                            <View style={{ paddingRight: 10 }}>
+                                <SVGImg.EmailIcon />
+                            </View>
+                            <TextInput
+                                style={{ flex: 1 }}
+                                placeholder="Enter email address"
+                                placeholderTextColor="#919191"
+                                value={this.state.email}
+                                onChangeText={(text) => { this.setState({ email: text.trim(), emailError: '' }) }}
+                            />
+                        </View>
                     </View>
-                    {this.state.emailError != '' ? <Text style={{  marginTop: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start' }}>{this.state.emailError}</Text> : null}
-                    
-                    
+                    {this.state.emailError != '' ? <Text style={{ marginTop: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start' }}>{this.state.emailError}</Text> : null}
+
+
                     <TouchableOpacity style={styles.loginBtn} activeOpacity={0.6} onPress={() => { this.validate(); }}>
                         <View >
                             <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Continue</Text>
                         </View>
                     </TouchableOpacity>
-                    
-                    
+
+
                 </View>
 
             </SafeAreaView>

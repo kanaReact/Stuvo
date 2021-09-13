@@ -16,22 +16,20 @@ class DrawerContainer extends Component {
             activeTab: false,
             activeTab1: true,
             activeTab2: true,
-            loading:false
+            loading: false
         }
     }
-    call_logout_API()
-    {
-        this.setState({ loading:true })
-        let url = constant.BASE_URL+'logout';
+    call_logout_API() {
+        this.setState({ loading: true })
+        let url = constant.BASE_URL + 'logout';
         axios({
-            url:url,
-            method:'POST',
-            headers:{
-                'Authorization':'Bearer '+this.props.AUTH
+            url: url,
+            method: 'POST',
+            headers: {
+                'Authorization': 'Bearer ' + this.props.AUTH
             }
-        }).then(responseJson=>{
-            this.setState({ loading:false })
-            console.log('res:',responseJson.data)
+        }).then(responseJson => {
+            this.setState({ loading: false })
             this.props.navigation.replace('Login')
         })
     }
@@ -63,7 +61,7 @@ class DrawerContainer extends Component {
         return (
             <SafeAreaView style={[styles.container, { backgroundColor: '#000000', }]}>
                 <Spinner visible={this.state.loading} />
-                <ScrollView contentContainerStyle={{ paddingBottom: height / 2, }}>
+                <ScrollView contentContainerStyle={{ paddingBottom: height / 4, }}>
                     <View style={{ flexDirection: 'row', paddingTop: 50 }}>
                         <TouchableOpacity onPress={() => { this.props.navigation.closeDrawer() }}>
                             <View style={{ justifyContent: 'center', flex: 1, flexDirection: 'column', marginLeft: 26 }}>
@@ -117,10 +115,10 @@ class DrawerContainer extends Component {
                             </View>
                         </TouchableOpacity>
                     </View>
-                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginTop : 200 }}>
-                        <TouchableOpacity onPress={()=>{ this.props.logout();this.call_logout_API() }}>
+                    <View style={{ flex: 1, flexDirection: 'row', alignItems: 'flex-end', marginTop: 200 }}>
+                        <TouchableOpacity onPress={() => { this.props.logout(); this.call_logout_API() }}>
                             <View style={{ flexDirection: 'row' }}>
-                            <View style={{ marginLeft: 26 }}>
+                                <View style={{ marginLeft: 26 }}>
                                     <SVGImg.LogOut />
                                 </View>
                                 <Text style={{ color: '#FFFFFF', fontSize: 14, fontFamily: 'Gotham-Medium', paddingLeft: 15 }}>Log Out</Text>
@@ -136,4 +134,4 @@ const mapStateToProps = (state) => {
     const AUTH = state.LoginData.token
     return { AUTH }
 }
-export default connect(mapStateToProps,{ logout })(DrawerContainer)
+export default connect(mapStateToProps, { logout })(DrawerContainer)

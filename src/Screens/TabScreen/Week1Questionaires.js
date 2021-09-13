@@ -7,6 +7,8 @@ import { connect } from 'react-redux'
 import { surveyList } from '../../Redux/Action'
 import Spinner from '../../Components/Spinner'
 import moment from 'moment'
+import axios from 'axios'
+import constant from '../../Redux/config/constant';
 var periods = {
     month: 30 * 24 * 60 * 60 * 1000,
     week: 7 * 24 * 60 * 60 * 1000,
@@ -52,7 +54,7 @@ class Week1Questionaires extends Component {
         }
     }
     formatTime(timeCreated) {
-        var diff = Date.now() - moment(timeCreated).format("x");
+        var diff = moment(timeCreated).format("x") - Date.now();
 
         if (diff > periods.month) {
             // it was at least a month ago
@@ -67,10 +69,23 @@ class Week1Questionaires extends Component {
         else if (diff > periods.minute) {
             return Math.floor(diff / periods.minute) + " mintues left to complete";
         }
-    }
 
+    }
+    surveyView(id) {
+        let url = constant.BASE_URL + 'survey_view'
+        let data = new URLSearchParams()
+        data.append('id', id)
+        axios.post(url, data, {
+            headers: {
+                'Authorization': 'Bearer ' + this.props.AUTH,
+                'Content-Type': "application/x-www-form-urlencoded"
+            }
+        }).then(responseJson => {
+            console.log('res flag::', responseJson.data)
+        }).catch(error => { })
+    }
     setColor(date) {
-        if (this.formatTime(date) !=  undefined) {
+        if (this.formatTime(date) != undefined) {
             if (this.formatTime(date).includes("days") == true) {
                 return '#E17800'
             }
@@ -78,7 +93,7 @@ class Week1Questionaires extends Component {
                 return '#E10000'
             }
         }
-        else{
+        else {
             return '#E10000'
         }
 
@@ -88,9 +103,8 @@ class Week1Questionaires extends Component {
         this.setState({ isVisible: !this.state.isVisible })
     }
     componentWillMount() {
-        this.setState({ loading: true })
-        const { type } = this.props.route.params
-        this.props.surveyList(this.props.AUTH, type)
+        const { weekData } = this.props.route.params
+        this.setState({ surveyData: weekData })
     }
     componentWillReceiveProps(nextProps) {
         this.setState({ loading: false })
@@ -103,8 +117,8 @@ class Week1Questionaires extends Component {
     }
 
     render() {
-        const { type } = this.props.route.params
-        console.log('id::', this.state.id)
+        const { type, week } = this.props.route.params
+        console.log('data::', this.state.surveyData)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -119,12 +133,12 @@ class Week1Questionaires extends Component {
                     <Header lefttxt={{ color: '#919191' }} btn={true} leftPress={() => this.props.navigation.goBack()} />
                     {
                         type == "new" ?
-                            <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Surveys</Text>
+                            <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week {week} - Surveys</Text>
                             :
                             type == "pandding" ?
-                                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Pending Surveys</Text>
+                                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week {week} - Pending Surveys</Text>
                                 :
-                                <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Completed Surveys</Text>
+                                null
                     }
 
 
@@ -134,11 +148,11 @@ class Week1Questionaires extends Component {
                                 data={this.state.surveyData}
                                 renderItem={({ item, index }) => (
                                     <View style={{ borderBottomWidth: 1, borderBottomColor: '#E0E0E066' }}>
-                                        <TouchableOpacity activeOpacity={0.6} onPress={() => { this.setState({ isVisible: true, id: item.id }) }}>
+                                        <TouchableOpacity activeOpacity={0.6} onPress={() => { this.setState({ isVisible: true, id: item.id }); }}>
                                             <View style={{ flexDirection: 'row', paddingVertical: 10, marginLeft: 16, marginRight: 24, justifyContent: 'center', alignItems: 'center' }}>
                                                 <View style={{ flexDirection: 'column', width: "85%", }}>
                                                     <Text style={{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium' }}>{item.title}</Text>
-                                                    <Text style={{ paddingTop: 7, fontSize: 10, color: this.setColor(item.created_at), fontFamily: Platform.OS == "android" ? "Gotham-BookItalic" : null, fontStyle: Platform.OS == "ios" ? "italic" : null }}>{this.formatTime(item.created_at)}</Text>
+                                                    <Text style={{ paddingTop: 7, fontSize: 10, color: this.setColor(item.end_date), fontFamily: Platform.OS == "android" ? "Gotham-BookItalic" : null, fontStyle: Platform.OS == "ios" ? "italic" : null }}>{this.formatTime(item.end_date)}</Text>
                                                 </View>
 
                                                 <View style={{ flexDirection: 'column', width: "15%", alignItems: 'flex-end' }}>
@@ -148,12 +162,11 @@ class Week1Questionaires extends Component {
                                         </TouchableOpacity>
                                     </View>
                                 )}
-                                keyExtractor={item => item.id.toString()}
                                 showsVerticalScrollIndicator={false}
                             />
                             :
                             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                <Text style={{ fontFamily: 'Gotham-Medium', fontSize: 15 }}>No Data Available</Text>
+                                <Text style={{ fontFamily: 'Gotham-Medium', fontSize: 15, color: '#000' }}>No Data Available</Text>
                             </View>
                     }
 
@@ -163,9 +176,6 @@ class Week1Questionaires extends Component {
                             animationType="slide"
                             transparent={true}
                             visible={this.state.isVisible}
-                            onRequestClose={() => {
-                                console.log("Modal has been closed.")
-                            }}
                         >
                             <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', alignItems: 'center', justifyContent: 'center' }}>
                                 <View style={{ backgroundColor: '#FFFFFF', borderRadius: 20, width: '90%', alignItems: 'center', paddingHorizontal: 23 }}>
@@ -177,7 +187,7 @@ class Week1Questionaires extends Component {
 
                                     <Text style={{ fontSize: 14, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#272727', textAlign: 'center', lineHeight: 22 }}>This new set of questions are strictly{'\n'}time-based. You only have 7 days to{'\n'}submit your answers.</Text>
 
-                                    <TouchableOpacity onPress={() => { this.props.navigation.navigate('Que1', { id: this.state.id }); this.setState({ isVisible: false }) }} activeOpacity={0.6}>
+                                    <TouchableOpacity onPress={() => { this.props.navigation.navigate('Que1', { id: this.state.id }); this.setState({ isVisible: false }); this.surveyView(this.state.id) }} activeOpacity={0.6}>
                                         <View style={{ backgroundColor: '#00AFF0', marginTop: 30, height: 47, justifyContent: 'center', paddingHorizontal: 40, borderRadius: 50, marginBottom: 33 }}>
                                             <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Continue</Text>
                                         </View>
@@ -192,7 +202,6 @@ class Week1Questionaires extends Component {
     }
 }
 const mapStateToProps = (state) => {
-    console.log('res::', state.SurveyData.surveyData)
     const AUTH = state.LoginData.token
     const surveyData = state.SurveyData.surveyData
     return { AUTH, surveyData }

@@ -14,6 +14,7 @@ var periods = {
     hour: 60 * 60 * 1000,
     minute: 60 * 1000
 };
+var week;
 class CompletedQuestion extends Component {
     constructor(props) {
         super(props);
@@ -48,12 +49,15 @@ class CompletedQuestion extends Component {
             surveyData: [],
             loading: false,
             noData: false,
-            id: ''
+            id: '',
+            week: ''
+
         }
     }
     formatTime(timeCreated) {
-        var diff = Date.now() - moment(timeCreated).format("x");
 
+        var diff = Date.now() - moment(timeCreated).format("x");
+        this.calculateWeek()
         if (diff > periods.month) {
             // it was at least a month ago
             return ''
@@ -82,10 +86,10 @@ class CompletedQuestion extends Component {
         this.setState({ isVisible: !this.state.isVisible })
     }
     componentWillMount() {
-        this.setState({ loading: true })
-        const { type } = this.props.route.params
-        this.props.surveyList(this.props.AUTH, type)
+        const { weekData } = this.props.route.params
+        this.setState({ surveyData: weekData })
     }
+
     componentWillReceiveProps(nextProps) {
         this.setState({ loading: false })
         if (nextProps.surveyData != this.state.surveyData) {
@@ -95,10 +99,27 @@ class CompletedQuestion extends Component {
             this.setState({ noData: true })
         }
     }
+    calculateWeek() {
+        if (this.state.surveyData.length != 0) {
+            let val = this.state.surveyData.map((item, index) => {
+                var dt = moment(item.created_at, "YYYY-MM-DD HH:mm:ss").format('YYYY-MM-DD')
+                var given = moment(dt, "YYYY-MM-DD");
+                var current = moment().startOf('day');
+
+                let getWeek = moment.duration(current.diff(given)).asDays();
+                let countWeek = getWeek / 7
+                return Math.ceil(countWeek).toString()
+            })
+            let value = [...new Set(val)].toString() // remove duplicates
+            let min = Math.max(parseInt(value))
+            return min;
+
+        }
+    }
+
 
     render() {
-        const { type } = this.props.route.params
-        console.log('survey data::', this.state.surveyData)
+        const { week } = this.props.route.params
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -112,7 +133,7 @@ class CompletedQuestion extends Component {
                     source={require('../../images/mainback.png')}>
                     <Header lefttxt={{ color: '#919191' }} btn={true} leftPress={() => this.props.navigation.goBack()} />
                     {
-                        <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week 1 - Completed Surveys</Text>
+                        <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, marginBottom: 12 }}>Week {week} - Completed Surveys</Text>
                     }
 
 
@@ -121,12 +142,12 @@ class CompletedQuestion extends Component {
                             <FlatList
                                 data={this.state.surveyData}
                                 renderItem={({ item, index }) => (
-                                    <View style={{ borderBottomWidth: 1, borderBottomColor: '#E0E0E066' }}>
-                                        <TouchableOpacity activeOpacity={0.6} onPress={()=>{ this.props.navigation.navigate('CompletedList',{id:item.id}) }}>
+                                    <View key={index} style={{ borderBottomWidth: 1, borderBottomColor: '#E0E0E066' }}>
+                                        <TouchableOpacity activeOpacity={0.6} onPress={() => { this.props.navigation.navigate('CompletedList', { id: item.completed_survey_id, title: item.title }) }}>
                                             <View style={{ flexDirection: 'row', paddingVertical: 10, marginLeft: 16, marginRight: 24, justifyContent: 'center', alignItems: 'center' }}>
                                                 <View style={{ flexDirection: 'column', width: "85%", }}>
                                                     <Text style={{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium' }}>{item.title}</Text>
-                                                    <Text style={{ paddingTop: 7, fontSize: 10, color: this.setColor(item.created_at), fontFamily: Platform.OS == "android" ? "Gotham-BookItalic" : null, fontStyle: Platform.OS == "ios" ? "italic" : null }}>{this.formatTime(item.created_at)}</Text>
+                                                    <Text />
                                                 </View>
 
                                                 <View style={{ flexDirection: 'column', width: "15%", alignItems: 'flex-end' }}>
@@ -136,7 +157,6 @@ class CompletedQuestion extends Component {
                                         </TouchableOpacity>
                                     </View>
                                 )}
-                                keyExtractor={item => item.id.toString()}
                                 showsVerticalScrollIndicator={false}
                             />
                             :
@@ -150,11 +170,7 @@ class CompletedQuestion extends Component {
                         <Modal
                             animationType="slide"
                             transparent={true}
-                            visible={this.state.isVisible}
-                            onRequestClose={() => {
-                                console.log("Modal has been closed.")
-                            }}
-                        >
+                            visible={this.state.isVisible}                        >
                             <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', alignItems: 'center', justifyContent: 'center' }}>
                                 <View style={{ backgroundColor: '#FFFFFF', borderRadius: 20, width: '90%', alignItems: 'center', paddingHorizontal: 23 }}>
                                     <View style={{ marginTop: 45 }}>

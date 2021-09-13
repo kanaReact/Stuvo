@@ -3,8 +3,9 @@ import {
     UserDetailSuccess, UserDetailFailed,
     Rememberme, LogoutSuccess,
     RemoveRememberMe,
-    SchoolDataSuccess, SchoolDataFailed,
-    ClearMessage
+    ClearMessage,
+    SendDeviceTokenSuccess, SendDeviceTokenFailed,
+    WelcomeSuccess, WelcomeFailed
 } from '../Action/ActionTypes'
 const INITIAL_STATE = {
     isLoggedIn: false,
@@ -15,13 +16,14 @@ const INITIAL_STATE = {
     userdetailData: [],
     rememberMe: false,
     schoolList: [],
-    school: ''
+    school: '',
+    tokenStatus: '',
+    welcomeData: []
 };
 
 const LoginReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case LoginSuccess:
-            console.log('Reducers Data', action.payload.responseJson.data[0].id)
             return {
                 ...state,
                 isLoggedIn: true,
@@ -63,6 +65,26 @@ const LoginReducer = (state = INITIAL_STATE, action) => {
             return {
                 ...state,
                 errormsg: '',
+            }
+        case SendDeviceTokenSuccess:
+            return {
+                ...state,
+                tokenStatus: 1
+            }
+        case SendDeviceTokenFailed:
+            return {
+                ...state,
+                tokenStatus: 0
+            }
+        case WelcomeSuccess:
+            return {
+                ...state,
+                welcomeData: action.payload.responseJson.data[0].welcome
+            }
+        case WelcomeFailed:
+            return {
+                ...state,
+                welcomeData: []
             }
         case LogoutSuccess: {
             return {

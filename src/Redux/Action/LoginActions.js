@@ -1,9 +1,9 @@
 import {
     LoginSuccess, LogoutSuccess, LoginFailed, ServerError,
-    UserDetailSuccess,UserDetailFailed,
-    Rememberme,RemoveRememberMe,
-    SchoolDataSuccess,SchoolDataFailed,
-    ClearMessage
+    UserDetailSuccess, UserDetailFailed,
+    Rememberme, RemoveRememberMe,
+    SendDeviceTokenSuccess, SendDeviceTokenFailed,
+    WelcomeSuccess, WelcomeFailed
 } from './ActionTypes';
 // import API from '../../Api/API';
 import constant from "../config/constant";
@@ -25,23 +25,21 @@ export function loginFailed(responseJson) {
 /** Call login api */
 export const login = (id, otp) => {
     return (dispatch) => {
-        let url = constant.BASE_URL+'otp_verify'
+        let url = constant.BASE_URL + 'otp_verify'
         let data = new URLSearchParams();
-        data.append('id',id);
-        data.append('otp',otp);
-        console.log(data)
+        data.append('id', id);
+        data.append('otp', otp);
         axios.post(url, data, {
             headers: { 'Content-Type': "application/x-www-form-urlencoded" },
         }).then(responseJson => {
             if (responseJson.data.status == 1) {
-                console.log('Response login:', responseJson.data)
                 dispatch(loginSuccess(responseJson.data))
             }
             else {
                 dispatch(loginFailed(responseJson.data))
             }
         }).catch((error) => { dispatch(loginFailed(error)) })
-        
+
     };
 };
 
@@ -61,24 +59,89 @@ export function userDetailFailed(responseJson) {
 /** Call user detail api */
 export const userDetail = (AUTH) => {
     return (dispatch) => {
-        let url = constant.BASE_URL+'user_detail'
-       
-        axios.get(url,{
-            headers:{ 'Authorization':'Bearer '+AUTH }
-        }).then(responseJson=>{
-            if(responseJson.data.status == 1)
-            {
+        let url = constant.BASE_URL + 'user_detail'
+
+        axios.get(url, {
+            headers: { 'Authorization': 'Bearer ' + AUTH }
+        }).then(responseJson => {
+            console.log('res::', responseJson.data)
+            if (responseJson.data.status == 1) {
                 dispatch(userDetailSuccess(responseJson.data))
             }
-            else
-            {
+            else {
                 dispatch(userDetailFailed(responseJson.data))
             }
         })
-        .catch(error=>{ dispatch(userDetailFailed(error)) })
-        
+            .catch(error => { dispatch(userDetailFailed(error)) })
+
     };
 };
+export function sendDeviceTokenSuccess(responseJson) {
+    return dispatch => {
+        dispatch({ type: SendDeviceTokenSuccess, payload: { responseJson } });
+    };
+}
+
+export function sendDeviceTokenFailed(responseJson) {
+    return dispatch => {
+        dispatch({ type: SendDeviceTokenFailed, payload: { responseJson } });
+    };
+}
+export const sendToken = (AUTH, device_id, device_type) => {
+    return (dispatch) => {
+        let url = constant.BASE_URL + 'login_details_submit'
+        let data = new URLSearchParams()
+        data.append('device_id', device_id);
+        data.append('device_type', device_type);
+        axios.post(url, data, {
+            headers: {
+                'Authorization': 'Bearer ' + AUTH,
+                'Content-Type': "application/x-www-form-urlencoded"
+            }
+        }).then(responseJson => {
+            if (responseJson.data.status == 1) {
+                dispatch(sendDeviceTokenSuccess(responseJson.data))
+            }
+            else {
+                dispatch(sendDeviceTokenFailed(responseJson.data))
+            }
+        })
+            .catch(error => { dispatch(sendDeviceTokenFailed(error)) })
+
+    };
+};
+
+export function welcomeSuccess(responseJson) {
+    return dispatch => {
+        dispatch({ type: WelcomeSuccess, payload: { responseJson } });
+    };
+}
+
+export function welcomeFailed(responseJson) {
+    return dispatch => {
+        dispatch({ type: WelcomeFailed, payload: { responseJson } });
+    };
+}
+
+export const handle_welcome = (AUTH) => {
+    return (dispatch) => {
+        let url = constant.BASE_URL + 'welcome'
+        axios.get(url, {
+            headers: {
+                'Authorization': 'Bearer ' + AUTH,
+            }
+        }).then(responseJson => {
+            if (responseJson.data.status == 1) {
+                dispatch(welcomeSuccess(responseJson.data))
+            }
+            else {
+                dispatch(welcomeFailed(responseJson.data))
+            }
+        })
+            .catch(error => { dispatch(welcomeFailed(error)) })
+
+    };
+}
 /** Handle logout */
 export const logout = () => {
     return (dispatch) => {

@@ -96,77 +96,79 @@ export default StyleSheet.create({
         marginLeft: 12,
         backgroundColor: '#000000'
     },
-    myProfileView:{
-        flexDirection:'row',
-        height:50,
-        justifyContent:'space-between',
-        alignItems:"center",
-        borderBottomWidth:1,
-        borderColor:'#E0E0E066',
-        marginHorizontal:16,
+    myProfileView: {
+        flexDirection: 'row',
+        height: 50,
+        justifyContent: 'space-between',
+        alignItems: "center",
+        borderBottomWidth: 1,
+        borderColor: '#E0E0E066',
+        marginHorizontal: 16,
     },
-    myProfileTxt:{
-        color:'#919191',
-        fontSize:13,
-        fontFamily:'Poppins-Regular'
-    },
-    myProfileText:{
-        color:'#222222',
-        fontSize:13,
-        fontFamily:'Poppins-Regular'
-    },
-    textInput:{
-        width: '90%', height: 50, borderWidth: 0.5, borderColor: 'gray', borderRadius: 30, paddingLeft: 20
-    },
-    textInputPassword:{
-        width: '90%', height: 50, borderWidth: 0.5, borderColor: 'gray', borderRadius: 30, paddingLeft: 20,marginTop:15
-    },
-    loginBtn:{
-        width:'100%',
-        height:50,
-        backgroundColor:'#00AFF0',
-        alignItems:'center',
-        justifyContent:'center',
-        marginTop:15,
-        borderRadius:30,
-        position:"absolute",
-        left:0,
-        right:0,
-        bottom:40,
-        alignSelf:"center",
-    },
-    loginView:{
-        paddingTop: 10, width: '90%', alignItems: 'center',flex:1,
-    },
-    signinLabelView:{
-        alignSelf: "flex-start", 
-        padding: 5
-    },
-    signinLabel:{
-        color: '#00AFF0', 
-        fontSize: 20, 
-        fontFamily: 'Gotham-Bold'
-    },
-    signinNotelabel:{
-        color: '#919191', 
-        fontSize: 14, 
+    myProfileTxt: {
+        color: '#919191',
+        fontSize: 13,
         fontFamily: 'Poppins-Regular'
     },
-    emailAddressLabel:{
-        color: '#00AFF0', 
+    myProfileText: {
+        color: '#222222',
+        fontSize: 13,
+        fontFamily: 'Poppins-Regular'
+    },
+    textInput: {
+        width: '90%', height: 50, borderWidth: 0.5, borderColor: 'gray', borderRadius: 30, paddingLeft: 20
+    },
+    textInputPassword: {
+        width: '90%', height: 50, borderWidth: 0.5, borderColor: 'gray', borderRadius: 30, paddingLeft: 20, marginTop: 15
+    },
+    loginBtn: {
+        width: '100%',
+        height: 50,
+        backgroundColor: '#00AFF0',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 15,
+        borderRadius: 30,
+        position: "absolute",
+        left: 0,
+        right: 0,
+        bottom: 40,
+        alignSelf: "center",
+    },
+    loginView: {
+        paddingTop: 10, width: '90%', alignItems: 'center', flex: 1,
+    },
+    signinLabelView: {
+        alignSelf: "flex-start",
+        padding: 5
+    },
+    signinLabel: {
+        color: '#00AFF0',
+        fontSize: 20,
+        fontFamily: 'Gotham-Bold'
+    },
+    signinNotelabel: {
+        color: '#919191',
+        fontSize: 14,
+        fontFamily: 'Poppins-Regular'
+    },
+    emailAddressLabel: {
+        color: '#00AFF0',
         fontSize: 14,
         fontFamily: 'Poppins-Regular',
-        paddingVertical:15
+        paddingVertical: 15
     },
-    textinputemail:{
-        width:'100%',
-        borderBottomWidth:0.5,
-        borderColor:'#919191',
-        height:47,
-        paddingLeft:5
+    textinputemail: {
+        width: '100%',
+        borderBottomWidth: 0.5,
+        borderColor: '#919191',
+        height: 47,
+        paddingLeft: 5,
+        flexDirection: "row",
+        alignItems: "center"
     }
-    
-    
-    
+
+
+
 
 })

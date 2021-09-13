@@ -20,7 +20,7 @@ import Notification from "./Notification"
 import Arrow from "./Arrow"
 import QATBlack from "./QATBlack"
 import Edit from "./Edit"
-
+import EmailIcon from "./EmailIcon"
 export default {
     SplashLogo: SplashLogo,
     Check: Check,
@@ -42,7 +42,8 @@ export default {
     TabNotWhite: TabNotWhite,
     Notification: Notification,
     Arrow: Arrow,
-    QATBlack : QATBlack,
-    Edit : Edit
+    QATBlack: QATBlack,
+    Edit: Edit,
+    EmailIcon: EmailIcon
 
 }

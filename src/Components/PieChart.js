@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import {  Animated } from 'react-native';
+import { Animated } from 'react-native';
 import { Surface, Group } from '@react-native-community/art'
 import Wedge from './Wedge';
 
@@ -121,7 +121,7 @@ export default class PieChart extends Component {
     this.endAngleArray = endAngleArray;
 
     for (let index = 0; index < this.props.percentArray.length; index++) {
-      
+
       const startAngle = index === 0 ? 0 : this.endAngleArray[index - 1] * circumference;
 
       const endAngle = this.props.isClockwise ?

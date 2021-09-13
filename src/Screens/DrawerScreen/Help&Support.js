@@ -22,9 +22,9 @@ class Help extends Component {
                     text: 'Help & Support'
                 },
             ],
-            description:'',
-            loading:false,
-            errorInput:''
+            description: '',
+            loading: false,
+            errorInput: ''
         }
     }
     _renderItem({ item, index }) {
@@ -40,24 +40,21 @@ class Help extends Component {
             </View>
         )
     }
-    call_submitform_API()
-    {
-        this.setState({ loading:true })
-        let url = constant.BASE_URL+'help_support_form_submit';
+    call_submitform_API() {
+        this.setState({ loading: true })
+        let url = constant.BASE_URL + 'help_support_form_submit';
         let data = new URLSearchParams()
-        data.append('name',this.props.name);
-        data.append('school',this.props.school);
-        data.append('descreption',this.state.description)
-        axios.post(url,data,{
-            headers:{ 
-                'Authorization':'Bearer '+this.props.AUTH,
+        data.append('name', this.props.name);
+        data.append('school', this.props.school);
+        data.append('descreption', this.state.description)
+        axios.post(url, data, {
+            headers: {
+                'Authorization': 'Bearer ' + this.props.AUTH,
                 'Content-Type': "application/x-www-form-urlencoded"
-             }
-        }).then(responseJson=>{
-            this.setState({ loading:false })
-            console.log('response::',responseJson.data)
-            if(responseJson.data.status == 1)
-            {
+            }
+        }).then(responseJson => {
+            this.setState({ loading: false })
+            if (responseJson.data.status == 1) {
                 Toast.show('Thank you for feedback', {
                     position: Toast.position.BOTTOM,
                     containerStyle: { backgroundColor: 'black' },
@@ -65,18 +62,15 @@ class Help extends Component {
                 })
                 this.props.navigation.navigate('Question')
             }
-        }).catch(error=>{
-            this.setState({ loading:false })
+        }).catch(error => {
+            this.setState({ loading: false })
         })
     }
-    validate()
-    {
-        if(this.state.description == '')
-        {
-            this.setState({ errorInput:'Please enter description' })
+    validate() {
+        if (this.state.description == '') {
+            this.setState({ errorInput: 'Please enter description' })
         }
-        else
-        {
+        else {
             this.call_submitform_API()
         }
     }
@@ -101,7 +95,7 @@ class Help extends Component {
                     </View>
                     <View style={{ marginTop: 18, height: 49, marginHorizontal: 16, borderRadius: 10, backgroundColor: '#F3F3F3', fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14 }}>
                         <TextInput
-                            style={{ flex: 1, paddingLeft: 18, paddingRight: 5, fontFamily: 'Gotham-Medium', color: '#272727', fontSize: 14 }}
+                            style={{ flex: 1, paddingLeft: 18, paddingRight: 5, fontFamily: 'Gotham-Medium', color: '#272727', fontSize: 14, }}
                             placeholder="Address"
                             value={this.props.school}
                             editable={false}
@@ -110,16 +104,16 @@ class Help extends Component {
 
                     <View>
                         <TextInput
-                            style={{ paddingLeft:18,marginTop: 15, height: 131, marginHorizontal: 16, borderRadius: 10, backgroundColor: '#F3F3F3', fontFamily: 'Gotham-Medium', color: '#272727', fontSize: 14,paddingTop:15 }}
+                            style={{ paddingLeft: 18, marginTop: 15, height: 131, marginHorizontal: 16, borderRadius: 10, backgroundColor: '#F3F3F3', fontFamily: 'Gotham-Medium', color: '#272727', fontSize: 14, paddingTop: 15, textAlignVertical: "top" }}
                             placeholder="Write something..."
                             multiline={true}
                             blurOnSubmit={true}
                             returnKeyType="done"
                             placeholderTextColor="#919191"
                             value={this.state.description}
-                            onChangeText={(text)=>{ this.setState({ description:text.trimStart(),errorInput:'' }) }}
+                            onChangeText={(text) => { this.setState({ description: text.trimStart(), errorInput: '' }) }}
                         />
-                        {this.state.errorInput != '' ? <Text style={{ padding: 18, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorInput}</Text>:null}
+                        {this.state.errorInput != '' ? <Text style={{ padding: 18, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorInput}</Text> : null}
                     </View>
 
                     <View style={{ justifyContent: 'flex-end', marginHorizontal: 27 }}>
@@ -138,7 +132,7 @@ const mapStateToProps = (state) => {
     const name = state.LoginData.name;
     const school = state.LoginData.school;
     const AUTH = state.LoginData.token
-  
-    return { name,school,AUTH  }
+
+    return { name, school, AUTH }
 }
-export default connect(mapStateToProps,null)(Help);
+export default connect(mapStateToProps, null)(Help);

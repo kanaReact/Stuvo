@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, Dimensions, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Dimensions, ScrollView, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
@@ -31,6 +31,12 @@ import About_Student_Voice from '../Screens/TabScreen/About_Student_Voice'
 import SVGImg from '../Source/SVGImg';
 import Login from '../Screens/Login';
 import VerifyOTP from '../Screens/VerifyOTP';
+import DeviceInfo from 'react-native-device-info'
+import ResultBarProgress from '../Screens/TabScreen/ResultBarProgress';
+import SurveyQueAns from '../Screens/TabScreen/SurveyQueAns';
+import RadioImageResult from '../Screens/TabScreen/RadioImageResult';
+import NewQuestionaries from '../Screens/TabScreen/NewQuestionaries';
+import NewQuestionariesComplete from '../Screens/TabScreen/NewQuestionariesComplete';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -60,9 +66,11 @@ function Navigation() {
 }
 function Navigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, animationEnabled: false }} initialRouteName="Question" >
+    <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, animationEnabled: false }} initialRouteName="Question">
       <Stack.Screen name="Question" component={Question} />
       <Stack.Screen name="Week1Questionaires" component={Week1Questionaires} />
+      <Stack.Screen name="NewQuestionaries" component={NewQuestionaries} />
+      <Stack.Screen name="NewQuestionariesComplete" component={NewQuestionariesComplete} />
       <Stack.Screen name="Week1PendingQue" component={Week1PendingQue} />
       <Stack.Screen name="Notification" component={Notification} />
       <Stack.Screen name="Guidance" component={Guidance} />
@@ -71,11 +79,14 @@ function Navigator() {
       <Stack.Screen name="Week1Result" component={Week1Result} />
       <Stack.Screen name="Week2Result" component={Week2Result} />
       <Stack.Screen name="ResultProgress" component={ResultProgress} />
+      <Stack.Screen name="ResultBarProgress" component={ResultBarProgress} />
       <Stack.Screen name="FAQ" component={FAQ} />
       <Stack.Screen name="Help" component={Help} />
       <Stack.Screen name="CompletedQuestion" component={CompletedQuestion} />
       <Stack.Screen name="MyProfile" component={MyProfile} />
       <Stack.Screen name="About_Student_Voice" component={About_Student_Voice} />
+      <Stack.Screen name="SurveyQueAns" component={SurveyQueAns} />
+      <Stack.Screen name="RadioImageResult" component={RadioImageResult} />
     </Stack.Navigator>
   );
 }
@@ -141,7 +152,7 @@ function MyTabBar({ state, descriptors, navigation }) {
           return (
 
             <View key={index} style={{
-              flexDirection: 'row', alignItems: 'center', height: 69, backgroundColor: '#00AFF0', width: width, justifyContent: 'center', paddingTop: 8,
+              flexDirection: 'row', alignItems: 'center', height: 69, backgroundColor: '#00AFF0', width: width, justifyContent: 'center', paddingTop: 8, paddingBottom: DeviceInfo.hasNotch() == true ? 20 : 0
             }}>
               <TouchableOpacity
                 accessibilityRole="button"
@@ -197,8 +208,8 @@ function MyTabBar({ state, descriptors, navigation }) {
                 style={{ height: 68, width: width / 3.3, alignItems: "center", justifyContent: "center" }}>
                 {
                   activeIndex == 2 ?
-                  <View style={{ alignItems: 'center' }}>
-                     <SVGImg.TabNotWhite />
+                    <View style={{ alignItems: 'center' }}>
+                      <SVGImg.TabNotWhite />
                       <Text style={{ color: "#FFFFFF", fontSize: 9, paddingTop: 8, textAlign: "center", fontFamily: 'Gotham-Medium' }}>Notifications</Text>
                     </View>
                     :

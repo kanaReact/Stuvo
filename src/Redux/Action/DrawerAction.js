@@ -25,7 +25,7 @@ export const guidance=(AUTH)=>{
         axios.get(url,{
             headers:{ 'Authorization':'Bearer '+AUTH }
         }).then(responseJson=>{
-            console.log('response:',responseJson.data)
+            
             if(responseJson.data.status == 1)
             {
                 dispatch(guidanceSucess(responseJson.data))
@@ -59,7 +59,6 @@ export const faq=(AUTH)=>{
         axios.get(url,{
             headers:{ 'Authorization':'Bearer '+AUTH }
         }).then(responseJson=>{
-            console.log('response:',responseJson.data)
             if(responseJson.data.status == 1)
             {
                 dispatch(faqSuccess(responseJson.data))

@@ -34,4 +34,17 @@ export const SurveycompletedlistFailed = 'SurveycompletedlistFailed';
 export const GraphDetailSuccess = 'GraphDetailSuccess';
 export const GraphDetailFailed = 'GraphDetailFailed';
 
+export const SendDeviceTokenSuccess = 'SendDeviceTokenSuccess';
+export const SendDeviceTokenFailed = 'SendDeviceTokenFailed';
 
+export const NotificationListSuccess = 'NotificationListSuccess';
+export const NotificationListFailed = 'NotificationListFailed';
+
+export const SubmitSurveyListSuccess = 'SubmitSurveyListSuccess';
+export const SubmitSurveyListFailed = 'SubmitSurveyListFailed';
+
+export const AnswerGraphSuccess = 'AnswerGraphSuccess';
+export const AnswerGraphFailed = 'AnswerGraphFailed';
+
+export const WelcomeSuccess = 'WelcomeSuccess';
+export const WelcomeFailed = 'WelcomeFailed';

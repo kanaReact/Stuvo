@@ -17,9 +17,9 @@ class VerifyOTP extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            password: '',
+            otp: '',
             loading: false,
-            passwordError: '',
+            otpError: '',
             showOTP: false,
             id: '',
             schoolList: [],
@@ -27,17 +27,18 @@ class VerifyOTP extends React.Component {
             editableInput: true,
             dropdownDisable: false,
             counter: 59,
-            showResend:false
+            showResend: false
         }
     }
     componentDidMount() {
         this.startTimer()
-        
+
     }
     componentWillReceiveProps(nextProps) {
         this.setState({ loading: false })
         if (nextProps.status == 1) {
-            this.props.navigation.replace('tabs')
+            clearInterval(this.interval)
+            this.props.navigation.replace('Welcome')
         }
         else {
             Toast.show(nextProps.errormsg, {
@@ -50,64 +51,54 @@ class VerifyOTP extends React.Component {
     }
     startTimer() {
         this.interval = setInterval(() => {
-            this.setState({ counter: this.state.counter - 1 },()=>{ 
-                if(this.state.counter == 0)
-                {
+            this.setState({ counter: this.state.counter - 1 }, () => {
+                if (this.state.counter == 0) {
                     clearInterval(this.interval);
-                    this.setState({ counter:59,showResend:true })
+                    this.setState({ counter: 59, showResend: true })
                 }
-             })
+            })
         }, 1000)
     }
-    componentWillUnmount()
-    {
+    componentWillUnmount() {
         clearInterval(this.interval)
     }
     validate() {
 
-        if (this.state.email == "") {
-            this.setState({ emailError: 'Please enter email' })
-        }
-        else if (!(/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(this.state.email))) {
-            this.setState({ emailError: 'Please enter valid email' })
+        if (this.state.otp == "") {
+            this.setState({ otpError: 'Please enter otp' })
         }
         else {
-            this.call_login_API()
+            this.setState({ loading: true })
+            const { id } = this.props.route.params
+            this.props.login(id, this.state.otp)
         }
 
     }
-    call_login_API() {
+    call_resend_OTP(id) {
         this.setState({ loading: true })
-        let url = constant.BASE_URL + 'LoginWithOTP'
+        let url = constant.BASE_URL + 'resend_otp'
         let data = new URLSearchParams()
-        let email = this.state.email
-        data.append('email', email);
+        data.append('id', id)
         axios.post(url, data, {
             headers: { 'Content-Type': "application/x-www-form-urlencoded" },
         }).then(responseJson => {
-            this.setState({ loading: false })
-            console.log('response json::', responseJson.data.data[0])
+            this.setState({ loading: false, showResend: false, })
+            console.log('res::', responseJson)
             if (responseJson.data.status == 1) {
-                Toast.show('OTP sent on mail', {
+                Toast.show('OTP resent successfully', {
                     position: Toast.position.BOTTOM,
                     containerStyle: { backgroundColor: 'black' },
                     textStyle: { color: 'white' },
                 })
-                let id = responseJson.data.data[0].id
-                this.setState({ showOTP: true, id: id, editableInput: false, dropdownDisable: true })
+                this.startTimer()
             }
-            else {
-                Toast.show(responseJson.data.message, {
-                    position: Toast.position.BOTTOM,
-                    containerStyle: { backgroundColor: 'black' },
-                    textStyle: { color: 'white' },
-                })
-            }
-        }).catch(error => { this.setState({ loading: false }) })
+        }).catch(error => {
+            this.setState({ loading: false })
+        })
     }
     render() {
-        console.log('check:', this.state.counter)
-        var val = ''
+        const { id } = this.props.route.params
+
         return (
             <SafeAreaView style={[styles.container, { alignItems: 'center', }]}>
                 <View style={{ padding: 15, width: "100%" }}>
@@ -135,23 +126,27 @@ class VerifyOTP extends React.Component {
                                 width: 50,
                                 height: 50,
                                 justifyContent: "center",
-                                backgroundColor: "#eaeaea",
+                                backgroundColor: "#F3F3F3",
                                 color: 'black'
                             }}
-                            handleChange={(code) => console.log(code)}
+                            handleChange={(code) => this.setState({ otp: code, otpError: '' })}
                             selectTextOnFocus={false}
+                            returnKeyType="done"
                         />
+                        {this.state.otpError != '' ? <Text style={{ marginTop: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start' }}>{this.state.otpError}</Text> : null}
 
                     </View>
-                    <View style={{ height:60,width:"100%",alignItems:"center",justifyContent:"center",marginTop:35 }}>
-                        <Text style={{ fontFamily:"Gotham-Bold" }}>{'0:'+this.state.counter}</Text>
+                    <View style={{ height: 60, width: "100%", alignItems: "center", justifyContent: "center", marginTop: 35 }}>
+                        <Text style={{ fontFamily: "Gotham-Bold" }}>{this.state.counter < 10 ? '0:0' + this.state.counter : '0:' + this.state.counter}</Text>
                         {
-                            this.state.showResend == true ? 
-                            <Text style={{ fontFamily:"Poppins-Regular",color:'#00AFF0',textDecorationLine:"underline",padding:10 }}>Resend OTP</Text>
-                            :null
+                            this.state.showResend == true ?
+                                <TouchableOpacity onPress={() => { this.call_resend_OTP(id) }}>
+                                    <Text style={{ fontFamily: "Poppins-Regular", color: '#00AFF0', textDecorationLine: "underline", padding: 10 }}>Resend OTP</Text>
+                                </TouchableOpacity>
+                                : null
                         }
                     </View>
-                    <TouchableOpacity style={styles.loginBtn} activeOpacity={0.6}>
+                    <TouchableOpacity style={styles.loginBtn} activeOpacity={0.6} onPress={() => { this.validate() }}>
                         <View >
                             <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Continue</Text>
                         </View>

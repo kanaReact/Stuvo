@@ -81,7 +81,6 @@ class Login extends React.Component {
                 })
                 let id = responseJson.data.data[0].id
                 this.props.navigation.navigate('VerifyOTP', { id: id })
-
             }
 
             else {

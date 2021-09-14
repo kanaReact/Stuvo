@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, Dimensions, ScrollView, Platform } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Dimensions, ScrollView, Platform, } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Splash from '../Screens/Splash'
@@ -43,11 +43,10 @@ const TabBottom = createBottomTabNavigator();
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-
 function Navigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, animationEnabled: false }}>
+      <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS }}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="VerifyOTP" component={VerifyOTP} />
@@ -66,7 +65,7 @@ function Navigation() {
 }
 function Navigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, animationEnabled: false }} initialRouteName="Question">
+    <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS }} initialRouteName="Question">
       <Stack.Screen name="Question" component={Question} />
       <Stack.Screen name="Week1Questionaires" component={Week1Questionaires} />
       <Stack.Screen name="NewQuestionaries" component={NewQuestionaries} />

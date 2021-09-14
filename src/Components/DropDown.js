@@ -113,7 +113,7 @@ const DropDown = props => {
 
                 <FlatList
                     data={props.data}
-                    nestedScrollEnabled
+                    nestedScrollEnabled={true}
                     renderItem={item => <DropDownRender {...item} />}
                 />
             </Animated.View>
@@ -149,6 +149,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: '#495057',
         paddingVertical: 0,
+        fontFamily: 'Gotham-Medium'
     },
     error: {
         fontSize: 12,
@@ -194,6 +195,7 @@ const localStyle = StyleSheet.create({
         flex: 1,
         color: '#2A2A2A',
         fontSize: 14,
+        fontFamily: 'Gotham-Medium'
     },
     imageTouch: {
         height: '100%',

@@ -67,6 +67,7 @@ class CompletedList extends Component {
     }
     render() {
         const { title } = this.props.route.params
+        console.log('data:::', this.state.surveyCompleteList)
         return (
             <SafeAreaView style={[styles.container, { backgroundColor: 'white' }]}>
                 <Spinner visible={this.state.loading} />
@@ -109,11 +110,24 @@ class CompletedList extends Component {
                                                                 </View>
                                                             </View>
                                                             :
-                                                            <View>
+                                                            val.type == "rank" ?
+                                                                val.anserData.map((value, newKey) => {
+                                                                    const newVal = val.anserRank.map((val) => { return val })
+                                                                    return (
+                                                                        <View>
+                                                                            <View>
+                                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{value} ({newVal[newKey]})</Text>
+                                                                            </View>
+                                                                        </View>
+                                                                    )
+                                                                })
+
+                                                                :
                                                                 <View>
-                                                                    <Image source={{ uri: val.anserData }} style={{ width: 50, height: 50, marginTop: 10, marginLeft: 10, borderRadius: 10 }} />
+                                                                    <View>
+                                                                        <Image source={{ uri: val.anserData }} style={{ width: 50, height: 50, marginTop: 10, marginLeft: 10, borderRadius: 10 }} />
+                                                                    </View>
                                                                 </View>
-                                                            </View>
 
                                             }
                                         </View>

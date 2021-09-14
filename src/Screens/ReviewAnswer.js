@@ -10,6 +10,7 @@ import Spinner from '../Components/Spinner';
 import CheckBox from 'react-native-check-box';
 import ConfettiCannon from 'react-native-confetti-cannon';
 import DropDown from '../Components/DropDown';
+import Toast from 'react-native-tiny-toast';
 var temp = [];
 var tempid = [];
 var tempRankAns = [];
@@ -85,7 +86,8 @@ class ReviewAnswer extends Component {
             radioButtonImageArray: [],
             showBtn: false,
             dropDownData: [],
-            selectRank: []
+            selectRank: [],
+            rankFlag: false,
         }
     }
 
@@ -98,7 +100,6 @@ class ReviewAnswer extends Component {
         this.setState({ loading: true })
         let url = constant.BASE_URL + 'survey_form_submit'
         let data = new URLSearchParams()
-
         data.append('ans_array', JSON.stringify(this.state.answerArray));
         axios.post(url, data, {
             headers: {
@@ -137,18 +138,17 @@ class ReviewAnswer extends Component {
         }
         else if (value == true) {
             this.changeCheckboxValue(index, false);
-            let tempIndex = temp.indexOf(item.answer_title)
-            let tempidIndex = tempid.indexOf(item.id)
+            let tempIndex = temp.indexOf(item.answer_title);
+            let tempidIndex = tempid.indexOf(item.id);
             if (temp.includes(item.answer_title) == true) {
                 temp.splice(tempIndex, 1);
                 tempid.splice(tempidIndex, 1);
             }
-            console.log('temp else ::', temp)
         }
     }
     async openEditAnsModal(index, item) {
-        let tempRadioBtn = []
-        let tempImageRadioBtn = []
+        let tempRadioBtn = [];
+        let tempImageRadioBtn = [];
         console.log('item:', item)
         this.setState({ index: index, editAnsModal: true })
         if (item.type == "radiobutton") {
@@ -248,6 +248,7 @@ class ReviewAnswer extends Component {
         this.setState({ checkboxArray: temp })
     }
     onDropDown(item, index, value) {
+        this.setState({ rankFlag: true })
         let temp = this.state.selectRank;
         temp[index] = item;
         let newTempRank = tempRank;
@@ -341,32 +342,46 @@ class ReviewAnswer extends Component {
 
         }
         else if (this.state.answerArray[this.state.index].type == "checkbox") {
+            let min = this.props.surveyDetailData[this.state.index]?.min
+            let max = this.props.surveyDetailData[this.state.index]?.max
             if (this.state.checkboxFlag == false) {
                 if (temp.length != 0) {
-                    array[this.state.index].type = "checkbox";
-                    array[this.state.index].anstitle_id = tempid
-                    array[this.state.index].answeroption = temp
-                    this.setState({ answerArray: array, editAnsModal: false })
-                    temp = [];
-                    tempid = [];
-                }
-                else {
-                    this.setState({ checkboxError: "Please select answer" })
+                    if (max < temp.length) {
+                        alert('You can not select more than ' + max + ' answer')
+                    }
+                    else if (min >= temp.length || max == temp.length) {
+                        array[this.state.index].type = "checkbox";
+                        array[this.state.index].anstitle_id = tempid
+                        array[this.state.index].answeroption = temp
+                        this.setState({ answerArray: array, editAnsModal: false })
+                        temp = [];
+                        tempid = [];
+                    }
                 }
             }
             else {
                 this.setState({ editAnsModal: false })
+                temp = [];
+                tempid = [];
             }
         }
         else if (this.state.answerArray[this.state.index].type == "rank") {
-            array[this.state.index].type = "rank";
-            array[this.state.index].anstitle_id = tempRankid
-            array[this.state.index].answeroption = tempRankAns
-            array[this.state.index].rank = tempRank
-            this.setState({ answerArray: array, editAnsModal: false })
-            tempRank = [];
-            tempRankid = [];
-            tempRankAns = [];
+            if (this.state.rankFlag == true) {
+                array[this.state.index].type = "rank";
+                array[this.state.index].anstitle_id = tempRankid
+                array[this.state.index].answeroption = tempRankAns
+                array[this.state.index].rank = tempRank
+                this.setState({ answerArray: array, editAnsModal: false })
+                tempRank = [];
+                tempRankid = [];
+                tempRankAns = [];
+            }
+            else {
+                this.setState({ editAnsModal: false })
+                tempRank = [];
+                tempRankid = [];
+                tempRankAns = [];
+            }
         }
         else if (this.state.answerArray[this.state.index].type == "textbox") {
             if (this.state.textInputAnswer != '') {
@@ -385,12 +400,12 @@ class ReviewAnswer extends Component {
         tempid = [];
         tempRank = [];
         tempRankAns = [];
-        tempRankid = []
+        tempRankid = [];
     }
     render() {
-        let questionCount = this.props.surveyDetailData.length
+        let questionCount = this.props.surveyDetailData.length;
         let currentQuestion = this.state.index + 1
-        let arr = this.state.answerArray[this.state.index]
+
         console.log('Answer Arr:', this.state.answerArray)
         return (
             <SafeAreaView style={styles.container}>
@@ -434,21 +449,16 @@ class ReviewAnswer extends Component {
                                         item.type == "rank" ?
                                             <View style={{ marginTop: 25, marginBottom: 16, }}>
                                                 <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>Answer.</Text>
-                                                <View style={{ flexDirection: 'row', }}>
+                                                <View>
                                                     {
-                                                        item.answeroption.map((value) => (
-
-                                                            <Text style={{ padding: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', }}>{value}</Text>
-
-                                                        ))
+                                                        item.answeroption.map((value, newkey) => {
+                                                            const newVal = item.rank.map((val) => { return val })
+                                                            return (
+                                                                <Text style={{ padding: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', }}>{value} ({newVal[newkey]})</Text>
+                                                            )
+                                                        })
                                                     }
-                                                    {
-                                                        item.answeroption.map((value) => (
 
-                                                            <Text style={{ padding: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', }}>{'1'}</Text>
-
-                                                        ))
-                                                    }
                                                 </View>
                                             </View>
                                             :

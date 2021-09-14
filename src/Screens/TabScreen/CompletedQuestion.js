@@ -54,33 +54,6 @@ class CompletedQuestion extends Component {
 
         }
     }
-    formatTime(timeCreated) {
-
-        var diff = Date.now() - moment(timeCreated).format("x");
-        this.calculateWeek()
-        if (diff > periods.month) {
-            // it was at least a month ago
-            return ''
-        } else if (diff > periods.week) {
-            return Math.floor(diff / periods.week) + " week left to complete";
-        } else if (diff > periods.day) {
-            return Math.floor(diff / periods.day) + " days left to complete";
-        } else if (diff > periods.hour) {
-            return Math.floor(diff / periods.hour) + " hours left to complete";
-        }
-        else if (diff > periods.minute) {
-            return Math.floor(diff / periods.minute) + " mintues left to complete";
-        }
-    }
-
-    setColor(date) {
-        if (this.formatTime(date).includes("days") == true) {
-            return '#E17800'
-        }
-        else {
-            return '#E10000'
-        }
-    }
 
     toggleModal = () => {
         this.setState({ isVisible: !this.state.isVisible })
@@ -99,27 +72,12 @@ class CompletedQuestion extends Component {
             this.setState({ noData: true })
         }
     }
-    calculateWeek() {
-        if (this.state.surveyData.length != 0) {
-            let val = this.state.surveyData.map((item, index) => {
-                var dt = moment(item.created_at, "YYYY-MM-DD HH:mm:ss").format('YYYY-MM-DD')
-                var given = moment(dt, "YYYY-MM-DD");
-                var current = moment().startOf('day');
 
-                let getWeek = moment.duration(current.diff(given)).asDays();
-                let countWeek = getWeek / 7
-                return Math.ceil(countWeek).toString()
-            })
-            let value = [...new Set(val)].toString() // remove duplicates
-            let min = Math.max(parseInt(value))
-            return min;
-
-        }
-    }
 
 
     render() {
         const { week } = this.props.route.params
+        console.log('data::', this.state.surveyData)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -146,8 +104,7 @@ class CompletedQuestion extends Component {
                                         <TouchableOpacity activeOpacity={0.6} onPress={() => { this.props.navigation.navigate('CompletedList', { id: item.completed_survey_id, title: item.title }) }}>
                                             <View style={{ flexDirection: 'row', paddingVertical: 10, marginLeft: 16, marginRight: 24, justifyContent: 'center', alignItems: 'center' }}>
                                                 <View style={{ flexDirection: 'column', width: "85%", }}>
-                                                    <Text style={{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium' }}>{item.title}</Text>
-                                                    <Text />
+                                                    <Text style={{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium', paddingVertical: 5 }}>{item.title}</Text>
                                                 </View>
 
                                                 <View style={{ flexDirection: 'column', width: "15%", alignItems: 'flex-end' }}>
@@ -164,7 +121,6 @@ class CompletedQuestion extends Component {
                                 <Text style={{ fontFamily: 'Gotham-Medium', fontSize: 15 }}>No Data Available</Text>
                             </View>
                     }
-
 
                     <View>
                         <Modal

@@ -207,13 +207,14 @@ class Que1 extends Component {
         }
     }
     onDropDown(item, index, value) {
+        this.setState({ errorRadio: '' })
         let temp = this.state.selectRank;
         temp[index] = item;
         this.setState({ selectRank: temp, type: 'rank', survey_id: value.serve_id, question_id: value.question_id, });
         if (tempRankAns.includes(value.answer_title) == false) {
-            tempRankAns.push(value.answer_title)
+            tempRankAns.push(value.answer_title);
             tempRankid.push(value.id);
-            tempRank.push(item.name)
+            tempRank.push(item.name);
         }
     }
     nextQuestion() {
@@ -275,44 +276,55 @@ class Que1 extends Component {
             }
         }
         else if (this.state.surveyDetailData[this.state.index].answeroption == "checkbox") {
+            let min = this.state.surveyDetailData[this.state.index]?.min
+            let max = this.state.surveyDetailData[this.state.index]?.max
             if (temp.length != 0) {
-                this.setState({ loading: true })
-                const { id } = this.props.route.params
-                this.props.surveyDetail(this.props.AUTH, id)
-                let survey_id = this.state.survey_id;
-                let question_id = this.state.question_id;
-                let answer_id = tempid;
-                let question = this.state.question;
-                let answeroption = temp;
-                let type = this.state.type;
-                let answer = "true"
-                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                this.setState({ index: this.state.index + 1 })
-                temp = [];
-                tempid = [];
-
+                if (max < temp.length) {
+                    alert('You can not select more than ' + max + ' answer')
+                }
+                else if (min >= temp.length || max == temp.length) {
+                    this.setState({ loading: true })
+                    const { id } = this.props.route.params
+                    this.props.surveyDetail(this.props.AUTH, id)
+                    let survey_id = this.state.survey_id;
+                    let question_id = this.state.question_id;
+                    let answer_id = tempid;
+                    let question = this.state.question;
+                    let answeroption = temp;
+                    let type = this.state.type;
+                    let answer = "true"
+                    this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                    this.setState({ index: this.state.index + 1 })
+                    temp = [];
+                    tempid = [];
+                }
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
             }
         }
         else {
-            this.setState({ loading: true })
-            const { id } = this.props.route.params
-            this.props.surveyDetail(this.props.AUTH, id)
-            let survey_id = this.state.survey_id;
-            let question_id = this.state.question_id;
-            let answer_id = tempRankid;
-            let question = this.state.question;
-            let answeroption = tempRankAns;
-            let rank = tempRank;
-            let answer = "true"
-            let type = this.state.type;
-            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
-            this.setState({ index: this.state.index + 1 })
-            tempRank = [];
-            tempRankid = [];
-            tempRankAns = [];
+            if (this.state.dropDownData.length == tempRank.length) {
+                this.setState({ loading: true })
+                const { id } = this.props.route.params
+                this.props.surveyDetail(this.props.AUTH, id)
+                let survey_id = this.state.survey_id;
+                let question_id = this.state.question_id;
+                let answer_id = tempRankid;
+                let question = this.state.question;
+                let answeroption = tempRankAns;
+                let rank = tempRank;
+                let answer = "true"
+                let type = this.state.type;
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
+                this.setState({ index: this.state.index + 1 })
+                tempRank = [];
+                tempRankid = [];
+                tempRankAns = [];
+            }
+            else {
+                this.setState({ errorRadio: 'Please select answer' })
+            }
 
         }
 
@@ -341,7 +353,6 @@ class Que1 extends Component {
 
             if (this.state.type != '') {
                 const { id } = this.props.route.params
-
                 let survey_id = this.state.survey_id;
                 let question_id = this.state.question_id;
                 let answer_id = this.state.answer_id;
@@ -359,7 +370,6 @@ class Que1 extends Component {
         if (this.state.surveyDetailData[this.state.index].answeroption == "radiobuttonImage") {
             if (this.state.type != '') {
                 const { id } = this.props.route.params
-
                 let survey_id = this.state.survey_id;
                 let question_id = this.state.question_id;
                 let answer_id = this.state.answer_id;
@@ -375,19 +385,26 @@ class Que1 extends Component {
             }
         }
         else if (this.state.surveyDetailData[this.state.index].answeroption == "checkbox") {
+            let min = this.state.surveyDetailData[this.state.index]?.min
+            let max = this.state.surveyDetailData[this.state.index]?.max
             if (temp.length != 0) {
-                const { id } = this.props.route.params
-
-                let survey_id = this.state.survey_id;
-                let question_id = this.state.question_id;
-                let answer_id = tempid;
-                let question = this.state.question;
-                let answeroption = temp;
-                let type = this.state.type;
-                let answer = "true"
-                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
-                temp = []
+                if (max < temp.length) {
+                    alert('You can not select more than ' + max + ' answer')
+                }
+                else if (min >= temp.length || max == temp.length) {
+                    const { id } = this.props.route.params
+                    let survey_id = this.state.survey_id;
+                    let question_id = this.state.question_id;
+                    let answer_id = tempid;
+                    let question = this.state.question;
+                    let answeroption = temp;
+                    let type = this.state.type;
+                    let answer = "true"
+                    this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                    this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
+                    temp = []
+                    tempid = [];
+                }
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
@@ -395,21 +412,25 @@ class Que1 extends Component {
         }
         else {
 
-            const { id } = this.props.route.params
-
-            let survey_id = this.state.survey_id;
-            let question_id = this.state.question_id;
-            let answer_id = tempRankid;
-            let answeroption = tempRankAns;
-            let question = this.state.question
-            let rank = tempRank;
-            let answer = "true";
-            let type = this.state.type
-            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
-            this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
-            tempRank = [];
-            tempRankid = [];
-            tempRankAns = [];
+            if (this.state.dropDownData.length == tempRank.length) {
+                const { id } = this.props.route.params
+                let survey_id = this.state.survey_id;
+                let question_id = this.state.question_id;
+                let answer_id = tempRankid;
+                let answeroption = tempRankAns;
+                let question = this.state.question
+                let rank = tempRank;
+                let answer = "true";
+                let type = this.state.type
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
+                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
+                tempRank = [];
+                tempRankid = [];
+                tempRankAns = [];
+            }
+            else {
+                this.setState({ errorRadio: 'Please select answer' })
+            }
         }
 
 
@@ -427,7 +448,7 @@ class Que1 extends Component {
         const { currentIndex } = this.state;
         let questionCount = this.state.surveyDetailData.length;
         let currentQuestion = this.state.index + 1;
-        console.log('data::', this.state.answerArray)
+        console.log('data::', this.state.surveyDetailData[this.state.index]?.max)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -522,21 +543,26 @@ class Que1 extends Component {
                                             </View>
 
                                             :
-                                            this.state.surveyDetailData[this.state.index].anslist.map((item, index) => (
-                                                <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                                                    <Text style={{ marginTop: 35, paddingLeft: 5, fontFamily: 'Gotham-Medium', flex: 1 }}>{item.answer_title}</Text>
-                                                    <DropDown
-                                                        placeholder="Select Rank"
-                                                        data={this.state.dropDownData}
-                                                        value={this.state.selectRank[index]}
-                                                        onSelect={value => {
-                                                            this.onDropDown(value, index, item);
-                                                        }}
-                                                        Style={{ width: '45%', marginTop: 0, marginHorizontal: 0, flex: 1 }}
-                                                    />
+                                            <View>
+                                                {
+                                                    this.state.surveyDetailData[this.state.index].anslist.map((item, index) => (
+                                                        <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                                                            <Text style={{ marginTop: 35, paddingLeft: 5, fontFamily: 'Gotham-Medium', flex: 1 }}>{item.answer_title}</Text>
+                                                            <DropDown
+                                                                placeholder="Select Rank"
+                                                                data={this.state.dropDownData}
+                                                                value={this.state.selectRank[index]}
+                                                                onSelect={value => {
+                                                                    this.onDropDown(value, index, item);
+                                                                }}
+                                                                Style={{ width: '45%', marginTop: 0, marginHorizontal: 0, flex: 1 }}
+                                                            />
+                                                        </View>
+                                                    ))
+                                                }
+                                                {this.state.errorRadio != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRadio}</Text> : null}
+                                            </View>
 
-                                                </View>
-                                            ))
                             :
                             null
                     }

@@ -156,12 +156,24 @@ class SurveyQueAns extends Component {
                                                                     </View>
                                                                 </View>
                                                                 :
-                                                                <View>
+                                                                val.type == "rank" ?
+                                                                    val.anserData.map((value, newKey) => {
+                                                                        const newVal = val.anserRank.map((val) => { return val })
+                                                                        return (
+                                                                            <View>
+                                                                                <View>
+                                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{value} ({newVal[newKey]})</Text>
+                                                                                </View>
+                                                                            </View>
+                                                                        )
+                                                                    })
+                                                                    :
                                                                     <View>
-                                                                        <Image source={{ uri: val.anserData }} onLoadStart={() => { this.setState({ imageLoad: true }) }} onLoadEnd={() => { this.setState({ imageLoad: false }) }} style={{ width: 50, height: 50, marginTop: 10, marginLeft: 10, borderRadius: 10 }} />
-                                                                        <ActivityIndicator animating={this.state.imageLoad} size="small" color="black" style={{ position: "absolute", top: 0, bottom: 0, left: 25 }} />
+                                                                        <View>
+                                                                            <Image source={{ uri: val.anserData }} onLoadStart={() => { this.setState({ imageLoad: true }) }} onLoadEnd={() => { this.setState({ imageLoad: false }) }} style={{ width: 50, height: 50, marginTop: 10, marginLeft: 10, borderRadius: 10 }} />
+                                                                            <ActivityIndicator animating={this.state.imageLoad} size="small" color="black" style={{ position: "absolute", top: 0, bottom: 0, left: 25 }} />
+                                                                        </View>
                                                                     </View>
-                                                                </View>
 
                                                 }
                                             </View>

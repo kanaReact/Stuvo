@@ -88,6 +88,7 @@ class ReviewAnswer extends Component {
             dropDownData: [],
             selectRank: [],
             rankFlag: false,
+            errorRank: ''
         }
     }
 
@@ -248,7 +249,7 @@ class ReviewAnswer extends Component {
         this.setState({ checkboxArray: temp })
     }
     onDropDown(item, index, value) {
-        this.setState({ rankFlag: true })
+        this.setState({ rankFlag: true, errorRank: '' })
         let temp = this.state.selectRank;
         temp[index] = item;
         let newTempRank = tempRank;
@@ -315,6 +316,9 @@ class ReviewAnswer extends Component {
         })
         this.setState({ radiobuttonArray: array })
     }
+    checkIfDuplicateExists(array) {
+        return new Set(array).size !== array.length
+    }
     updateQuestion() {
         let array = this.state.answerArray
         if (this.state.answerArray[this.state.index].type == "radiobutton") {
@@ -346,10 +350,33 @@ class ReviewAnswer extends Component {
             let max = this.props.surveyDetailData[this.state.index]?.max
             if (this.state.checkboxFlag == false) {
                 if (temp.length != 0) {
-                    if (max < temp.length) {
-                        alert('You can not select more than ' + max + ' answer')
+                    if (min != null && max != null) {
+                        if (max < temp.length) {
+                            alert('You can not select more than ' + max + ' answer')
+                        }
+                        else if (temp.length < min) {
+                            alert('You have to select minimum ' + min + ' answer')
+                        }
+                        else if (temp.length > min && temp.length < max) {
+                            array[this.state.index].type = "checkbox";
+                            array[this.state.index].anstitle_id = tempid
+                            array[this.state.index].answeroption = temp
+                            this.setState({ answerArray: array, editAnsModal: false })
+                            temp = [];
+                            tempid = [];
+
+                        }
+                        else if (min >= temp.length || max == temp.length) {
+                            array[this.state.index].type = "checkbox";
+                            array[this.state.index].anstitle_id = tempid
+                            array[this.state.index].answeroption = temp
+                            this.setState({ answerArray: array, editAnsModal: false })
+                            temp = [];
+                            tempid = [];
+
+                        }
                     }
-                    else if (min >= temp.length || max == temp.length) {
+                    else {
                         array[this.state.index].type = "checkbox";
                         array[this.state.index].anstitle_id = tempid
                         array[this.state.index].answeroption = temp
@@ -357,6 +384,10 @@ class ReviewAnswer extends Component {
                         temp = [];
                         tempid = [];
                     }
+                }
+                else {
+                    this.setState({ checkboxError: 'Please select answer' })
+
                 }
             }
             else {
@@ -367,14 +398,19 @@ class ReviewAnswer extends Component {
         }
         else if (this.state.answerArray[this.state.index].type == "rank") {
             if (this.state.rankFlag == true) {
-                array[this.state.index].type = "rank";
-                array[this.state.index].anstitle_id = tempRankid
-                array[this.state.index].answeroption = tempRankAns
-                array[this.state.index].rank = tempRank
-                this.setState({ answerArray: array, editAnsModal: false })
-                tempRank = [];
-                tempRankid = [];
-                tempRankAns = [];
+                if (this.checkIfDuplicateExists(tempRank) == true) {
+                    this.setState({ errorRank: 'You can not select same rank' })
+                }
+                else {
+                    array[this.state.index].type = "rank";
+                    array[this.state.index].anstitle_id = tempRankid
+                    array[this.state.index].answeroption = tempRankAns
+                    array[this.state.index].rank = tempRank
+                    this.setState({ answerArray: array, editAnsModal: false })
+                    tempRank = [];
+                    tempRankid = [];
+                    tempRankAns = [];
+                }
             }
             else {
                 this.setState({ editAnsModal: false })
@@ -592,21 +628,26 @@ class ReviewAnswer extends Component {
                                                     </View>
 
                                                     :
-                                                    this.props.surveyDetailData[this.state.index].anslist.map((item, index) => (
-                                                        <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                                                            <Text style={{ marginTop: 35, paddingLeft: 5, fontFamily: 'Gotham-Medium', flex: 1 }}>{item.answer_title}</Text>
-                                                            <DropDown
-                                                                placeholder="Select Rank"
-                                                                data={this.state.dropDownData}
-                                                                value={this.state.selectRank[index]}
-                                                                onSelect={value => {
-                                                                    this.onDropDown(value, index, item);
-                                                                }}
-                                                                Style={{ width: '45%', marginTop: 0, marginHorizontal: 0, flex: 1 }}
-                                                            />
+                                                    <View>
+                                                        {
+                                                            this.props.surveyDetailData[this.state.index].anslist.map((item, index) => (
+                                                                <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                                                                    <Text style={{ marginTop: 35, paddingLeft: 5, fontFamily: 'Gotham-Medium', flex: 1 }}>{item.answer_title}</Text>
+                                                                    <DropDown
+                                                                        placeholder="Select Rank"
+                                                                        data={this.state.dropDownData}
+                                                                        value={this.state.selectRank[index]}
+                                                                        onSelect={value => {
+                                                                            this.onDropDown(value, index, item);
+                                                                        }}
+                                                                        Style={{ width: '45%', marginTop: 0, marginHorizontal: 0, flex: 1 }}
+                                                                    />
 
-                                                        </View>
-                                                    ))
+                                                                </View>
+                                                            ))
+                                                        }
+                                                        {this.state.errorRank != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRank}</Text> : null}
+                                                    </View>
                                     : null
                             }
 

@@ -40,7 +40,7 @@ const DropDown = props => {
         }, 200);
     };
 
-    const click = async item => {
+    const click = async (item, index) => {
         Animated.timing(animatedValue, {
             toValue: dropVisible ? 0 : 1,
             duration: 200,
@@ -49,14 +49,14 @@ const DropDown = props => {
         }).start();
 
         setTimeout(() => {
-            props.onSelect(item);
+            props.onSelect(item, index);
             setdropVisible(!dropVisible);
         }, 200);
     };
-    const DropDownRender = ({ item }) => {
+    const DropDownRender = ({ item, index }) => {
         return (
             <View>
-                <TouchableOpacity onPress={() => click(item)}>
+                <TouchableOpacity onPress={() => click(item, index)}>
                     <View
                         style={[
                             localStyle.renderRow,

@@ -58,7 +58,7 @@ class Week1Questionaires extends Component {
 
         if (diff > periods.month) {
             // it was at least a month ago
-            return ''
+            return Math.floor(diff / periods.month) + " month left to complete";
         } else if (diff > periods.week) {
             return Math.floor(diff / periods.week) + " week left to complete";
         } else if (diff > periods.day) {

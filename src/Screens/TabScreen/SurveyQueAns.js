@@ -79,8 +79,12 @@ class SurveyQueAns extends Component {
         if (val.type == "radiobuttonImage") {
             this.props.navigation.navigate('RadioImageResult', { id: val.question_id, question: val.question })
         }
+        if (val.type == 'rank') {
+            this.props.navigation.navigate('ResultRank', { id: val.question_id, question: val.question })
+        }
     }
     resultShow(val) {
+
         if (val.type != 'textbox') {
             this.setState({ loading: true })
             let url = constant.BASE_URL + 'survey_result_flag?id=' + val.survey_id

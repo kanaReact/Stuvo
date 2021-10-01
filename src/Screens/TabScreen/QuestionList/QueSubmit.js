@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import axios from 'axios';
 import constant from '../../../Redux/config/constant';
 import Spinner from '../../../Components/Spinner';
+import Toast from 'react-native-tiny-toast';
 class QueSubmit extends Component {
     constructor(props) {
         super(props);
@@ -35,12 +36,20 @@ class QueSubmit extends Component {
             },
         }).then(async (responseJson) => {
             this.setState({ loading: false })
+            console.log('res:', responseJson)
             if (responseJson.data.status == 1) {
                 this.explosion.start()
                 await this.setState({ showBtn: true, isVisible: true })
             }
+            else {
+                Toast.show(responseJson.data.message, {
+                    position: Toast.position.BOTTOM,
+                    containerStyle: { backgroundColor: 'black' },
+                    textStyle: { color: 'white' },
+                })
+            }
         }).catch(error => {
-
+            console.log('err:', error)
             this.setState({ loading: false })
         })
 

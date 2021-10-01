@@ -38,7 +38,7 @@ export const surveyList = (AUTH, type) => {
                 dispatch(surveyListFailed(responseJson.data))
             }
         })
-            .catch(error => { dispatch(surveyListFailed(error)) })
+            .catch(error => { dispatch(surveyListFailed(error)); console.log('err:', error) })
 
     };
 };

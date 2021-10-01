@@ -46,13 +46,19 @@ class ResultProgress extends Component {
         if (array.length != 0) {
             let countAddition = array.map(item => item.count).reduce((a, b) => a + b)
             let temp = []
-            let colorTemp = []
+            let colorTemp = [];
+            let letters = '00AFF0'
             array.map((item, index) => {
                 console.log('count:', item.count)
                 let multiply = item.count * 100;
                 let ans = (multiply / countAddition).toFixed()
                 let finalans = (ans / 100)
                 temp.push(finalans)
+                // var letters = '0123456789ABCDEF';
+                // var color = '#';
+                // for (var i = 0; i < 6; i++) {
+                //     color += letters[Math.floor(Math.random() * 16)];
+                // }
                 var randomElement = this.state.colorArray[Math.floor(Math.random() * this.state.colorArray.length)];
                 console.log('color:', randomElement)
                 array[index].color = randomElement

@@ -37,6 +37,7 @@ import SurveyQueAns from '../Screens/TabScreen/SurveyQueAns';
 import RadioImageResult from '../Screens/TabScreen/RadioImageResult';
 import NewQuestionaries from '../Screens/TabScreen/NewQuestionaries';
 import NewQuestionariesComplete from '../Screens/TabScreen/NewQuestionariesComplete';
+import ResultRank from '../Screens/TabScreen/ResultRank';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const TabBottom = createBottomTabNavigator();
@@ -86,6 +87,7 @@ function Navigator() {
       <Stack.Screen name="About_Student_Voice" component={About_Student_Voice} />
       <Stack.Screen name="SurveyQueAns" component={SurveyQueAns} />
       <Stack.Screen name="RadioImageResult" component={RadioImageResult} />
+      <Stack.Screen name="ResultRank" component={ResultRank} />
     </Stack.Navigator>
   );
 }

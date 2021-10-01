@@ -22,6 +22,7 @@ const INITIAL_STATE = {
 const SurveyReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
         case SurveyListSuccess:
+            console.log('reducer::', action.payload.responseJson)
             return {
                 ...state,
                 surveyData: action.payload.responseJson.data[0].Survey

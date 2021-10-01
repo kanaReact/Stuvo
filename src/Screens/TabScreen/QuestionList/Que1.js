@@ -495,20 +495,26 @@ class Que1 extends Component {
         else {
 
             if (this.state.dropDownData.length == tempRank.length) {
-                const { id } = this.props.route.params
-                let survey_id = this.state.survey_id;
-                let question_id = this.state.question_id;
-                let answer_id = tempRankid;
-                let answeroption = tempRankAns;
-                let question = this.state.question
-                let rank = tempRank;
-                let answer = "true";
-                let type = this.state.type
-                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
-                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
-                tempRank = [];
-                tempRankid = [];
-                tempRankAns = [];
+                if (this.checkIfDuplicateExists(tempRank) == true) {
+                    this.setState({ errorRadio: 'You can not select same rank' })
+                }
+                else {
+                    const { id } = this.props.route.params
+                    let survey_id = this.state.survey_id;
+                    let question_id = this.state.question_id;
+                    let answer_id = tempRankid;
+                    let answeroption = tempRankAns;
+                    let question = this.state.question
+                    let rank = tempRank;
+                    let answer = "true";
+                    let type = this.state.type
+                    this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
+                    this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
+                    tempRank = [];
+                    tempRankid = [];
+                    tempRankAns = [];
+                }
+
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })

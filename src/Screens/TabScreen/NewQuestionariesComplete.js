@@ -53,39 +53,8 @@ class NewQuestionariesComplete extends Component {
             id: ''
         }
     }
-    formatTime(timeCreated) {
-        var diff = Date.now() - moment(timeCreated).format("x");
 
-        if (diff > periods.month) {
-            // it was at least a month ago
-            return Math.floor(diff / periods.month) + " month left to complete";
-        } else if (diff > periods.week) {
-            return Math.floor(diff / periods.week) + " week left to complete";
-        } else if (diff > periods.day) {
-            return Math.floor(diff / periods.day) + " days left to complete";
-        } else if (diff > periods.hour) {
-            return Math.floor(diff / periods.hour) + " hours left to complete";
-        }
-        else if (diff > periods.minute) {
-            return Math.floor(diff / periods.minute) + " mintues left to complete";
-        }
 
-    }
-
-    setColor(date) {
-        if (this.formatTime(date) != undefined) {
-            if (this.formatTime(date).includes("days") == true) {
-                return '#E17800'
-            }
-            else {
-                return '#E10000'
-            }
-        }
-        else {
-            return '#E10000'
-        }
-
-    }
 
     toggleModal = () => {
         this.setState({ isVisible: !this.state.isVisible })

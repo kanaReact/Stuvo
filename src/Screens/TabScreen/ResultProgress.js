@@ -54,12 +54,13 @@ class ResultProgress extends Component {
                 let ans = (multiply / countAddition).toFixed()
                 let finalans = (ans / 100)
                 temp.push(finalans)
-                // var letters = '0123456789ABCDEF';
-                // var color = '#';
-                // for (var i = 0; i < 6; i++) {
-                //     color += letters[Math.floor(Math.random() * 16)];
-                // }
-                var randomElement = this.state.colorArray[Math.floor(Math.random() * this.state.colorArray.length)];
+                var letters = '0123456789ABCDEF';
+                var color = '#';
+                for (var i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                //var randomElement = this.state.colorArray[Math.floor(Math.random() * this.state.colorArray.length)];
+                var randomElement = color
                 console.log('color:', randomElement)
                 array[index].color = randomElement
                 colorTemp.push(randomElement)

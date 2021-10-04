@@ -54,8 +54,9 @@ class Week1Questionaires extends Component {
         }
     }
     formatTime(timeCreated) {
-        var diff = moment(timeCreated).format("x") - Date.now();
-
+        let currentDate = Date.now();
+        let endDate = moment(timeCreated).format("x")
+        var diff = endDate > currentDate ? endDate - currentDate : currentDate - endDate;
         if (diff > periods.month) {
             // it was at least a month ago
             return Math.floor(diff / periods.month) + " month left to complete";

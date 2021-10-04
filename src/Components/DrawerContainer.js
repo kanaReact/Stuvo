@@ -36,15 +36,12 @@ class DrawerContainer extends Component {
     changeTab(i) {
         if (i == 1) {
             this.props.navigation.navigate('Question')
-            this.setState({ activeTab: false, activeTab1: true, activeTab2: true })
             this.props.navigation.closeDrawer()
         } else if (i == 2) {
             this.props.navigation.navigate('Guidance')
-            this.setState({ activeTab1: false, activeTab2: true, activeTab: true })
             this.props.navigation.closeDrawer()
         } else if (i == 3) {
             this.props.navigation.navigate('TechnicalSupport')
-            this.setState({ activeTab1: true, activeTab2: false, activeTab: true })
             this.props.navigation.closeDrawer()
         }
         else if (i == 4) {

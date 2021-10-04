@@ -89,10 +89,10 @@ export function surveyCompletedListFailed(responseJson) {
 export const surveyComplete = (AUTH, id) => {
     return (dispatch) => {
         let url = constant.BASE_URL + 'submit_survey_view?id=' + id
-
         axios.get(url, {
             headers: { 'Authorization': 'Bearer ' + AUTH }
         }).then(responseJson => {
+            console.log('survey ques ans::', responseJson.data)
             if (responseJson.data.status == 1) {
                 dispatch(surveyCompletedListSuccess(responseJson.data))
             }
@@ -100,7 +100,7 @@ export const surveyComplete = (AUTH, id) => {
                 dispatch(surveyCompletedListFailed(responseJson.data))
             }
         })
-            .catch(error => { dispatch(surveyCompletedListFailed(error)) })
+            .catch(error => { dispatch(surveyCompletedListFailed(error)); console.log('error:', error) })
 
     };
 };

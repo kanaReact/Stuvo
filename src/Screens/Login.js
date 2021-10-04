@@ -72,7 +72,7 @@ class Login extends React.Component {
         }).then(responseJson => {
             this.setState({ loading: false })
 
-            console.log('res:', responseJson)
+            console.log('res:', responseJson.data.data)
             if (responseJson.data.status == 1) {
                 Toast.show('OTP sent successfully', {
                     position: Toast.position.BOTTOM,

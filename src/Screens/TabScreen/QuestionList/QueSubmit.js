@@ -23,11 +23,12 @@ class QueSubmit extends Component {
     }
 
     submitQuestion() {
-        const { answerArray } = this.props.route.params
+        const { answerArray, questionList } = this.props.route.params
         this.setState({ loading: true })
         let url = constant.BASE_URL + 'survey_form_submit'
         let data = new URLSearchParams()
         data.append('ans_array', JSON.stringify(answerArray));
+        data.append('question_array', JSON.stringify(questionList));
         console.log('data:', data)
         axios.post(url, data, {
             headers: {
@@ -56,8 +57,9 @@ class QueSubmit extends Component {
     }
 
     render() {
-        const { answerArray } = this.props.route.params
-        console.log('ans array:', answerArray)
+        const { answerArray, questionList } = this.props.route.params
+        console.log('ans array:', JSON.stringify(answerArray))
+        console.log('que array:', JSON.stringify(questionList))
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -75,7 +77,7 @@ class QueSubmit extends Component {
                     {
                         this.state.showBtn == false ?
                             <View style={{ flex: 1, justifyContent: 'flex-end', marginHorizontal: 27 }}>
-                                <TouchableOpacity onPress={() => this.props.navigation.navigate('ReviewAnswer', { answerArray: answerArray })} activeOpacity={0.6} style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', alignItems: 'center', marginBottom: 27 }}>
+                                <TouchableOpacity onPress={() => this.props.navigation.navigate('ReviewAnswer', { answerArray: answerArray, questionList: questionList })} activeOpacity={0.6} style={{ justifyContent: 'center', alignContent: 'center', alignSelf: 'center', alignItems: 'center', marginBottom: 27 }}>
                                     <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>{this.state.isVisible ? '' : 'Review answers'}</Text>
                                 </TouchableOpacity>
 

@@ -42,8 +42,22 @@ class Que1 extends Component {
             imageAnimating: false,
             dropDownData: [],
             selectRank: [],
+            otherOption: '',
+            commentOption: '',
+            otherOptionInput: '',
+            commentOptionInput: '',
+            questionListArray: [],
+            commentOptionCheckBox: '',
+            commentOptionCheckBoxInput: '',
+            commentOptionRank: '',
+            commentOptionRankInput: '',
+            otherOptionRadioImage: '',
+            otherOptionRadioImageInput: '',
+            commentOptionRadioImage: '',
+            commentOptionRadioImageInput: '',
+            otherOptionError: '',
+            commentOptinError: ''
         }
-
     }
 
     selectedIndex = (i) => {
@@ -61,6 +75,8 @@ class Que1 extends Component {
         }
         if (nextProps.surveyDetailData[this.state.index].answeroption == "radiobutton") {
             let tempArrayRadioBtn = []
+            let comment = nextProps.surveyDetailData[this.state.index].comment
+            this.setState({ commentOption: comment })
             nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
                 tempArrayRadioBtn.push({
                     answer_title: item.answer_title,
@@ -70,14 +86,15 @@ class Que1 extends Component {
                     id: item.id,
                     question: nextProps.surveyDetailData[this.state.index].question,
                     answeroption: 'radiobutton',
+                    other_option: item.other_option
                 })
             })
-
             this.setState({ radiobuttonArray: tempArrayRadioBtn })
-
         }
         else if (nextProps.surveyDetailData[this.state.index].answeroption == "checkbox") {
             let tempArrayRadioBtn = []
+            let comment = nextProps.surveyDetailData[this.state.index].comment
+            this.setState({ commentOptionCheckBox: comment })
             nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
                 this.changeCheckboxValue(index, false)
             })
@@ -96,6 +113,8 @@ class Que1 extends Component {
         }
         else if (nextProps.surveyDetailData[this.state.index].answeroption == "radiobuttonImage") {
             let tempArrayRadioBtnImage = []
+            let comment = nextProps.surveyDetailData[this.state.index].comment
+            this.setState({ commentOptionRadioImage: comment })
             nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
                 tempArrayRadioBtnImage.push({
                     answer_title: item.answer_title,
@@ -105,12 +124,14 @@ class Que1 extends Component {
                     id: item.id,
                     question: nextProps.surveyDetailData[this.state.index].question,
                     answeroption: 'radiobuttonImage',
+                    other_option: item.other_option
                 })
             })
             this.setState({ radioButtonWithImageArray: tempArrayRadioBtnImage })
         }
         else if (nextProps.surveyDetailData[this.state.index].answeroption == "rank") {
-            this.setState({ selectRank: [], question: nextProps.surveyDetailData[this.state.index].question })
+            let comment = nextProps.surveyDetailData[this.state.index].comment
+            this.setState({ selectRank: [], question: nextProps.surveyDetailData[this.state.index].question, commentOptionRank: comment })
             let tempArrayRank = []
             nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
                 let val = index + 1
@@ -133,6 +154,7 @@ class Que1 extends Component {
                     question: data.question,
                     answeroption: data.answer_title,
                     type: data.answeroption,
+                    otherOption: data.other_option
                 })
             }
             else {
@@ -163,6 +185,7 @@ class Que1 extends Component {
                     question: data.question,
                     answeroption: data.answer_title,
                     type: data.answeroption,
+                    otherOptionRadioImage: data.other_option
                 })
             }
             else {
@@ -218,7 +241,6 @@ class Que1 extends Component {
     checkIfDuplicateExists(array) {
         return new Set(array).size !== array.length
     }
-
     nextQuestion() {
         if (this.state.surveyDetailData[this.state.index].answeroption == "textbox") {
             if (this.state.textInputAnswer != '') {
@@ -231,7 +253,7 @@ class Que1 extends Component {
                 let question = this.state.question;
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
-                let answer = this.state.textInputAnswer
+                let answer = this.state.textInputAnswer;
                 this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
                 this.setState({ index: this.state.index + 1 })
             }
@@ -250,9 +272,14 @@ class Que1 extends Component {
                 let question = this.state.question;
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
-                let answer = "true"
-                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                this.setState({ index: this.state.index + 1 })
+                let answer = "true";
+                let other_option = this.state.otherOption
+                let otherOptionAnswer = this.state.otherOptionInput
+                let comment = this.state.commentOption
+                let commentOptionAnswer = this.state.commentOptionInput
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                this.setState({ index: this.state.index + 1, otherOptionInput: '', commentOptionInput: '', otherOption: '', commentOption: '' })
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
@@ -269,8 +296,13 @@ class Que1 extends Component {
                 let question = this.state.question;
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
-                let answer = "true"
-                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                let answer = "true";
+                let other_option = this.state.otherOptionRadioImage;
+                let otherOptionAnswer = this.state.otherOptionRadioImageInput;
+                let comment = this.state.commentOptionRadioImage;
+                let commentOptionAnswer = this.state.commentOptionRadioImageInput;
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                 this.setState({ index: this.state.index + 1 })
             }
             else {
@@ -299,7 +331,10 @@ class Que1 extends Component {
                         let answeroption = temp;
                         let type = this.state.type;
                         let answer = "true"
+                        let comment = this.state.commentOptionCheckBox;
+                        let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                         this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                         this.setState({ index: this.state.index + 1 })
                         temp = [];
                         tempid = [];
@@ -315,7 +350,10 @@ class Que1 extends Component {
                         let answeroption = temp;
                         let type = this.state.type;
                         let answer = "true"
+                        let comment = this.state.commentOptionCheckBox;
+                        let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                         this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                         this.setState({ index: this.state.index + 1 })
                         temp = [];
                         tempid = [];
@@ -332,7 +370,10 @@ class Que1 extends Component {
                     let answeroption = temp;
                     let type = this.state.type;
                     let answer = "true"
+                    let comment = this.state.commentOptionCheckBox;
+                    let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                     this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                    this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                     this.setState({ index: this.state.index + 1 })
                     temp = [];
                     tempid = [];
@@ -360,26 +401,25 @@ class Que1 extends Component {
                     let rank = tempRank;
                     let answer = "true"
                     let type = this.state.type;
+                    let comment = this.state.commentOptionRank;
+                    let commentOptionAnswer = this.state.commentOptionRankInput
                     this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
+                    this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                     this.setState({ index: this.state.index + 1 })
                     tempRank = [];
                     tempRankid = [];
                     tempRankAns = [];
                 }
             }
-
             else {
                 this.setState({ errorRadio: 'Please select answer' })
             }
-
         }
-
     }
     navigateSubmit() {
         if (this.state.surveyDetailData[this.state.index].answeroption == "textbox") {
             if (this.state.textInputAnswer != '') {
                 const { id } = this.props.route.params
-
                 let survey_id = this.state.survey_id;
                 let question_id = this.state.question_id;
                 let answer_id = this.state.answer_id;
@@ -388,15 +428,13 @@ class Que1 extends Component {
                 let type = this.state.type;
                 let answer = this.state.textInputAnswer;
                 this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                //setTimeout(() => { this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray }); }, 500)
                 this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
             }
             else {
                 this.setState({ errorInput: 'Please enter answer' })
             }
         }
-        if (this.state.surveyDetailData[this.state.index].answeroption == "radiobutton") {
-
+        if (this.state.surveyDetailData[this.state.index].answeroption === "radiobutton") {
             if (this.state.type != '') {
                 const { id } = this.props.route.params
                 let survey_id = this.state.survey_id;
@@ -406,8 +444,13 @@ class Que1 extends Component {
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
                 let answer = "true";
-                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
+                let other_option = this.state.otherOption
+                let otherOptionAnswer = this.state.otherOptionInput
+                let comment = this.state.commentOption
+                let commentOptionAnswer = this.state.commentOptionInput
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                this.state.questionListArray.push({ question_id: question_id, comment, comment, commentOptionAnswer: commentOptionAnswer })
+                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
@@ -422,9 +465,14 @@ class Que1 extends Component {
                 let question = this.state.question;
                 let answeroption = this.state.answeroption;
                 let type = this.state.type;
-                let answer = "true"
-                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
+                let answer = "true";
+                let other_option = this.state.otherOptionRadioImage;
+                let otherOptionAnswer = this.state.otherOptionRadioImageInput;
+                let comment = this.state.commentOptionRadioImage;
+                let commentOptionAnswer = this.state.commentOptionRadioImageInput;
+                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
@@ -450,8 +498,11 @@ class Que1 extends Component {
                         let answeroption = temp;
                         let type = this.state.type;
                         let answer = "true"
+                        let comment = this.state.commentOptionCheckBox;
+                        let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                         this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                        this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                        this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
                         temp = []
                         tempid = [];
 
@@ -465,11 +516,13 @@ class Que1 extends Component {
                         let answeroption = temp;
                         let type = this.state.type;
                         let answer = "true"
+                        let comment = this.state.commentOptionCheckBox;
+                        let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                         this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                        this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                        this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
                         temp = []
                         tempid = [];
-
                     }
                 }
                 else {
@@ -481,11 +534,13 @@ class Que1 extends Component {
                     let answeroption = temp;
                     let type = this.state.type;
                     let answer = "true"
+                    let comment = this.state.commentOptionCheckBox;
+                    let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                     this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                    this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
+                    this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                    this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
                     temp = []
                     tempid = [];
-
                 }
             }
             else {
@@ -494,34 +549,37 @@ class Que1 extends Component {
         }
         else {
 
-            if (this.state.dropDownData.length == tempRank.length) {
-                if (this.checkIfDuplicateExists(tempRank) == true) {
-                    this.setState({ errorRadio: 'You can not select same rank' })
+            if (this.state.dropDownData.length != 0) {
+                if (this.state.dropDownData.length == tempRank.length) {
+                    if (this.checkIfDuplicateExists(tempRank) == true) {
+                        this.setState({ errorRadio: 'You can not select same rank' })
+                    }
+                    else {
+                        const { id } = this.props.route.params
+                        let survey_id = this.state.survey_id;
+                        let question_id = this.state.question_id;
+                        let answer_id = tempRankid;
+                        let answeroption = tempRankAns;
+                        let question = this.state.question
+                        let rank = tempRank;
+                        let answer = "true";
+                        let type = this.state.type;
+                        let comment = this.state.commentOptionRank;
+                        let commentOptionAnswer = this.state.commentOptionRankInput
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                        this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                        tempRank = [];
+                        tempRankid = [];
+                        tempRankAns = [];
+                    }
+
                 }
                 else {
-                    const { id } = this.props.route.params
-                    let survey_id = this.state.survey_id;
-                    let question_id = this.state.question_id;
-                    let answer_id = tempRankid;
-                    let answeroption = tempRankAns;
-                    let question = this.state.question
-                    let rank = tempRank;
-                    let answer = "true";
-                    let type = this.state.type
-                    this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
-                    this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
-                    tempRank = [];
-                    tempRankid = [];
-                    tempRankAns = [];
+                    this.setState({ errorRadio: 'Please select answer' })
                 }
-
-            }
-            else {
-                this.setState({ errorRadio: 'Please select answer' })
             }
         }
-
-
     }
     onClose() {
         this.props.navigation.goBack();
@@ -531,12 +589,11 @@ class Que1 extends Component {
         tempRankAns = [];
         tempRankid = [];
     }
-
     render() {
         const { currentIndex } = this.state;
         let questionCount = this.state.surveyDetailData.length;
         let currentQuestion = this.state.index + 1;
-        console.log('data rank::', this.state.selectRank[0])
+        console.log('data rank::', this.state.surveyDetailData)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -550,12 +607,9 @@ class Que1 extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-
                 {questionCount == 0 ? <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16 }}>Question </Text> : <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16 }}>Question {currentQuestion} of {questionCount}</Text>}
-
-                <ScrollView style={{ marginLeft: 16, marginRight: 24 }} contentContainerStyle={{ paddingBottom: 100 }}>
+                <ScrollView showsVerticalScrollIndicator={false} style={{ marginLeft: 16, marginRight: 24 }} contentContainerStyle={{ paddingBottom: 100 }}>
                     <Text style={{ marginTop: 15, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', lineHeight: 20 }}>{this.state.surveyDetailData.length != 0 ? this.state.surveyDetailData[this.state.index].question : null}</Text>
-
                     {
                         this.state.surveyDetailData.length != 0 ?
                             this.state.surveyDetailData[this.state.index].answeroption == "radiobutton" ?
@@ -574,9 +628,34 @@ class Que1 extends Component {
                                             </TouchableOpacity>
                                         ))
                                     }
-                                    {this.state.errorRadio != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRadio}</Text> : null}
+                                    {this.state.errorRadio != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRadio}</Text>}
+                                    {
+                                        this.state.otherOption == 'Y' &&
+                                        <TextInput
+                                            style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                            placeholder="Write other comment..."
+                                            multiline={true}
+                                            value={this.state.otherOptionInput}
+                                            returnKeyType="done"
+                                            onSubmitEditing={() => { Keyboard.dismiss() }}
+                                            onChangeText={(text) => { this.setState({ otherOptionInput: text.trimStart(), errorInput: '' }) }}
+                                        />
+                                    }
+                                    {this.state.otherOptionError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.otherOptionError}</Text>}
+                                    {
+                                        this.state.commentOption == 'Y' &&
+                                        <TextInput
+                                            style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                            placeholder="Write comment..."
+                                            multiline={true}
+                                            value={this.state.commentOptionInput}
+                                            returnKeyType="done"
+                                            onSubmitEditing={() => { Keyboard.dismiss() }}
+                                            onChangeText={(text) => { this.setState({ commentOptionInput: text.trimStart(), errorInput: '' }) }}
+                                        />
+                                    }
+                                    {this.state.commentOptinError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptinError}</Text>}
                                 </View>
-
                                 :
                                 this.state.surveyDetailData[this.state.index].answeroption == "checkbox" ?
                                     <View>
@@ -593,7 +672,20 @@ class Que1 extends Component {
                                                 </View>
                                             ))
                                         }
-                                        {this.state.errorRadio != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRadio}</Text> : null}
+                                        {this.state.errorRadio != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRadio}</Text>}
+                                        {
+                                            this.state.commentOptionCheckBox == 'Y' &&
+                                            <TextInput
+                                                style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                placeholder="Write comment..."
+                                                multiline={true}
+                                                value={this.state.commentOptionCheckBoxInput}
+                                                returnKeyType="done"
+                                                onSubmitEditing={() => { Keyboard.dismiss() }}
+                                                onChangeText={(text) => { this.setState({ commentOptionCheckBoxInput: text.trimStart(), errorInput: '' }) }}
+                                            />
+                                        }
+                                        {this.state.commentOptinError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptinError}</Text>}
                                     </View>
                                     :
                                     this.state.surveyDetailData[this.state.index].answeroption == "textbox" ?
@@ -607,7 +699,7 @@ class Que1 extends Component {
                                                 onSubmitEditing={() => { Keyboard.dismiss() }}
                                                 onChangeText={(text) => { this.setState({ textInputAnswer: text.trimStart(), errorInput: '' }) }}
                                             />
-                                            {this.state.errorInput != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorInput}</Text> : null}
+                                            {this.state.errorInput != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorInput}</Text>}
                                         </View>
                                         :
                                         this.state.surveyDetailData[this.state.index].answeroption == "radiobuttonImage" ?
@@ -617,19 +709,55 @@ class Que1 extends Component {
                                                     numColumns={2}
                                                     columnWrapperStyle={{ justifyContent: "space-between", }}
                                                     renderItem={({ item, index }) => (
-                                                        <View style={{ width: "48%", marginTop: 10 }}>
-                                                            <TouchableOpacity onPress={() => { this.changeRadioBtnImageValue(item) }} style={{ flex: 1 }} activeOpacity={0.75}>
-                                                                <Image onLoadStart={() => { this.setState({ imageAnimating: true }) }} onLoadEnd={() => { this.setState({ imageAnimating: false }) }} source={{ uri: item.answer_title }} style={{ height: 166, width: '100%', borderWidth: 4, borderColor: item.set == 1 ? '#00AFF0' : '#eaeaea', borderRadius: 10 }} />
-                                                                <ActivityIndicator color="black" animating={this.state.imageAnimating} style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />
+                                                        item.other_option == 'N' ?
+                                                            <View style={{ width: "48%", marginTop: 10 }}>
+                                                                <TouchableOpacity onPress={() => { this.changeRadioBtnImageValue(item) }} style={{ flex: 1 }} activeOpacity={0.75}>
+                                                                    <Image onLoadStart={() => { this.setState({ imageAnimating: true }) }} onLoadEnd={() => { this.setState({ imageAnimating: false }) }} source={{ uri: item.answer_title }} style={{ height: 166, width: '100%', borderWidth: 4, borderColor: item.set == 1 ? '#00AFF0' : '#eaeaea', borderRadius: 10 }} />
+                                                                    <ActivityIndicator color="black" animating={this.state.imageAnimating} style={{ position: 'absolute', top: 0, bottom: 0, left: 0, right: 0 }} />
+                                                                </TouchableOpacity>
+                                                            </View>
+                                                            :
+                                                            <TouchableOpacity key={index} style={{
+                                                                marginTop: 30, borderRadius: 30, minHeight: 41, justifyContent: 'center', paddingHorizontal: 18,
+                                                                backgroundColor: item.set == 0 ? '#E0E0E066' : '#00AFF0', paddingVertical: 10, width: '100%'
+                                                            }} activeOpacity={0.6}
+                                                                onPress={() => { this.changeRadioBtnImageValue(item) }}>
+                                                                <Text style={{
+                                                                    fontSize: 14, fontFamily: 'Gotham-Medium',
+                                                                    color: item.set == 0 ? '#272727' : '#FFFFFF'
+                                                                }}>{item.answer_title}</Text>
                                                             </TouchableOpacity>
-
-                                                        </View>
 
                                                     )}
                                                 />
-                                                {this.state.errorRadio != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRadio}</Text> : null}
+                                                {this.state.errorRadio != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRadio}</Text>}
+                                                {
+                                                    this.state.otherOptionRadioImage == 'Y' &&
+                                                    <TextInput
+                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                        placeholder="Write other comment..."
+                                                        multiline={true}
+                                                        value={this.state.otherOptionRadioImageInput}
+                                                        returnKeyType="done"
+                                                        onSubmitEditing={() => { Keyboard.dismiss() }}
+                                                        onChangeText={(text) => { this.setState({ otherOptionRadioImageInput: text.trimStart(), errorInput: '' }) }}
+                                                    />
+                                                }
+                                                {this.state.otherOptionError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.otherOptionError}</Text>}
+                                                {
+                                                    this.state.commentOptionRadioImage == 'Y' &&
+                                                    <TextInput
+                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                        placeholder="Write comment..."
+                                                        multiline={true}
+                                                        value={this.state.commentOptionRadioImageInput}
+                                                        returnKeyType="done"
+                                                        onSubmitEditing={() => { Keyboard.dismiss() }}
+                                                        onChangeText={(text) => { this.setState({ commentOptionRadioImageInput: text.trimStart(), errorInput: '' }) }}
+                                                    />
+                                                }
+                                                {this.state.commentOptinError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptinError}</Text>}
                                             </View>
-
                                             :
                                             <View>
                                                 {
@@ -648,9 +776,21 @@ class Que1 extends Component {
                                                         </View>
                                                     ))
                                                 }
-                                                {this.state.errorRadio != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRadio}</Text> : null}
+                                                {this.state.errorRadio != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRadio}</Text>}
+                                                {
+                                                    this.state.commentOptionRank == 'Y' &&
+                                                    <TextInput
+                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                        placeholder="Write something..."
+                                                        multiline={true}
+                                                        value={this.state.commentOptionRankInput}
+                                                        returnKeyType="done"
+                                                        onSubmitEditing={() => { Keyboard.dismiss() }}
+                                                        onChangeText={(text) => { this.setState({ commentOptionRankInput: text.trimStart(), errorInput: '' }) }}
+                                                    />
+                                                }
+                                                {this.state.commentOptinError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptinError}</Text>}
                                             </View>
-
                             :
                             null
                     }
@@ -672,7 +812,6 @@ class Que1 extends Component {
                             </TouchableOpacity>
                     }
                 </View>
-
             </SafeAreaView>
         )
     }

@@ -88,7 +88,8 @@ class ReviewAnswer extends Component {
             dropDownData: [],
             selectRank: [],
             rankFlag: false,
-            errorRank: ''
+            errorRank: '',
+            questionList: this.props.route.params.questionList
         }
     }
 
@@ -135,7 +136,7 @@ class ReviewAnswer extends Component {
             temp.push(item.answer_title)
             tempid.push(item.id)
             console.log('temp add::', temp)
-            this.setState({ type: 'checkbox', survey_id: item.serve_id, question_id: item.question_id, question: que, })
+            this.setState({ type: 'checkbox', survey_id: item.serve_id, question_id: item.question_id, question: que })
         }
         else if (value == true) {
             this.changeCheckboxValue(index, false);
@@ -163,6 +164,7 @@ class ReviewAnswer extends Component {
                         id: item.id,
                         question: this.props.surveyDetailData[index].question,
                         answeroption: 'radiobutton',
+                        other_option: item.other_option
                     })
                 }
                 else {
@@ -174,6 +176,7 @@ class ReviewAnswer extends Component {
                         id: item.id,
                         question: this.props.surveyDetailData[index].question,
                         answeroption: 'radiobutton',
+                        other_option: item.other_option
                     })
                 }
             })

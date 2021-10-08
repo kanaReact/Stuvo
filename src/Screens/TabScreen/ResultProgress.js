@@ -47,7 +47,6 @@ class ResultProgress extends Component {
             let countAddition = array.map(item => item.count).reduce((a, b) => a + b)
             let temp = []
             let colorTemp = [];
-            let letters = '00AFF0'
             array.map((item, index) => {
                 console.log('count:', item.count)
                 let multiply = item.count * 100;

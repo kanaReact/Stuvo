@@ -66,7 +66,7 @@ class CompletedList extends Component {
         return value.anserData.toString()
     }
     render() {
-        const { title } = this.props.route.params
+        const { title, id } = this.props.route.params
         console.log('data:::', this.state.surveyCompleteList)
         return (
             <SafeAreaView style={[styles.container, { backgroundColor: 'white' }]}>
@@ -94,6 +94,12 @@ class CompletedList extends Component {
                                                         <View>
                                                             <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>{this.showcheckboxAnswer(val)}</Text>
                                                         </View>
+                                                        {
+                                                            val.comment == 'Y' &&
+                                                            <View>
+                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
+                                                            </View>
+                                                        }
                                                     </View>
                                                     :
                                                     val.type == "textbox" ?
@@ -108,25 +114,63 @@ class CompletedList extends Component {
                                                                 <View>
                                                                     <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{val.anserData}</Text>
                                                                 </View>
+                                                                {
+                                                                    val.comment == 'Y' &&
+                                                                    <View>
+                                                                        <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                    </View>
+                                                                }
+                                                                {
+                                                                    val.other_option == 'Y' &&
+                                                                    <View>
+                                                                        <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Other Comment : {val.other_option_answer}</Text>
+                                                                    </View>
+                                                                }
                                                             </View>
                                                             :
                                                             val.type == "rank" ?
-                                                                val.anserData.map((value, newKey) => {
-                                                                    const newVal = val.anserRank.map((val) => { return val })
-                                                                    return (
+                                                                <View>
+                                                                    {
+                                                                        val.anserData.map((value, newKey) => {
+                                                                            const newVal = val.anserRank.map((val) => { return val })
+                                                                            return (
+                                                                                <View>
+                                                                                    <View>
+                                                                                        <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{value} ({newVal[newKey]})</Text>
+                                                                                    </View>
+
+                                                                                </View>
+                                                                            )
+                                                                        })}
+                                                                    {val.comment == 'Y' &&
                                                                         <View>
-                                                                            <View>
-                                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{value} ({newVal[newKey]})</Text>
-                                                                            </View>
+                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
                                                                         </View>
-                                                                    )
-                                                                })
+                                                                    }
+                                                                </View>
 
                                                                 :
                                                                 <View>
                                                                     <View>
-                                                                        <Image source={{ uri: val.anserData }} style={{ width: 50, height: 50, marginTop: 10, marginLeft: 10, borderRadius: 10 }} />
+                                                                        {
+                                                                            val.other_option_answer == null ?
+                                                                                <Image source={{ uri: val.anserData }} style={{ width: 50, height: 50, marginTop: 10, marginLeft: 10, borderRadius: 10 }} />
+                                                                                :
+                                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{val.anserData}</Text>
+                                                                        }
                                                                     </View>
+                                                                    {
+                                                                        val.comment == 'Y' &&
+                                                                        <View>
+                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                        </View>
+                                                                    }
+                                                                    {
+                                                                        val.other_option == 'Y' &&
+                                                                        <View>
+                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Other Comment : {val.other_option_answer}</Text>
+                                                                        </View>
+                                                                    }
                                                                 </View>
 
                                             }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Dimensions, TouchableOpacity, FlatList, Image, SafeAreaView, Modal, TextInput, Keyboard } from 'react-native'
+import { Text, View, Dimensions, TouchableOpacity, FlatList, Image, SafeAreaView, Modal, TextInput, Keyboard, ScrollView } from 'react-native'
 const { height, width } = Dimensions.get('window');
 import styles from '../style/styles'
 import SVGImg from '../Source/SVGImg';
@@ -89,7 +89,14 @@ class ReviewAnswer extends Component {
             selectRank: [],
             rankFlag: false,
             errorRank: '',
-            questionList: this.props.route.params.questionList
+            questionList: this.props.route.params.questionList,
+            otherOption: '',
+            commentOption: '',
+            otherOptionInput: '',
+            commentOptionInput: '',
+            otherOptionError: '',
+            commentOptionError: '',
+            questionIndex: ''
         }
     }
 
@@ -103,6 +110,7 @@ class ReviewAnswer extends Component {
         let url = constant.BASE_URL + 'survey_form_submit'
         let data = new URLSearchParams()
         data.append('ans_array', JSON.stringify(this.state.answerArray));
+        data.append('question_array', JSON.stringify(this.state.questionList));
         axios.post(url, data, {
             headers: {
                 'Content-Type': "application/x-www-form-urlencoded",
@@ -151,11 +159,24 @@ class ReviewAnswer extends Component {
     async openEditAnsModal(index, item) {
         let tempRadioBtn = [];
         let tempImageRadioBtn = [];
-        console.log('item:', item)
         this.setState({ index: index, editAnsModal: true })
         if (item.type == "radiobutton") {
+            let questionIndex = this.state.questionList.findIndex(val => val.question_id == item.question_id)
+
+            let comment = this.props.surveyDetailData[index].comment;
+            let otherOption = item.other_option;
+            this.setState({ commentOption: comment, questionIndex: questionIndex, otherOption: otherOption })
+            if (comment == 'Y') {
+                let quesComment = this.state.questionList[questionIndex].commentOptionAnswer
+                this.setState({ commentOptionInput: quesComment })
+            }
+            if (otherOption == 'Y') {
+                let otherComment = item.otherOptionAnswer
+                this.setState({ otherOptionInput: otherComment })
+            }
             this.props.surveyDetailData[index].anslist.map((item, key) => {
                 if (item.answer_title == this.state.answerArray[index].answeroption) {
+                    this.setState({ answeroption: item.answer_title })
                     tempRadioBtn.push({
                         answer_title: item.answer_title,
                         serve_id: item.serve_id,
@@ -183,8 +204,21 @@ class ReviewAnswer extends Component {
             this.setState({ radiobuttonArray: tempRadioBtn })
         }
         else if (item.type == "radiobuttonImage") {
+            let questionIndex = this.state.questionList.findIndex(val => val.question_id == item.question_id)
+            let comment = this.props.surveyDetailData[index].comment;
+            let otherOption = item.other_option;
+            this.setState({ commentOption: comment, questionIndex: questionIndex, otherOption: otherOption })
+            if (comment == 'Y') {
+                let quesComment = this.state.questionList[questionIndex].commentOptionAnswer
+                this.setState({ commentOptionInput: quesComment })
+            }
+            if (otherOption == 'Y') {
+                let otherComment = item.otherOptionAnswer
+                this.setState({ otherOptionInput: otherComment })
+            }
             this.props.surveyDetailData[index].anslist.map((item, key) => {
                 if (item.answer_title == this.state.answerArray[index].answeroption) {
+                    this.setState({ answeroption: item.answer_title })
                     tempImageRadioBtn.push({
                         answer_title: item.answer_title,
                         serve_id: item.serve_id,
@@ -193,6 +227,7 @@ class ReviewAnswer extends Component {
                         id: item.id,
                         question: this.props.surveyDetailData[index].question,
                         answeroption: 'radiobuttonImage',
+                        other_option: item.other_option
                     })
                 }
                 else {
@@ -204,12 +239,21 @@ class ReviewAnswer extends Component {
                         id: item.id,
                         question: this.props.surveyDetailData[index].question,
                         answeroption: 'radiobuttonImage',
+                        other_option: item.other_option
                     })
                 }
             })
             this.setState({ radioButtonImageArray: tempImageRadioBtn })
         }
         else if (item.type == "checkbox") {
+            let questionIndex = this.state.questionList.findIndex(val => val.question_id == item.question_id)
+            let comment = this.props.surveyDetailData[index].comment;
+            this.setState({ questionIndex: questionIndex, commentOption: comment })
+
+            if (comment == 'Y') {
+                let quesComment = this.state.questionList[questionIndex].commentOptionAnswer
+                this.setState({ commentOptionInput: quesComment })
+            }
             this.props.surveyDetailData[index].anslist.map((item, key) => {
                 if (this.state.answerArray[index].answeroption.includes(item.answer_title) == true) {
                     this.setState({ checkboxFlag: true })
@@ -225,6 +269,13 @@ class ReviewAnswer extends Component {
         else if (item.type == "rank") {
             let tempRankArr = []
             let unique = []
+            let questionIndex = this.state.questionList.findIndex(val => val.question_id == item.question_id)
+            let comment = this.props.surveyDetailData[index].comment;
+            this.setState({ questionIndex: questionIndex, commentOption: comment })
+            if (comment == 'Y') {
+                let quesComment = this.state.questionList[questionIndex].commentOptionAnswer
+                this.setState({ commentOptionInput: quesComment })
+            }
             this.props.surveyDetailData[index].anslist.map((item, key) => {
                 let val = key + 1;
 
@@ -261,7 +312,7 @@ class ReviewAnswer extends Component {
         this.setState({ selectRank: temp, type: 'rank', survey_id: value.serve_id, question_id: value.question_id, });
         newTempRank[index] = item.name;
         newTempRankId[index] = value.id;
-        newTempRankAns[index] = value.answer_title
+        newTempRankAns[index] = value.answer_title;
     }
     async changeRadioBtnImageValue(data) {
         let array = this.state.radioButtonImageArray
@@ -275,6 +326,7 @@ class ReviewAnswer extends Component {
                     question: data.question,
                     answeroption: data.answer_title,
                     type: data.answeroption,
+                    otherOption: data.other_option
                 })
             }
             else {
@@ -286,6 +338,8 @@ class ReviewAnswer extends Component {
                     question: data.question,
                     answeroption: data.answer_title,
                     type: data.answeroption,
+                    otherOptionInput: '',
+                    otherOptionError: ''
                 })
             }
         })
@@ -303,6 +357,7 @@ class ReviewAnswer extends Component {
                     question: data.question,
                     answeroption: data.answer_title,
                     type: data.answeroption,
+                    otherOption: data.other_option,
                 })
             }
             else {
@@ -314,6 +369,8 @@ class ReviewAnswer extends Component {
                     question: data.question,
                     answeroption: data.answer_title,
                     type: data.answeroption,
+                    otherOptionInput: '',
+                    otherOptionError: ''
                 })
             }
         })
@@ -324,27 +381,144 @@ class ReviewAnswer extends Component {
     }
     updateQuestion() {
         let array = this.state.answerArray
+        let questionArray = this.state.questionList
         if (this.state.answerArray[this.state.index].type == "radiobutton") {
             if (this.state.answeroption != '') {
-                array[this.state.index].type = "radiobutton";
-                array[this.state.index].anstitle_id = this.state.answer_id;
-                array[this.state.index].answeroption = this.state.answeroption;
-                this.setState({ answerArray: array, editAnsModal: false })
+
+                if (this.state.commentOption == 'Y') {
+                    if (this.state.commentOptionInput == '') {
+                        this.setState({ commentOptionError: 'Please enter answer' })
+                    }
+                    else {
+                        if (this.state.otherOption == 'Y') {
+                            if (this.state.otherOptionInput == '') {
+                                this.setState({ otherOptionError: 'Please enter answer' })
+                            }
+                            else {
+                                array[this.state.index].type = "radiobutton";
+                                array[this.state.index].anstitle_id = this.state.answer_id;
+                                array[this.state.index].answeroption = this.state.answeroption;
+                                array[this.state.index].other_option = this.state.otherOption;
+                                array[this.state.index].otherOptionAnswer = this.state.otherOptionInput;
+                                questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                                questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                                console.log('array:', array)
+                                this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                            }
+                        }
+                        else {
+                            array[this.state.index].type = "radiobutton";
+                            array[this.state.index].anstitle_id = this.state.answer_id;
+                            array[this.state.index].answeroption = this.state.answeroption;
+                            array[this.state.index].other_option = this.state.otherOption;
+                            array[this.state.index].otherOptionAnswer = this.state.otherOptionInput;
+                            questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                            questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                            this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                        }
+                    }
+                }
+                else {
+                    if (this.state.otherOption == 'Y') {
+                        if (this.state.otherOptionInput == '') {
+                            this.setState({ otherOptionError: 'Please enter answer' })
+                        }
+                        else {
+                            array[this.state.index].type = "radiobutton";
+                            array[this.state.index].anstitle_id = this.state.answer_id;
+                            array[this.state.index].answeroption = this.state.answeroption;
+                            array[this.state.index].other_option = this.state.otherOption;
+                            array[this.state.index].otherOptionAnswer = this.state.otherOptionInput;
+                            questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                            questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                            this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+
+                        }
+                    }
+                    else {
+                        array[this.state.index].type = "radiobutton";
+                        array[this.state.index].anstitle_id = this.state.answer_id;
+                        array[this.state.index].answeroption = this.state.answeroption;
+                        array[this.state.index].other_option = this.state.otherOption;
+                        array[this.state.index].otherOptionAnswer = this.state.otherOptionInput;
+                        questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                        questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                        this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                    }
+                }
             }
             else {
-                this.setState({ editAnsModal: false })
+                this.setState({ editAnsModal: false, commentOption: '', commentOptionInput: '', commentOptionError: '' })
             }
 
         }
         else if (this.state.answerArray[this.state.index].type == "radiobuttonImage") {
             if (this.state.answeroption != '') {
-                array[this.state.index].type = "radiobuttonImage";
-                array[this.state.index].anstitle_id = this.state.answer_id;
-                array[this.state.index].answeroption = this.state.answeroption;
-                this.setState({ answerArray: array, editAnsModal: false })
+                if (this.state.commentOption == 'Y') {
+                    if (this.state.commentOptionInput == '') {
+                        this.setState({ commentOptionError: 'Please enter answer' })
+                    }
+                    else {
+                        if (this.state.otherOption == 'Y') {
+                            if (this.state.otherOptionInput == '') {
+                                this.setState({ otherOptionError: 'Please enter answer' })
+                            }
+                            else {
+                                array[this.state.index].type = "radiobuttonImage";
+                                array[this.state.index].anstitle_id = this.state.answer_id;
+                                array[this.state.index].answeroption = this.state.answeroption;
+                                array[this.state.index].other_option = this.state.otherOption;
+                                array[this.state.index].otherOptionAnswer = this.state.otherOptionInput;
+                                questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                                questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                                this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+
+                            }
+                        }
+                        else {
+                            array[this.state.index].type = "radiobuttonImage";
+                            array[this.state.index].anstitle_id = this.state.answer_id;
+                            array[this.state.index].answeroption = this.state.answeroption;
+                            array[this.state.index].other_option = this.state.otherOption;
+                            array[this.state.index].otherOptionAnswer = this.state.otherOptionInput;
+                            questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                            questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                            this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+
+                        }
+                    }
+                }
+                else {
+                    if (this.state.otherOption == 'Y') {
+                        if (this.state.otherOptionInput == '') {
+                            this.setState({ otherOptionError: 'Please enter answer' })
+                        }
+                        else {
+                            array[this.state.index].type = "radiobuttonImage";
+                            array[this.state.index].anstitle_id = this.state.answer_id;
+                            array[this.state.index].answeroption = this.state.answeroption;
+                            array[this.state.index].other_option = this.state.otherOption;
+                            array[this.state.index].otherOptionAnswer = this.state.otherOptionInput;
+                            questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                            questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                            this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                        }
+                    }
+                    else {
+                        array[this.state.index].type = "radiobuttonImage";
+                        array[this.state.index].anstitle_id = this.state.answer_id;
+                        array[this.state.index].answeroption = this.state.answeroption;
+                        array[this.state.index].other_option = this.state.otherOption;
+                        array[this.state.index].otherOptionAnswer = this.state.otherOptionInput;
+                        questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                        questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                        this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+
+                    }
+                }
             }
             else {
-                this.setState({ editAnsModal: false })
+                this.setState({ editAnsModal: false, commentOption: '', commentOptionInput: '', commentOptionError: '' })
             }
 
         }
@@ -353,39 +527,97 @@ class ReviewAnswer extends Component {
             let max = this.props.surveyDetailData[this.state.index]?.max
             if (this.state.checkboxFlag == false) {
                 if (temp.length != 0) {
-                    if (min != null && max != null) {
-                        if (max < temp.length) {
-                            alert('You can not select more than ' + max + ' answer')
-                        }
-                        else if (temp.length < min) {
-                            alert('You have to select minimum ' + min + ' answer')
-                        }
-                        else if (temp.length > min && temp.length < max) {
-                            array[this.state.index].type = "checkbox";
-                            array[this.state.index].anstitle_id = tempid
-                            array[this.state.index].answeroption = temp
-                            this.setState({ answerArray: array, editAnsModal: false })
-                            temp = [];
-                            tempid = [];
+                    if (this.state.commentOption == 'Y') {
+                        if (this.state.commentOptionInput == '') {
 
+                            this.setState({ commentOptionError: 'Please enter answer' })
                         }
-                        else if (min >= temp.length || max == temp.length) {
-                            array[this.state.index].type = "checkbox";
-                            array[this.state.index].anstitle_id = tempid
-                            array[this.state.index].answeroption = temp
-                            this.setState({ answerArray: array, editAnsModal: false })
-                            temp = [];
-                            tempid = [];
+                        else {
+                            if (min != null && max != null) {
+                                if (max < temp.length) {
+                                    alert('You can not select more than ' + max + ' answer')
+                                }
+                                else if (temp.length < min) {
+                                    alert('You have to select minimum ' + min + ' answer')
+                                }
+                                else if (temp.length > min && temp.length < max) {
+                                    array[this.state.index].type = "checkbox";
+                                    array[this.state.index].anstitle_id = tempid
+                                    array[this.state.index].answeroption = temp;
+                                    questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                                    questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                                    this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                                    temp = [];
+                                    tempid = [];
+
+                                }
+                                else if (min >= temp.length || max == temp.length) {
+                                    array[this.state.index].type = "checkbox";
+                                    array[this.state.index].anstitle_id = tempid
+                                    array[this.state.index].answeroption = temp;
+                                    questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                                    questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                                    this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                                    temp = [];
+                                    tempid = [];
+
+                                }
+                            }
+                            else {
+                                array[this.state.index].type = "checkbox";
+                                array[this.state.index].anstitle_id = tempid
+                                array[this.state.index].answeroption = temp;
+                                questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                                questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                                this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                                temp = [];
+                                tempid = [];
+                            }
 
                         }
                     }
                     else {
-                        array[this.state.index].type = "checkbox";
-                        array[this.state.index].anstitle_id = tempid
-                        array[this.state.index].answeroption = temp
-                        this.setState({ answerArray: array, editAnsModal: false })
-                        temp = [];
-                        tempid = [];
+                        if (min != null && max != null) {
+                            if (max < temp.length) {
+                                alert('You can not select more than ' + max + ' answer')
+                            }
+                            else if (temp.length < min) {
+                                alert('You have to select minimum ' + min + ' answer')
+                            }
+                            else if (temp.length > min && temp.length < max) {
+                                array[this.state.index].type = "checkbox";
+                                array[this.state.index].anstitle_id = tempid
+                                array[this.state.index].answeroption = temp;
+                                questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                                questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                                this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                                temp = [];
+                                tempid = [];
+
+                            }
+                            else if (min >= temp.length || max == temp.length) {
+                                array[this.state.index].type = "checkbox";
+                                array[this.state.index].anstitle_id = tempid
+                                array[this.state.index].answeroption = temp;
+                                questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                                questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                                this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                                temp = [];
+                                tempid = [];
+
+                            }
+                        }
+                        else {
+                            array[this.state.index].type = "checkbox";
+                            array[this.state.index].anstitle_id = tempid
+                            array[this.state.index].answeroption = temp;
+                            questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                            questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput;
+                            this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                            temp = [];
+                            tempid = [];
+                        }
+
                     }
                 }
                 else {
@@ -394,7 +626,7 @@ class ReviewAnswer extends Component {
                 }
             }
             else {
-                this.setState({ editAnsModal: false })
+                this.setState({ editAnsModal: false, commentOption: '', commentOptionAnswer: '', commentOptionError: '' })
                 temp = [];
                 tempid = [];
             }
@@ -405,18 +637,41 @@ class ReviewAnswer extends Component {
                     this.setState({ errorRank: 'You can not select same rank' })
                 }
                 else {
-                    array[this.state.index].type = "rank";
-                    array[this.state.index].anstitle_id = tempRankid
-                    array[this.state.index].answeroption = tempRankAns
-                    array[this.state.index].rank = tempRank
-                    this.setState({ answerArray: array, editAnsModal: false })
-                    tempRank = [];
-                    tempRankid = [];
-                    tempRankAns = [];
+                    if (this.state.commentOption == 'Y') {
+                        if (this.state.commentOptionInput == '') {
+                            this.setState({ commentOptionError: 'Please enter answer' })
+                        }
+                        else {
+                            array[this.state.index].type = "rank";
+                            array[this.state.index].anstitle_id = tempRankid
+                            array[this.state.index].answeroption = tempRankAns
+                            array[this.state.index].rank = tempRank;
+                            questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                            questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput
+                            this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                            tempRank = [];
+                            tempRankid = [];
+                            tempRankAns = [];
+
+                        }
+                    }
+                    else {
+                        array[this.state.index].type = "rank";
+                        array[this.state.index].anstitle_id = tempRankid
+                        array[this.state.index].answeroption = tempRankAns
+                        array[this.state.index].rank = tempRank;
+                        questionArray[this.state.questionIndex].comment = this.state.commentOption;
+                        questionArray[this.state.questionIndex].commentOptionAnswer = this.state.commentOptionInput
+                        this.setState({ answerArray: array, questionList: questionArray, editAnsModal: false })
+                        tempRank = [];
+                        tempRankid = [];
+                        tempRankAns = [];
+
+                    }
                 }
             }
             else {
-                this.setState({ editAnsModal: false })
+                this.setState({ editAnsModal: false, commentOption: '', commentOptionAnswer: '', commentOptionInput: '' })
                 tempRank = [];
                 tempRankid = [];
                 tempRankAns = [];
@@ -434,18 +689,22 @@ class ReviewAnswer extends Component {
         }
     }
     onCloseModal() {
-        this.setState({ editAnsModal: false });
+        this.setState({ editAnsModal: false, otherOption: '', otherOptionError: '', otherOptionInput: '' });
         temp = [];
         tempid = [];
         tempRank = [];
         tempRankAns = [];
         tempRankid = [];
     }
+    getExtension(file) {
+        let extension = file.split('.').pop();
+        return extension
+    }
     render() {
         let questionCount = this.props.surveyDetailData.length;
         let currentQuestion = this.state.index + 1
-
-        console.log('Answer Arr:', this.state.answerArray)
+        // console.log('Answer Arr:', this.state.answerArray)
+        // console.log('Question Arr:', this.state.questionList)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -481,8 +740,13 @@ class ReviewAnswer extends Component {
                                 {
                                     item.type == "radiobuttonImage" ?
                                         <View style={{ flexDirection: 'row', marginTop: 25, marginBottom: 16, alignItems: 'center' }}>
-                                            <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>Answer.</Text>
-                                            <Image source={{ uri: item.answeroption }} style={{ width: 50, height: 50, borderRadius: 10, marginLeft: 10 }} />
+                                            <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>Answer. </Text>
+                                            {
+                                                this.getExtension(item.answeroption) == 'jpg' || this.getExtension(item.answeroption) == 'png' ?
+                                                    <Image source={{ uri: item.answeroption }} style={{ width: 50, height: 50, borderRadius: 10, marginLeft: 10 }} />
+                                                    :
+                                                    <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>{item.answeroption}</Text>
+                                            }
                                         </View>
                                         :
                                         item.type == "rank" ?
@@ -553,110 +817,216 @@ class ReviewAnswer extends Component {
                             </View>
                         </View>
 
+                        <ScrollView contentContainerStyle={{ paddingBottom: 30 }} showsVerticalScrollIndicator={false}>
+                            <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16 }}>Question {currentQuestion} of {questionCount}</Text>
 
-                        <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16 }}>Question {currentQuestion} of {questionCount}</Text>
-
-                        <View style={{ marginLeft: 16, marginRight: 24 }}>
-                            <Text style={{ marginTop: 15, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', lineHeight: 20 }}>{this.props.surveyDetailData.length != 0 ? this.props.surveyDetailData[this.state.index].question : null}</Text>
-                            {
-                                this.props.surveyDetailData.length != 0 ?
-                                    this.props.surveyDetailData[this.state.index].answeroption == "radiobutton" ?
-                                        <View>
-                                            {
-                                                this.state.radiobuttonArray.map((item, index) => (
-                                                    <TouchableOpacity key={index} style={{
-                                                        marginTop: 30, borderRadius: 30, height: 41, justifyContent: 'center', paddingHorizontal: 18,
-                                                        backgroundColor: item.set == 1 ? '#00AFF0' : '#E0E0E066'
-                                                    }} activeOpacity={0.6}
-                                                        onPress={() => { this.changeRadioBtnValue(item) }}>
-                                                        <Text style={{
-                                                            fontSize: 14, fontFamily: 'Gotham-Medium',
-                                                            color: item.set == 1 ? '#FFFFFF' : '#272727'
-                                                        }}>{item.answer_title}</Text>
-                                                    </TouchableOpacity>
-                                                ))
-                                            }
-                                            {this.state.errorRadio != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRadio}</Text> : null}
-                                        </View>
-
-                                        :
-                                        this.props.surveyDetailData[this.state.index].answeroption == "checkbox" ?
+                            <View style={{ marginLeft: 16, marginRight: 24 }}>
+                                <Text style={{ marginTop: 15, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', lineHeight: 20 }}>{this.props.surveyDetailData.length != 0 ? this.props.surveyDetailData[this.state.index].question : null}</Text>
+                                {
+                                    this.props.surveyDetailData.length != 0 ?
+                                        this.props.surveyDetailData[this.state.index].answeroption == "radiobutton" ?
                                             <View>
                                                 {
-                                                    this.props.surveyDetailData[this.state.index].anslist.map((item, index) => (
-                                                        <View key={index} style={{ flexDirection: 'row' }}>
-                                                            <CheckBox style={{ padding: 10, width: '50%' }}
-                                                                onClick={() => { this.onCheckBoxChange(index, item) }}
-                                                                checkBoxColor={'#00AFF0'}
-                                                                checkedCheckBoxColor={'#00AFF0'}
-                                                                isChecked={this.state.checkboxArray[index]}
-                                                                rightText={item.answer_title}
-                                                            />
-                                                        </View>
+                                                    this.state.radiobuttonArray.map((item, index) => (
+                                                        <TouchableOpacity key={index} style={{
+                                                            marginTop: 30, borderRadius: 30, height: 41, justifyContent: 'center', paddingHorizontal: 18,
+                                                            backgroundColor: item.set == 1 ? '#00AFF0' : '#E0E0E066'
+                                                        }} activeOpacity={0.6}
+                                                            onPress={() => { this.changeRadioBtnValue(item) }}>
+                                                            <Text style={{
+                                                                fontSize: 14, fontFamily: 'Gotham-Medium',
+                                                                color: item.set == 1 ? '#FFFFFF' : '#272727'
+                                                            }}>{item.answer_title}</Text>
+                                                        </TouchableOpacity>
                                                     ))
                                                 }
-                                                {this.state.checkboxError != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.checkboxError}</Text> : null}
+                                                {this.state.errorRadio != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRadio}</Text> : null}
+                                                {
+                                                    this.state.otherOption == 'Y' &&
+                                                    <View>
+                                                        <TextInput
+                                                            style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                            placeholder="Write something..."
+                                                            multiline={true}
+                                                            returnKeyType="done"
+                                                            onSubmitEditing={() => { Keyboard.dismiss() }}
+                                                            value={this.state.otherOptionInput}
+                                                            onChangeText={(text) => { this.setState({ otherOptionInput: text.trimStart(), otherOptionError: '' }) }}
+                                                        />
+                                                        {this.state.otherOptionError != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.otherOptionError}</Text> : null}
+                                                    </View>
+
+                                                }
+                                                {
+                                                    this.state.commentOption == 'Y' &&
+                                                    <View>
+                                                        <TextInput
+                                                            style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                            placeholder="Write something..."
+                                                            multiline={true}
+                                                            returnKeyType="done"
+                                                            onSubmitEditing={() => { Keyboard.dismiss() }}
+                                                            value={this.state.commentOptionInput}
+                                                            onChangeText={(text) => { this.setState({ commentOptionInput: text.trimStart(), commentOptionError: '' }) }}
+                                                        />
+                                                        {this.state.commentOptionError != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptionError}</Text> : null}
+                                                    </View>
+
+                                                }
                                             </View>
+
                                             :
-                                            this.props.surveyDetailData[this.state.index].answeroption == "textbox" ?
-                                                <View >
-                                                    <TextInput
-                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
-                                                        placeholder="Write something..."
-                                                        multiline={true}
-                                                        returnKeyType="done"
-                                                        onSubmitEditing={() => { Keyboard.dismiss() }}
-                                                        value={this.state.textInputAnswer}
-                                                        onChangeText={(text) => { this.setState({ textInputAnswer: text.trimStart(), errorInput: '' }) }}
-                                                    />
-                                                    {this.state.errorInput != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorInput}</Text> : null}
+                                            this.props.surveyDetailData[this.state.index].answeroption == "checkbox" ?
+                                                <View>
+                                                    {
+                                                        this.props.surveyDetailData[this.state.index].anslist.map((item, index) => (
+                                                            <View key={index} style={{ flexDirection: 'row' }}>
+                                                                <CheckBox style={{ padding: 10, width: '50%' }}
+                                                                    onClick={() => { this.onCheckBoxChange(index, item) }}
+                                                                    checkBoxColor={'#00AFF0'}
+                                                                    checkedCheckBoxColor={'#00AFF0'}
+                                                                    isChecked={this.state.checkboxArray[index]}
+                                                                    rightText={item.answer_title}
+                                                                />
+                                                            </View>
+                                                        ))
+                                                    }
+                                                    {this.state.checkboxError != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.checkboxError}</Text> : null}
+                                                    {
+                                                        this.state.commentOption == 'Y' &&
+                                                        <View>
+                                                            <TextInput
+                                                                style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                                placeholder="Write something..."
+                                                                multiline={true}
+                                                                returnKeyType="done"
+                                                                onSubmitEditing={() => { Keyboard.dismiss() }}
+                                                                value={this.state.commentOptionInput}
+                                                                onChangeText={(text) => { this.setState({ commentOptionInput: text.trimStart(), commentOptionError: '', checkboxFlag: false }) }}
+                                                            />
+                                                            {this.state.commentOptionError != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptionError}</Text> : null}
+                                                        </View>
+
+                                                    }
                                                 </View>
                                                 :
-                                                this.props.surveyDetailData[this.state.index].answeroption == "radiobuttonImage" ?
-                                                    <View>
-                                                        <FlatList
-                                                            data={this.state.radioButtonImageArray}
-                                                            numColumns={2}
-                                                            columnWrapperStyle={{ justifyContent: "space-between", }}
-                                                            renderItem={({ item, index }) => (
-                                                                <View style={{ width: "48%", marginTop: 10 }}>
-                                                                    <TouchableOpacity onPress={() => { this.changeRadioBtnImageValue(item) }} style={{ flex: 1 }} activeOpacity={0.75}>
-                                                                        <Image source={{ uri: item.answer_title }} style={{ height: 166, width: '100%', borderWidth: 4, borderColor: item.set == 1 ? '#00AFF0' : '#eaeaea', borderRadius: 10 }} />
-                                                                    </TouchableOpacity>
-
-                                                                </View>
-
-                                                            )}
+                                                this.props.surveyDetailData[this.state.index].answeroption == "textbox" ?
+                                                    <View >
+                                                        <TextInput
+                                                            style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                            placeholder="Write something..."
+                                                            multiline={true}
+                                                            returnKeyType="done"
+                                                            onSubmitEditing={() => { Keyboard.dismiss() }}
+                                                            value={this.state.textInputAnswer}
+                                                            onChangeText={(text) => { this.setState({ textInputAnswer: text.trimStart(), errorInput: '' }) }}
                                                         />
+                                                        {this.state.errorInput != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorInput}</Text> : null}
                                                     </View>
-
                                                     :
-                                                    <View>
-                                                        {
-                                                            this.props.surveyDetailData[this.state.index].anslist.map((item, index) => (
-                                                                <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
-                                                                    <Text style={{ marginTop: 35, paddingLeft: 5, fontFamily: 'Gotham-Medium', flex: 1 }}>{item.answer_title}</Text>
-                                                                    <DropDown
-                                                                        placeholder="Select Rank"
-                                                                        data={this.state.dropDownData}
-                                                                        value={this.state.selectRank[index]}
-                                                                        onSelect={value => {
-                                                                            this.onDropDown(value, index, item);
-                                                                        }}
-                                                                        Style={{ width: '45%', marginTop: 0, marginHorizontal: 0, flex: 1 }}
+                                                    this.props.surveyDetailData[this.state.index].answeroption == "radiobuttonImage" ?
+                                                        <View>
+                                                            <FlatList
+                                                                data={this.state.radioButtonImageArray}
+                                                                numColumns={2}
+                                                                columnWrapperStyle={{ justifyContent: "space-between", }}
+                                                                renderItem={({ item, index }) => (
+                                                                    item.other_option == 'N' ?
+                                                                        <View style={{ width: "48%", marginTop: 10 }}>
+                                                                            <TouchableOpacity onPress={() => { this.changeRadioBtnImageValue(item) }} style={{ flex: 1 }} activeOpacity={0.75}>
+                                                                                <Image source={{ uri: item.answer_title }} style={{ height: 166, width: '100%', borderWidth: 4, borderColor: item.set == 1 ? '#00AFF0' : '#eaeaea', borderRadius: 10 }} />
+                                                                            </TouchableOpacity>
+                                                                        </View>
+                                                                        :
+                                                                        <TouchableOpacity key={index} style={{
+                                                                            marginTop: 30, borderRadius: 30, height: 41, justifyContent: 'center', paddingHorizontal: 18,
+                                                                            backgroundColor: item.set == 1 ? '#00AFF0' : '#E0E0E066', width: '100%'
+                                                                        }} activeOpacity={0.6}
+                                                                            onPress={() => { this.changeRadioBtnImageValue(item) }}>
+                                                                            <Text style={{
+                                                                                fontSize: 14, fontFamily: 'Gotham-Medium',
+                                                                                color: item.set == 1 ? '#FFFFFF' : '#272727'
+                                                                            }}>{item.answer_title}</Text>
+                                                                        </TouchableOpacity>
+
+                                                                )}
+                                                            />
+                                                            {
+                                                                this.state.otherOption == 'Y' &&
+                                                                <View>
+                                                                    <TextInput
+                                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                                        placeholder="Write something..."
+                                                                        multiline={true}
+                                                                        returnKeyType="done"
+                                                                        onSubmitEditing={() => { Keyboard.dismiss() }}
+                                                                        value={this.state.otherOptionInput}
+                                                                        onChangeText={(text) => { this.setState({ otherOptionInput: text.trimStart(), otherOptionError: '' }) }}
                                                                     />
-
+                                                                    {this.state.otherOptionError != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.otherOptionError}</Text> : null}
                                                                 </View>
-                                                            ))
-                                                        }
-                                                        {this.state.errorRank != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRank}</Text> : null}
-                                                    </View>
-                                    : null
-                            }
 
-                        </View>
+                                                            }
+                                                            {
+                                                                this.state.commentOption == 'Y' &&
+                                                                <View>
+                                                                    <TextInput
+                                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                                        placeholder="Write something..."
+                                                                        multiline={true}
+                                                                        returnKeyType="done"
+                                                                        onSubmitEditing={() => { Keyboard.dismiss() }}
+                                                                        value={this.state.commentOptionInput}
+                                                                        onChangeText={(text) => { this.setState({ commentOptionInput: text.trimStart(), commentOptionError: '' }) }}
+                                                                    />
+                                                                    {this.state.commentOptionError != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptionError}</Text> : null}
+                                                                </View>
 
-                        <View style={{ flex: 1, justifyContent: 'flex-end', marginHorizontal: 27 }}>
+                                                            }
+                                                        </View>
+
+                                                        :
+                                                        <View>
+                                                            {
+                                                                this.props.surveyDetailData[this.state.index].anslist.map((item, index) => (
+                                                                    <View key={index} style={{ flexDirection: 'row', justifyContent: 'space-between', }}>
+                                                                        <Text style={{ marginTop: 35, paddingLeft: 5, fontFamily: 'Gotham-Medium', flex: 1 }}>{item.answer_title}</Text>
+                                                                        <DropDown
+                                                                            placeholder="Select Rank"
+                                                                            data={this.state.dropDownData}
+                                                                            value={this.state.selectRank[index]}
+                                                                            onSelect={value => {
+                                                                                this.onDropDown(value, index, item);
+                                                                            }}
+                                                                            Style={{ width: '45%', marginTop: 0, marginHorizontal: 0, flex: 1 }}
+                                                                        />
+                                                                    </View>
+                                                                ))
+                                                            }
+                                                            {this.state.errorRank != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.errorRank}</Text> : null}
+                                                            {
+                                                                this.state.commentOption == 'Y' &&
+                                                                <View>
+                                                                    <TextInput
+                                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                                        placeholder="Write something..."
+                                                                        multiline={true}
+                                                                        returnKeyType="done"
+                                                                        onSubmitEditing={() => { Keyboard.dismiss() }}
+                                                                        value={this.state.commentOptionInput}
+                                                                        onChangeText={(text) => { this.setState({ commentOptionInput: text.trimStart(), commentOptionError: '', rankFlag: true }) }}
+                                                                    />
+                                                                    {this.state.commentOptionError != '' ? <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptionError}</Text> : null}
+                                                                </View>
+
+                                                            }
+                                                        </View>
+                                        : null
+                                }
+
+                            </View>
+                        </ScrollView>
+                        <View style={{ justifyContent: 'flex-end', marginHorizontal: 27 }}>
                             {
 
                                 <TouchableOpacity onPress={() => { this.updateQuestion() }} activeOpacity={0.6}>

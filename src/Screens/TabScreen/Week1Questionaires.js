@@ -54,23 +54,8 @@ class Week1Questionaires extends Component {
         }
     }
     formatTime(timeCreated) {
-        let currentDate = Date.now();
-        let endDate = moment(timeCreated).format("x")
-        var diff = endDate > currentDate ? endDate - currentDate : currentDate - endDate;
-        if (diff > periods.month) {
-            // it was at least a month ago
-            return Math.floor(diff / periods.month) + " month left to complete";
-        } else if (diff > periods.week) {
-            return Math.floor(diff / periods.week) + " week left to complete";
-        } else if (diff > periods.day) {
-            return Math.floor(diff / periods.day) + " days left to complete";
-        } else if (diff > periods.hour) {
-            return Math.floor(diff / periods.hour) + " hours left to complete";
-        }
-        else if (diff > periods.minute) {
-            return Math.floor(diff / periods.minute) + " mintues left to complete";
-        }
-
+        let endDate = moment(timeCreated).fromNow(true)
+        return endDate + ' left to complete'
     }
     surveyView(id) {
         let url = constant.BASE_URL + 'survey_view'

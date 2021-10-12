@@ -70,6 +70,7 @@ class Que1 extends Component {
     }
     componentWillReceiveProps(nextProps) {
         this.setState({ loading: false })
+        this.setState({ otherOptionError: '', commentOptinError: '' })
         if (nextProps.surveyDetailData != this.state.surveyDetailData) {
             this.setState({ surveyDetailData: nextProps.surveyDetailData, type: '', textInputAnswer: '' })
         }
@@ -166,6 +167,8 @@ class Que1 extends Component {
                     question: data.question,
                     answeroption: data.answer_title,
                     type: data.answeroption,
+                    otherOptionInput: '',
+                    otherOptionError: ''
                 })
             }
         })
@@ -197,6 +200,8 @@ class Que1 extends Component {
                     question: data.question,
                     answeroption: data.answer_title,
                     type: data.answeroption,
+                    otherOptionRadioImageInput: '',
+                    otherOptionError: ''
                 })
             }
         })
@@ -263,23 +268,99 @@ class Que1 extends Component {
         }
         else if (this.state.surveyDetailData[this.state.index].answeroption == "radiobutton") {
             if (this.state.type != '') {
-                this.setState({ loading: true })
-                const { id } = this.props.route.params
-                this.props.surveyDetail(this.props.AUTH, id)
-                let survey_id = this.state.survey_id;
-                let question_id = this.state.question_id;
-                let answer_id = this.state.answer_id;
-                let question = this.state.question;
-                let answeroption = this.state.answeroption;
-                let type = this.state.type;
-                let answer = "true";
-                let other_option = this.state.otherOption
-                let otherOptionAnswer = this.state.otherOptionInput
-                let comment = this.state.commentOption
-                let commentOptionAnswer = this.state.commentOptionInput
-                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
-                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                this.setState({ index: this.state.index + 1, otherOptionInput: '', commentOptionInput: '', otherOption: '', commentOption: '' })
+                if (this.state.commentOption == 'Y') {
+                    if (this.state.commentOptionInput == '') {
+                        this.setState({ commentOptinError: 'Please enter answer' })
+                    }
+                    else {
+                        if (this.state.otherOption == 'Y') {
+                            if (this.state.otherOptionInput == '') {
+                                this.setState({ otherOptionError: 'Please enter answer' })
+                            }
+                            else {
+                                this.setState({ loading: true })
+                                const { id } = this.props.route.params
+                                this.props.surveyDetail(this.props.AUTH, id)
+                                let survey_id = this.state.survey_id;
+                                let question_id = this.state.question_id;
+                                let answer_id = this.state.answer_id;
+                                let question = this.state.question;
+                                let answeroption = this.state.answeroption;
+                                let type = this.state.type;
+                                let answer = "true";
+                                let other_option = this.state.otherOption
+                                let otherOptionAnswer = this.state.otherOptionInput
+                                let comment = this.state.commentOption
+                                let commentOptionAnswer = this.state.commentOptionInput
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                                this.setState({ index: this.state.index + 1, otherOptionInput: '', commentOptionInput: '', otherOption: '', commentOption: '' })
+                            }
+                        } else {
+                            this.setState({ loading: true })
+                            const { id } = this.props.route.params
+                            this.props.surveyDetail(this.props.AUTH, id)
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = this.state.answer_id;
+                            let question = this.state.question;
+                            let answeroption = this.state.answeroption;
+                            let type = this.state.type;
+                            let answer = "true";
+                            let other_option = this.state.otherOption
+                            let otherOptionAnswer = this.state.otherOptionInput
+                            let comment = this.state.commentOption
+                            let commentOptionAnswer = this.state.commentOptionInput
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.setState({ index: this.state.index + 1, otherOptionInput: '', commentOptionInput: '', otherOption: '', commentOption: '' })
+                        }
+                    }
+                }
+                else {
+                    if (this.state.otherOption == 'Y') {
+                        if (this.state.otherOptionInput == '') {
+                            this.setState({ otherOptionError: 'Please enter answer' })
+                        }
+                        else {
+                            this.setState({ loading: true })
+                            const { id } = this.props.route.params
+                            this.props.surveyDetail(this.props.AUTH, id)
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = this.state.answer_id;
+                            let question = this.state.question;
+                            let answeroption = this.state.answeroption;
+                            let type = this.state.type;
+                            let answer = "true";
+                            let other_option = this.state.otherOption
+                            let otherOptionAnswer = this.state.otherOptionInput
+                            let comment = this.state.commentOption
+                            let commentOptionAnswer = this.state.commentOptionInput
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.setState({ index: this.state.index + 1, otherOptionInput: '', commentOptionInput: '', otherOption: '', commentOption: '' })
+                        }
+                    } else {
+                        this.setState({ loading: true })
+                        const { id } = this.props.route.params
+                        this.props.surveyDetail(this.props.AUTH, id)
+                        let survey_id = this.state.survey_id;
+                        let question_id = this.state.question_id;
+                        let answer_id = this.state.answer_id;
+                        let question = this.state.question;
+                        let answeroption = this.state.answeroption;
+                        let type = this.state.type;
+                        let answer = "true";
+                        let other_option = this.state.otherOption
+                        let otherOptionAnswer = this.state.otherOptionInput
+                        let comment = this.state.commentOption
+                        let commentOptionAnswer = this.state.commentOptionInput
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                        this.setState({ index: this.state.index + 1, otherOptionInput: '', commentOptionInput: '', otherOption: '', commentOption: '' })
+                    }
+                }
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
@@ -287,23 +368,101 @@ class Que1 extends Component {
         }
         else if (this.state.surveyDetailData[this.state.index].answeroption == "radiobuttonImage") {
             if (this.state.type != '') {
-                this.setState({ loading: true })
-                const { id } = this.props.route.params
-                this.props.surveyDetail(this.props.AUTH, id)
-                let survey_id = this.state.survey_id;
-                let question_id = this.state.question_id;
-                let answer_id = this.state.answer_id;
-                let question = this.state.question;
-                let answeroption = this.state.answeroption;
-                let type = this.state.type;
-                let answer = "true";
-                let other_option = this.state.otherOptionRadioImage;
-                let otherOptionAnswer = this.state.otherOptionRadioImageInput;
-                let comment = this.state.commentOptionRadioImage;
-                let commentOptionAnswer = this.state.commentOptionRadioImageInput;
-                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
-                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                this.setState({ index: this.state.index + 1 })
+                if (this.state.commentOptionRadioImage == 'Y') {
+                    if (this.state.commentOptionRadioImageInput == '') {
+                        this.setState({ commentOptinError: 'Please enter answer' })
+                    }
+                    else {
+                        if (this.state.otherOptionRadioImage == 'Y') {
+                            if (this.state.otherOptionRadioImageInput == '') {
+                                this.setState({ otherOptionError: 'Please enter answer' })
+                            }
+                            else {
+                                this.setState({ loading: true })
+                                const { id } = this.props.route.params
+                                this.props.surveyDetail(this.props.AUTH, id)
+                                let survey_id = this.state.survey_id;
+                                let question_id = this.state.question_id;
+                                let answer_id = this.state.answer_id;
+                                let question = this.state.question;
+                                let answeroption = this.state.answeroption;
+                                let type = this.state.type;
+                                let answer = "true";
+                                let other_option = this.state.otherOptionRadioImage;
+                                let otherOptionAnswer = this.state.otherOptionRadioImageInput;
+                                let comment = this.state.commentOptionRadioImage;
+                                let commentOptionAnswer = this.state.commentOptionRadioImageInput;
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                                this.setState({ index: this.state.index + 1, otherOptionRadioImage: '', otherOptionRadioImageInput: '', commentOptionRadioImage: '', commentOptionRadioImageInput: '' })
+                            }
+                        } else {
+                            this.setState({ loading: true })
+                            const { id } = this.props.route.params
+                            this.props.surveyDetail(this.props.AUTH, id)
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = this.state.answer_id;
+                            let question = this.state.question;
+                            let answeroption = this.state.answeroption;
+                            let type = this.state.type;
+                            let answer = "true";
+                            let other_option = this.state.otherOptionRadioImage;
+                            let otherOptionAnswer = this.state.otherOptionRadioImageInput;
+                            let comment = this.state.commentOptionRadioImage;
+                            let commentOptionAnswer = this.state.commentOptionRadioImageInput;
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.setState({ index: this.state.index + 1, otherOptionRadioImage: '', otherOptionRadioImageInput: '', commentOptionRadioImage: '', commentOptionRadioImageInput: '' })
+
+                        }
+                    }
+                }
+                else {
+                    if (this.state.otherOptionRadioImage == 'Y') {
+                        if (this.state.otherOptionRadioImageInput == '') {
+                            this.setState({ otherOptionError: 'Please enter answer' })
+                        }
+                        else {
+                            this.setState({ loading: true })
+                            const { id } = this.props.route.params
+                            this.props.surveyDetail(this.props.AUTH, id)
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = this.state.answer_id;
+                            let question = this.state.question;
+                            let answeroption = this.state.answeroption;
+                            let type = this.state.type;
+                            let answer = "true";
+                            let other_option = this.state.otherOptionRadioImage;
+                            let otherOptionAnswer = this.state.otherOptionRadioImageInput;
+                            let comment = this.state.commentOptionRadioImage;
+                            let commentOptionAnswer = this.state.commentOptionRadioImageInput;
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.setState({ index: this.state.index + 1, otherOptionRadioImage: '', otherOptionRadioImageInput: '', commentOptionRadioImage: '', commentOptionRadioImageInput: '' })
+
+                        }
+                    } else {
+                        this.setState({ loading: true })
+                        const { id } = this.props.route.params
+                        this.props.surveyDetail(this.props.AUTH, id)
+                        let survey_id = this.state.survey_id;
+                        let question_id = this.state.question_id;
+                        let answer_id = this.state.answer_id;
+                        let question = this.state.question;
+                        let answeroption = this.state.answeroption;
+                        let type = this.state.type;
+                        let answer = "true";
+                        let other_option = this.state.otherOptionRadioImage;
+                        let otherOptionAnswer = this.state.otherOptionRadioImageInput;
+                        let comment = this.state.commentOptionRadioImage;
+                        let commentOptionAnswer = this.state.commentOptionRadioImageInput;
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                        this.setState({ index: this.state.index + 1, otherOptionRadioImage: '', otherOptionRadioImageInput: '', commentOptionRadioImage: '', commentOptionRadioImageInput: '' })
+                    }
+                }
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
@@ -313,70 +472,144 @@ class Que1 extends Component {
             let min = this.state.surveyDetailData[this.state.index]?.min
             let max = this.state.surveyDetailData[this.state.index]?.max
             if (temp.length != 0) {
-                if (min != null && max != null) {
-                    if (max < temp.length) {
-                        alert('You can not select more than ' + max + ' answer')
+                if (this.state.commentOptionCheckBox == 'Y') {
+                    if (this.state.commentOptionCheckBoxInput == '') {
+                        this.setState({ commentOptinError: 'Please enter answer' })
                     }
-                    else if (temp.length < min) {
-                        alert('You have to select minimum ' + min + ' answer')
-                    }
-                    else if (temp.length > min && temp.length < max) {
-                        this.setState({ loading: true })
-                        const { id } = this.props.route.params
-                        this.props.surveyDetail(this.props.AUTH, id)
-                        let survey_id = this.state.survey_id;
-                        let question_id = this.state.question_id;
-                        let answer_id = tempid;
-                        let question = this.state.question;
-                        let answeroption = temp;
-                        let type = this.state.type;
-                        let answer = "true"
-                        let comment = this.state.commentOptionCheckBox;
-                        let commentOptionAnswer = this.state.commentOptionCheckBoxInput
-                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                        this.setState({ index: this.state.index + 1 })
-                        temp = [];
-                        tempid = [];
-                    }
-                    else if (min >= temp.length || max == temp.length) {
-                        this.setState({ loading: true })
-                        const { id } = this.props.route.params
-                        this.props.surveyDetail(this.props.AUTH, id)
-                        let survey_id = this.state.survey_id;
-                        let question_id = this.state.question_id;
-                        let answer_id = tempid;
-                        let question = this.state.question;
-                        let answeroption = temp;
-                        let type = this.state.type;
-                        let answer = "true"
-                        let comment = this.state.commentOptionCheckBox;
-                        let commentOptionAnswer = this.state.commentOptionCheckBoxInput
-                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                        this.setState({ index: this.state.index + 1 })
-                        temp = [];
-                        tempid = [];
+                    else {
+                        if (min != null && max != null) {
+                            if (max < temp.length) {
+                                alert('You can not select more than ' + max + ' answer')
+                            }
+                            else if (temp.length < min) {
+                                alert('You have to select minimum ' + min + ' answer')
+                            }
+                            else if (temp.length > min && temp.length < max) {
+                                this.setState({ loading: true })
+                                const { id } = this.props.route.params
+                                this.props.surveyDetail(this.props.AUTH, id)
+                                let survey_id = this.state.survey_id;
+                                let question_id = this.state.question_id;
+                                let answer_id = tempid;
+                                let question = this.state.question;
+                                let answeroption = temp;
+                                let type = this.state.type;
+                                let answer = "true"
+                                let comment = this.state.commentOptionCheckBox;
+                                let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                                this.setState({ index: this.state.index + 1 })
+                                temp = [];
+                                tempid = [];
+                            }
+                            else if (min >= temp.length || max == temp.length) {
+                                this.setState({ loading: true })
+                                const { id } = this.props.route.params
+                                this.props.surveyDetail(this.props.AUTH, id)
+                                let survey_id = this.state.survey_id;
+                                let question_id = this.state.question_id;
+                                let answer_id = tempid;
+                                let question = this.state.question;
+                                let answeroption = temp;
+                                let type = this.state.type;
+                                let answer = "true"
+                                let comment = this.state.commentOptionCheckBox;
+                                let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                                this.setState({ index: this.state.index + 1 })
+                                temp = [];
+                                tempid = [];
+                            }
+                        }
+                        else {
+                            this.setState({ loading: true })
+                            const { id } = this.props.route.params
+                            this.props.surveyDetail(this.props.AUTH, id)
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = tempid;
+                            let question = this.state.question;
+                            let answeroption = temp;
+                            let type = this.state.type;
+                            let answer = "true"
+                            let comment = this.state.commentOptionCheckBox;
+                            let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.setState({ index: this.state.index + 1 })
+                            temp = [];
+                            tempid = [];
+                        }
                     }
                 }
                 else {
-                    this.setState({ loading: true })
-                    const { id } = this.props.route.params
-                    this.props.surveyDetail(this.props.AUTH, id)
-                    let survey_id = this.state.survey_id;
-                    let question_id = this.state.question_id;
-                    let answer_id = tempid;
-                    let question = this.state.question;
-                    let answeroption = temp;
-                    let type = this.state.type;
-                    let answer = "true"
-                    let comment = this.state.commentOptionCheckBox;
-                    let commentOptionAnswer = this.state.commentOptionCheckBoxInput
-                    this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                    this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                    this.setState({ index: this.state.index + 1 })
-                    temp = [];
-                    tempid = [];
+                    if (min != null && max != null) {
+                        if (max < temp.length) {
+                            alert('You can not select more than ' + max + ' answer')
+                        }
+                        else if (temp.length < min) {
+                            alert('You have to select minimum ' + min + ' answer')
+                        }
+                        else if (temp.length > min && temp.length < max) {
+                            this.setState({ loading: true })
+                            const { id } = this.props.route.params
+                            this.props.surveyDetail(this.props.AUTH, id)
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = tempid;
+                            let question = this.state.question;
+                            let answeroption = temp;
+                            let type = this.state.type;
+                            let answer = "true"
+                            let comment = this.state.commentOptionCheckBox;
+                            let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.setState({ index: this.state.index + 1 })
+                            temp = [];
+                            tempid = [];
+                        }
+                        else if (min >= temp.length || max == temp.length) {
+                            this.setState({ loading: true })
+                            const { id } = this.props.route.params
+                            this.props.surveyDetail(this.props.AUTH, id)
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = tempid;
+                            let question = this.state.question;
+                            let answeroption = temp;
+                            let type = this.state.type;
+                            let answer = "true"
+                            let comment = this.state.commentOptionCheckBox;
+                            let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.setState({ index: this.state.index + 1 })
+                            temp = [];
+                            tempid = [];
+                        }
+                    }
+                    else {
+                        this.setState({ loading: true })
+                        const { id } = this.props.route.params
+                        this.props.surveyDetail(this.props.AUTH, id)
+                        let survey_id = this.state.survey_id;
+                        let question_id = this.state.question_id;
+                        let answer_id = tempid;
+                        let question = this.state.question;
+                        let answeroption = temp;
+                        let type = this.state.type;
+                        let answer = "true"
+                        let comment = this.state.commentOptionCheckBox;
+                        let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                        this.setState({ index: this.state.index + 1 })
+                        temp = [];
+                        tempid = [];
+                    }
                 }
             }
             else {
@@ -390,25 +623,54 @@ class Que1 extends Component {
                     this.setState({ errorRadio: 'You can not select same rank' })
                 }
                 else {
-                    this.setState({ loading: true })
-                    const { id } = this.props.route.params
-                    this.props.surveyDetail(this.props.AUTH, id)
-                    let survey_id = this.state.survey_id;
-                    let question_id = this.state.question_id;
-                    let answer_id = tempRankid;
-                    let question = this.state.question;
-                    let answeroption = tempRankAns;
-                    let rank = tempRank;
-                    let answer = "true"
-                    let type = this.state.type;
-                    let comment = this.state.commentOptionRank;
-                    let commentOptionAnswer = this.state.commentOptionRankInput
-                    this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
-                    this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                    this.setState({ index: this.state.index + 1 })
-                    tempRank = [];
-                    tempRankid = [];
-                    tempRankAns = [];
+                    if (this.state.commentOptionRank == 'Y') {
+                        if (this.state.commentOptionRankInput == '') {
+                            this.setState({ commentOptinError: 'Please select answer' })
+                        }
+                        else {
+                            this.setState({ loading: true })
+                            const { id } = this.props.route.params
+                            this.props.surveyDetail(this.props.AUTH, id)
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = tempRankid;
+                            let question = this.state.question;
+                            let answeroption = tempRankAns;
+                            let rank = tempRank;
+                            let answer = "true"
+                            let type = this.state.type;
+                            let comment = this.state.commentOptionRank;
+                            let commentOptionAnswer = this.state.commentOptionRankInput;
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.setState({ index: this.state.index + 1 })
+                            tempRank = [];
+                            tempRankid = [];
+                            tempRankAns = [];
+                        }
+                    }
+                    else {
+                        this.setState({ loading: true })
+                        const { id } = this.props.route.params
+                        this.props.surveyDetail(this.props.AUTH, id)
+                        let survey_id = this.state.survey_id;
+                        let question_id = this.state.question_id;
+                        let answer_id = tempRankid;
+                        let question = this.state.question;
+                        let answeroption = tempRankAns;
+                        let rank = tempRank;
+                        let answer = "true"
+                        let type = this.state.type;
+                        let comment = this.state.commentOptionRank;
+                        let commentOptionAnswer = this.state.commentOptionRankInput;
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                        this.setState({ index: this.state.index + 1 })
+                        tempRank = [];
+                        tempRankid = [];
+                        tempRankAns = [];
+                    }
+
                 }
             }
             else {
@@ -428,7 +690,7 @@ class Que1 extends Component {
                 let type = this.state.type;
                 let answer = this.state.textInputAnswer;
                 this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray });
+                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
             }
             else {
                 this.setState({ errorInput: 'Please enter answer' })
@@ -436,21 +698,94 @@ class Que1 extends Component {
         }
         if (this.state.surveyDetailData[this.state.index].answeroption === "radiobutton") {
             if (this.state.type != '') {
-                const { id } = this.props.route.params
-                let survey_id = this.state.survey_id;
-                let question_id = this.state.question_id;
-                let answer_id = this.state.answer_id;
-                let question = this.state.question;
-                let answeroption = this.state.answeroption;
-                let type = this.state.type;
-                let answer = "true";
-                let other_option = this.state.otherOption
-                let otherOptionAnswer = this.state.otherOptionInput
-                let comment = this.state.commentOption
-                let commentOptionAnswer = this.state.commentOptionInput
-                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
-                this.state.questionListArray.push({ question_id: question_id, comment, comment, commentOptionAnswer: commentOptionAnswer })
-                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                if (this.state.commentOption == 'Y') {
+                    if (this.state.commentOptionInput == '') {
+                        this.setState({ commentOptinError: 'Please enter answer' })
+                    }
+                    else {
+                        if (this.state.otherOption == 'Y') {
+                            if (this.state.otherOptionInput == '') {
+                                this.setState({ otherOptionError: 'Please enter answer' })
+                            }
+                            else {
+                                const { id } = this.props.route.params
+                                let survey_id = this.state.survey_id;
+                                let question_id = this.state.question_id;
+                                let answer_id = this.state.answer_id;
+                                let question = this.state.question;
+                                let answeroption = this.state.answeroption;
+                                let type = this.state.type;
+                                let answer = "true";
+                                let other_option = this.state.otherOption
+                                let otherOptionAnswer = this.state.otherOptionInput
+                                let comment = this.state.commentOption
+                                let commentOptionAnswer = this.state.commentOptionInput
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+
+                            }
+                        } else {
+                            const { id } = this.props.route.params
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = this.state.answer_id;
+                            let question = this.state.question;
+                            let answeroption = this.state.answeroption;
+                            let type = this.state.type;
+                            let answer = "true";
+                            let other_option = this.state.otherOption
+                            let otherOptionAnswer = this.state.otherOptionInput
+                            let comment = this.state.commentOption
+                            let commentOptionAnswer = this.state.commentOptionInput
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                        }
+                    }
+                }
+                else {
+                    if (this.state.otherOption == 'Y') {
+                        if (this.state.otherOptionInput == '') {
+                            this.setState({ otherOptionError: 'Please enter answer' })
+                        }
+                        else {
+                            const { id } = this.props.route.params
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = this.state.answer_id;
+                            let question = this.state.question;
+                            let answeroption = this.state.answeroption;
+                            let type = this.state.type;
+                            let answer = "true";
+                            let other_option = this.state.otherOption
+                            let otherOptionAnswer = this.state.otherOptionInput
+                            let comment = this.state.commentOption
+                            let commentOptionAnswer = this.state.commentOptionInput
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+
+                        }
+                    } else {
+                        const { id } = this.props.route.params
+                        let survey_id = this.state.survey_id;
+                        let question_id = this.state.question_id;
+                        let answer_id = this.state.answer_id;
+                        let question = this.state.question;
+                        let answeroption = this.state.answeroption;
+                        let type = this.state.type;
+                        let answer = "true";
+                        let other_option = this.state.otherOption
+                        let otherOptionAnswer = this.state.otherOptionInput
+                        let comment = this.state.commentOption
+                        let commentOptionAnswer = this.state.commentOptionInput
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                        this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+
+                    }
+                }
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
@@ -458,21 +793,91 @@ class Que1 extends Component {
         }
         if (this.state.surveyDetailData[this.state.index].answeroption == "radiobuttonImage") {
             if (this.state.type != '') {
-                const { id } = this.props.route.params
-                let survey_id = this.state.survey_id;
-                let question_id = this.state.question_id;
-                let answer_id = this.state.answer_id;
-                let question = this.state.question;
-                let answeroption = this.state.answeroption;
-                let type = this.state.type;
-                let answer = "true";
-                let other_option = this.state.otherOptionRadioImage;
-                let otherOptionAnswer = this.state.otherOptionRadioImageInput;
-                let comment = this.state.commentOptionRadioImage;
-                let commentOptionAnswer = this.state.commentOptionRadioImageInput;
-                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
-                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                if (this.state.commentOptionRadioImage == 'Y') {
+                    if (this.state.commentOptionRadioImageInput == '') {
+                        this.setState({ commentOptinError: 'Please enter answer' })
+                    }
+                    else {
+                        if (this.state.otherOptionRadioImage == 'Y') {
+                            if (this.state.otherOptionRadioImageInput == '') {
+                                this.setState({ otherOptionError: 'Please enter answer' })
+                            }
+                            else {
+                                const { id } = this.props.route.params
+                                let survey_id = this.state.survey_id;
+                                let question_id = this.state.question_id;
+                                let answer_id = this.state.answer_id;
+                                let question = this.state.question;
+                                let answeroption = this.state.answeroption;
+                                let type = this.state.type;
+                                let answer = "true";
+                                let other_option = this.state.otherOptionRadioImage;
+                                let otherOptionAnswer = this.state.otherOptionRadioImageInput;
+                                let comment = this.state.commentOptionRadioImage;
+                                let commentOptionAnswer = this.state.commentOptionRadioImageInput;
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                            }
+                        } else {
+                            const { id } = this.props.route.params
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = this.state.answer_id;
+                            let question = this.state.question;
+                            let answeroption = this.state.answeroption;
+                            let type = this.state.type;
+                            let answer = "true";
+                            let other_option = this.state.otherOptionRadioImage;
+                            let otherOptionAnswer = this.state.otherOptionRadioImageInput;
+                            let comment = this.state.commentOptionRadioImage;
+                            let commentOptionAnswer = this.state.commentOptionRadioImageInput;
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                        }
+                    }
+                }
+                else {
+                    if (this.state.otherOptionRadioImage == 'Y') {
+                        if (this.state.otherOptionRadioImageInput == '') {
+                            this.setState({ otherOptionError: 'Please enter answer' })
+                        }
+                        else {
+                            const { id } = this.props.route.params
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = this.state.answer_id;
+                            let question = this.state.question;
+                            let answeroption = this.state.answeroption;
+                            let type = this.state.type;
+                            let answer = "true";
+                            let other_option = this.state.otherOptionRadioImage;
+                            let otherOptionAnswer = this.state.otherOptionRadioImageInput;
+                            let comment = this.state.commentOptionRadioImage;
+                            let commentOptionAnswer = this.state.commentOptionRadioImageInput;
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                        }
+                    } else {
+                        const { id } = this.props.route.params
+                        let survey_id = this.state.survey_id;
+                        let question_id = this.state.question_id;
+                        let answer_id = this.state.answer_id;
+                        let question = this.state.question;
+                        let answeroption = this.state.answeroption;
+                        let type = this.state.type;
+                        let answer = "true";
+                        let other_option = this.state.otherOptionRadioImage;
+                        let otherOptionAnswer = this.state.otherOptionRadioImageInput;
+                        let comment = this.state.commentOptionRadioImage;
+                        let commentOptionAnswer = this.state.commentOptionRadioImageInput;
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                        this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                    }
+                }
             }
             else {
                 this.setState({ errorRadio: 'Please select answer' })
@@ -482,65 +887,134 @@ class Que1 extends Component {
             let min = this.state.surveyDetailData[this.state.index]?.min
             let max = this.state.surveyDetailData[this.state.index]?.max
             if (temp.length != 0) {
-                if (min != null && max != null) {
-                    if (max < temp.length) {
-                        alert('You can not select more than ' + max + ' answer')
+                if (this.state.commentOptionCheckBox == 'Y') {
+                    if (this.state.commentOptionCheckBoxInput == '') {
+                        this.setState({ commentOptinError: 'Please enter comment' })
                     }
-                    else if (temp.length < min) {
-                        alert('You have to select minimum ' + min + ' answer')
-                    }
-                    else if (temp.length > min && temp.length < max) {
-                        const { id } = this.props.route.params
-                        let survey_id = this.state.survey_id;
-                        let question_id = this.state.question_id;
-                        let answer_id = tempid;
-                        let question = this.state.question;
-                        let answeroption = temp;
-                        let type = this.state.type;
-                        let answer = "true"
-                        let comment = this.state.commentOptionCheckBox;
-                        let commentOptionAnswer = this.state.commentOptionCheckBoxInput
-                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                        this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
-                        temp = []
-                        tempid = [];
+                    else {
+                        if (min != null && max != null) {
+                            if (max < temp.length) {
+                                alert('You can not select more than ' + max + ' answer')
+                            }
+                            else if (temp.length < min) {
+                                alert('You have to select minimum ' + min + ' answer')
+                            }
+                            else if (temp.length > min && temp.length < max) {
+                                const { id } = this.props.route.params
+                                let survey_id = this.state.survey_id;
+                                let question_id = this.state.question_id;
+                                let answer_id = tempid;
+                                let question = this.state.question;
+                                let answeroption = temp;
+                                let type = this.state.type;
+                                let answer = "true"
+                                let comment = this.state.commentOptionCheckBox;
+                                let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                                temp = []
+                                tempid = [];
 
-                    }
-                    else if (min >= temp.length || max == temp.length) {
-                        const { id } = this.props.route.params
-                        let survey_id = this.state.survey_id;
-                        let question_id = this.state.question_id;
-                        let answer_id = tempid;
-                        let question = this.state.question;
-                        let answeroption = temp;
-                        let type = this.state.type;
-                        let answer = "true"
-                        let comment = this.state.commentOptionCheckBox;
-                        let commentOptionAnswer = this.state.commentOptionCheckBoxInput
-                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                        this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
-                        temp = []
-                        tempid = [];
+                            }
+                            else if (min >= temp.length || max == temp.length) {
+                                const { id } = this.props.route.params
+                                let survey_id = this.state.survey_id;
+                                let question_id = this.state.question_id;
+                                let answer_id = tempid;
+                                let question = this.state.question;
+                                let answeroption = temp;
+                                let type = this.state.type;
+                                let answer = "true"
+                                let comment = this.state.commentOptionCheckBox;
+                                let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                                temp = []
+                                tempid = [];
+                            }
+                        }
+                        else {
+                            const { id } = this.props.route.params
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = tempid;
+                            let question = this.state.question;
+                            let answeroption = temp;
+                            let type = this.state.type;
+                            let answer = "true"
+                            let comment = this.state.commentOptionCheckBox;
+                            let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                            temp = []
+                            tempid = [];
+                        }
                     }
                 }
                 else {
-                    const { id } = this.props.route.params
-                    let survey_id = this.state.survey_id;
-                    let question_id = this.state.question_id;
-                    let answer_id = tempid;
-                    let question = this.state.question;
-                    let answeroption = temp;
-                    let type = this.state.type;
-                    let answer = "true"
-                    let comment = this.state.commentOptionCheckBox;
-                    let commentOptionAnswer = this.state.commentOptionCheckBoxInput
-                    this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
-                    this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                    this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
-                    temp = []
-                    tempid = [];
+                    if (min != null && max != null) {
+                        if (max < temp.length) {
+                            alert('You can not select more than ' + max + ' answer')
+                        }
+                        else if (temp.length < min) {
+                            alert('You have to select minimum ' + min + ' answer')
+                        }
+                        else if (temp.length > min && temp.length < max) {
+                            const { id } = this.props.route.params
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = tempid;
+                            let question = this.state.question;
+                            let answeroption = temp;
+                            let type = this.state.type;
+                            let answer = "true"
+                            let comment = this.state.commentOptionCheckBox;
+                            let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                            temp = []
+                            tempid = [];
+
+                        }
+                        else if (min >= temp.length || max == temp.length) {
+                            const { id } = this.props.route.params
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = tempid;
+                            let question = this.state.question;
+                            let answeroption = temp;
+                            let type = this.state.type;
+                            let answer = "true"
+                            let comment = this.state.commentOptionCheckBox;
+                            let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                            temp = []
+                            tempid = [];
+                        }
+                    }
+                    else {
+                        const { id } = this.props.route.params
+                        let survey_id = this.state.survey_id;
+                        let question_id = this.state.question_id;
+                        let answer_id = tempid;
+                        let question = this.state.question;
+                        let answeroption = temp;
+                        let type = this.state.type;
+                        let answer = "true"
+                        let comment = this.state.commentOptionCheckBox;
+                        let commentOptionAnswer = this.state.commentOptionCheckBoxInput
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
+                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                        this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                        temp = []
+                        tempid = [];
+                    }
                 }
             }
             else {
@@ -555,23 +1029,51 @@ class Que1 extends Component {
                         this.setState({ errorRadio: 'You can not select same rank' })
                     }
                     else {
-                        const { id } = this.props.route.params
-                        let survey_id = this.state.survey_id;
-                        let question_id = this.state.question_id;
-                        let answer_id = tempRankid;
-                        let answeroption = tempRankAns;
-                        let question = this.state.question
-                        let rank = tempRank;
-                        let answer = "true";
-                        let type = this.state.type;
-                        let comment = this.state.commentOptionRank;
-                        let commentOptionAnswer = this.state.commentOptionRankInput
-                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
-                        this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                        this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
-                        tempRank = [];
-                        tempRankid = [];
-                        tempRankAns = [];
+                        if (this.state.commentOptionRank == 'Y') {
+                            if (this.state.commentOptionRankInput == '') {
+                                this.setState({ commentOptinError: 'Please select answer' })
+                            }
+                            else {
+                                const { id } = this.props.route.params
+                                let survey_id = this.state.survey_id;
+                                let question_id = this.state.question_id;
+                                let answer_id = tempRankid;
+                                let answeroption = tempRankAns;
+                                let question = this.state.question;
+                                let rank = tempRank;
+                                let answer = "true";
+                                let type = this.state.type;
+                                let comment = this.state.commentOptionRank;
+                                let commentOptionAnswer = this.state.commentOptionRankInput
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
+                                this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                                this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                                tempRank = [];
+                                tempRankid = [];
+                                tempRankAns = [];
+
+                            }
+                        }
+                        else {
+                            const { id } = this.props.route.params
+                            let survey_id = this.state.survey_id;
+                            let question_id = this.state.question_id;
+                            let answer_id = tempRankid;
+                            let answeroption = tempRankAns;
+                            let question = this.state.question
+                            let rank = tempRank;
+                            let answer = "true";
+                            let type = this.state.type;
+                            let comment = this.state.commentOptionRank;
+                            let commentOptionAnswer = this.state.commentOptionRankInput
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
+                            this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
+                            this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
+                            tempRank = [];
+                            tempRankid = [];
+                            tempRankAns = [];
+
+                        }
                     }
 
                 }
@@ -638,7 +1140,7 @@ class Que1 extends Component {
                                             value={this.state.otherOptionInput}
                                             returnKeyType="done"
                                             onSubmitEditing={() => { Keyboard.dismiss() }}
-                                            onChangeText={(text) => { this.setState({ otherOptionInput: text.trimStart(), errorInput: '' }) }}
+                                            onChangeText={(text) => { this.setState({ otherOptionInput: text.trimStart(), otherOptionError: '' }) }}
                                         />
                                     }
                                     {this.state.otherOptionError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.otherOptionError}</Text>}
@@ -651,7 +1153,7 @@ class Que1 extends Component {
                                             value={this.state.commentOptionInput}
                                             returnKeyType="done"
                                             onSubmitEditing={() => { Keyboard.dismiss() }}
-                                            onChangeText={(text) => { this.setState({ commentOptionInput: text.trimStart(), errorInput: '' }) }}
+                                            onChangeText={(text) => { this.setState({ commentOptionInput: text.trimStart(), commentOptinError: '' }) }}
                                         />
                                     }
                                     {this.state.commentOptinError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptinError}</Text>}
@@ -682,7 +1184,7 @@ class Que1 extends Component {
                                                 value={this.state.commentOptionCheckBoxInput}
                                                 returnKeyType="done"
                                                 onSubmitEditing={() => { Keyboard.dismiss() }}
-                                                onChangeText={(text) => { this.setState({ commentOptionCheckBoxInput: text.trimStart(), errorInput: '' }) }}
+                                                onChangeText={(text) => { this.setState({ commentOptionCheckBoxInput: text.trimStart(), commentOptinError: '' }) }}
                                             />
                                         }
                                         {this.state.commentOptinError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptinError}</Text>}
@@ -740,7 +1242,7 @@ class Que1 extends Component {
                                                         value={this.state.otherOptionRadioImageInput}
                                                         returnKeyType="done"
                                                         onSubmitEditing={() => { Keyboard.dismiss() }}
-                                                        onChangeText={(text) => { this.setState({ otherOptionRadioImageInput: text.trimStart(), errorInput: '' }) }}
+                                                        onChangeText={(text) => { this.setState({ otherOptionRadioImageInput: text.trimStart(), otherOptionError: '' }) }}
                                                     />
                                                 }
                                                 {this.state.otherOptionError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.otherOptionError}</Text>}
@@ -753,7 +1255,7 @@ class Que1 extends Component {
                                                         value={this.state.commentOptionRadioImageInput}
                                                         returnKeyType="done"
                                                         onSubmitEditing={() => { Keyboard.dismiss() }}
-                                                        onChangeText={(text) => { this.setState({ commentOptionRadioImageInput: text.trimStart(), errorInput: '' }) }}
+                                                        onChangeText={(text) => { this.setState({ commentOptionRadioImageInput: text.trimStart(), commentOptinError: '' }) }}
                                                     />
                                                 }
                                                 {this.state.commentOptinError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptinError}</Text>}
@@ -786,7 +1288,7 @@ class Que1 extends Component {
                                                         value={this.state.commentOptionRankInput}
                                                         returnKeyType="done"
                                                         onSubmitEditing={() => { Keyboard.dismiss() }}
-                                                        onChangeText={(text) => { this.setState({ commentOptionRankInput: text.trimStart(), errorInput: '' }) }}
+                                                        onChangeText={(text) => { this.setState({ commentOptionRankInput: text.trimStart(), commentOptinError: '' }) }}
                                                     />
                                                 }
                                                 {this.state.commentOptinError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptinError}</Text>}

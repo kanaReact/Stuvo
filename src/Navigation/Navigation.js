@@ -47,7 +47,7 @@ const height = Dimensions.get('window').height;
 function Navigation() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS }}>
+      <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, }}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="VerifyOTP" component={VerifyOTP} />
@@ -66,7 +66,7 @@ function Navigation() {
 }
 function Navigator() {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS }} initialRouteName="Question">
+    <Stack.Navigator screenOptions={{ headerShown: false, gestureEnabled: false, }} initialRouteName="Question">
       <Stack.Screen name="Question" component={Question} />
       <Stack.Screen name="Week1Questionaires" component={Week1Questionaires} />
       <Stack.Screen name="NewQuestionaries" component={NewQuestionaries} />

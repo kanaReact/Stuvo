@@ -56,7 +56,9 @@ class Que1 extends Component {
             commentOptionRadioImage: '',
             commentOptionRadioImageInput: '',
             otherOptionError: '',
-            commentOptinError: ''
+            commentOptinError: '',
+            keyboardStatus: '',
+            noData: false
         }
     }
 
@@ -68,78 +70,103 @@ class Que1 extends Component {
         const { id } = this.props.route.params
         this.props.surveyDetail(this.props.AUTH, id)
     }
+    componentDidMount() {
+        this.keyboardDidShowSubscription = Keyboard.addListener(
+            'keyboardDidShow',
+            () => {
+                this.setState({ keyboardStatus: '1' });
+            },
+        );
+        this.keyboardDidHideSubscription = Keyboard.addListener(
+            'keyboardDidHide',
+            () => {
+                this.setState({ keyboardStatus: '0' });
+            },
+        );
+    }
+
+    componentWillUnmount() {
+        this.keyboardDidShowSubscription.remove();
+        this.keyboardDidHideSubscription.remove();
+    }
+
     componentWillReceiveProps(nextProps) {
         this.setState({ loading: false })
         this.setState({ otherOptionError: '', commentOptinError: '' })
         if (nextProps.surveyDetailData != this.state.surveyDetailData) {
             this.setState({ surveyDetailData: nextProps.surveyDetailData, type: '', textInputAnswer: '' })
         }
-        if (nextProps.surveyDetailData[this.state.index].answeroption == "radiobutton") {
-            let tempArrayRadioBtn = []
-            let comment = nextProps.surveyDetailData[this.state.index].comment
-            this.setState({ commentOption: comment })
-            nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
-                tempArrayRadioBtn.push({
-                    answer_title: item.answer_title,
-                    serve_id: item.serve_id,
-                    question_id: item.question_id,
-                    set: '',
-                    id: item.id,
-                    question: nextProps.surveyDetailData[this.state.index].question,
-                    answeroption: 'radiobutton',
-                    other_option: item.other_option
+        if (nextProps.surveyDetailData.length != 0) {
+            if (nextProps.surveyDetailData[this.state.index].answeroption == "radiobutton") {
+                let tempArrayRadioBtn = []
+                let comment = nextProps.surveyDetailData[this.state.index].comment
+                this.setState({ commentOption: comment })
+                nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
+                    tempArrayRadioBtn.push({
+                        answer_title: item.answer_title,
+                        serve_id: item.serve_id,
+                        question_id: item.question_id,
+                        set: '',
+                        id: item.id,
+                        question: nextProps.surveyDetailData[this.state.index].question,
+                        answeroption: 'radiobutton',
+                        other_option: item.other_option
+                    })
                 })
-            })
-            this.setState({ radiobuttonArray: tempArrayRadioBtn })
-        }
-        else if (nextProps.surveyDetailData[this.state.index].answeroption == "checkbox") {
-            let tempArrayRadioBtn = []
-            let comment = nextProps.surveyDetailData[this.state.index].comment
-            this.setState({ commentOptionCheckBox: comment })
-            nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
-                this.changeCheckboxValue(index, false)
-            })
+                this.setState({ radiobuttonArray: tempArrayRadioBtn })
+            }
+            else if (nextProps.surveyDetailData[this.state.index].answeroption == "checkbox") {
+                let tempArrayRadioBtn = []
+                let comment = nextProps.surveyDetailData[this.state.index].comment
+                this.setState({ commentOptionCheckBox: comment })
+                nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
+                    this.changeCheckboxValue(index, false)
+                })
 
 
-        }
-        else if (nextProps.surveyDetailData[this.state.index].answeroption == "textbox") {
-            this.setState({
-                survey_id: nextProps.surveyDetailData[this.state.index].serve_id,
-                question_id: nextProps.surveyDetailData[this.state.index].id,
-                answer_id: '',
-                question: nextProps.surveyDetailData[this.state.index].question,
-                answeroption: "",
-                type: "textbox",
-            })
-        }
-        else if (nextProps.surveyDetailData[this.state.index].answeroption == "radiobuttonImage") {
-            let tempArrayRadioBtnImage = []
-            let comment = nextProps.surveyDetailData[this.state.index].comment
-            this.setState({ commentOptionRadioImage: comment })
-            nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
-                tempArrayRadioBtnImage.push({
-                    answer_title: item.answer_title,
-                    serve_id: item.serve_id,
-                    question_id: item.question_id,
-                    set: '',
-                    id: item.id,
+            }
+            else if (nextProps.surveyDetailData[this.state.index].answeroption == "textbox") {
+                this.setState({
+                    survey_id: nextProps.surveyDetailData[this.state.index].serve_id,
+                    question_id: nextProps.surveyDetailData[this.state.index].id,
+                    answer_id: '',
                     question: nextProps.surveyDetailData[this.state.index].question,
-                    answeroption: 'radiobuttonImage',
-                    other_option: item.other_option
+                    answeroption: "",
+                    type: "textbox",
                 })
-            })
-            this.setState({ radioButtonWithImageArray: tempArrayRadioBtnImage })
+            }
+            else if (nextProps.surveyDetailData[this.state.index].answeroption == "radiobuttonImage") {
+                let tempArrayRadioBtnImage = []
+                let comment = nextProps.surveyDetailData[this.state.index].comment
+                this.setState({ commentOptionRadioImage: comment })
+                nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
+                    tempArrayRadioBtnImage.push({
+                        answer_title: item.answer_title,
+                        serve_id: item.serve_id,
+                        question_id: item.question_id,
+                        set: '',
+                        id: item.id,
+                        question: nextProps.surveyDetailData[this.state.index].question,
+                        answeroption: 'radiobuttonImage',
+                        other_option: item.other_option
+                    })
+                })
+                this.setState({ radioButtonWithImageArray: tempArrayRadioBtnImage })
+            }
+            else if (nextProps.surveyDetailData[this.state.index].answeroption == "rank") {
+                let comment = nextProps.surveyDetailData[this.state.index].comment
+                this.setState({ selectRank: [], question: nextProps.surveyDetailData[this.state.index].question, commentOptionRank: comment })
+                let tempArrayRank = []
+                nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
+                    let val = index + 1
+                    tempArrayRank.push({ id: val, name: val })
+                })
+                this.setState({ dropDownData: tempArrayRank })
+            }
+        } else {
+            this.setState({ noData: true })
         }
-        else if (nextProps.surveyDetailData[this.state.index].answeroption == "rank") {
-            let comment = nextProps.surveyDetailData[this.state.index].comment
-            this.setState({ selectRank: [], question: nextProps.surveyDetailData[this.state.index].question, commentOptionRank: comment })
-            let tempArrayRank = []
-            nextProps.surveyDetailData[this.state.index].anslist.map((item, index) => {
-                let val = index + 1
-                tempArrayRank.push({ id: val, name: val })
-            })
-            this.setState({ dropDownData: tempArrayRank })
-        }
+
 
     }
     changeRadioBtnValue(data) {
@@ -499,7 +526,7 @@ class Que1 extends Component {
                                 let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                                 this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
                                 this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                                this.setState({ index: this.state.index + 1 })
+                                this.setState({ index: this.state.index + 1, commentOptionCheckBoxInput: '', commentOptionCheckBox: '' })
                                 temp = [];
                                 tempid = [];
                             }
@@ -518,7 +545,7 @@ class Que1 extends Component {
                                 let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                                 this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
                                 this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                                this.setState({ index: this.state.index + 1 })
+                                this.setState({ index: this.state.index + 1, commentOptionCheckBoxInput: '', commentOptionCheckBox: '' })
                                 temp = [];
                                 tempid = [];
                             }
@@ -538,7 +565,7 @@ class Que1 extends Component {
                             let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                             this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                            this.setState({ index: this.state.index + 1 })
+                            this.setState({ index: this.state.index + 1, commentOptionCheckBoxInput: '', commentOptionCheckBox: '' })
                             temp = [];
                             tempid = [];
                         }
@@ -567,7 +594,7 @@ class Que1 extends Component {
                             let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                             this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                            this.setState({ index: this.state.index + 1 })
+                            this.setState({ index: this.state.index + 1, commentOptionCheckBoxInput: '', commentOptionCheckBox: '' })
                             temp = [];
                             tempid = [];
                         }
@@ -586,7 +613,7 @@ class Que1 extends Component {
                             let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                             this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                            this.setState({ index: this.state.index + 1 })
+                            this.setState({ index: this.state.index + 1, commentOptionCheckBoxInput: '', commentOptionCheckBox: '' })
                             temp = [];
                             tempid = [];
                         }
@@ -606,7 +633,7 @@ class Que1 extends Component {
                         let commentOptionAnswer = this.state.commentOptionCheckBoxInput
                         this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer })
                         this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                        this.setState({ index: this.state.index + 1 })
+                        this.setState({ index: this.state.index + 1, commentOptionCheckBoxInput: '', commentOptionCheckBox: '' })
                         temp = [];
                         tempid = [];
                     }
@@ -625,7 +652,7 @@ class Que1 extends Component {
                 else {
                     if (this.state.commentOptionRank == 'Y') {
                         if (this.state.commentOptionRankInput == '') {
-                            this.setState({ commentOptinError: 'Please select answer' })
+                            this.setState({ commentOptinError: 'Please enter answer' })
                         }
                         else {
                             this.setState({ loading: true })
@@ -643,7 +670,7 @@ class Que1 extends Component {
                             let commentOptionAnswer = this.state.commentOptionRankInput;
                             this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                            this.setState({ index: this.state.index + 1 })
+                            this.setState({ index: this.state.index + 1, commentOptionRankInput: '', commentOptionRank: '' })
                             tempRank = [];
                             tempRankid = [];
                             tempRankAns = [];
@@ -665,7 +692,7 @@ class Que1 extends Component {
                         let commentOptionAnswer = this.state.commentOptionRankInput;
                         this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, rank: rank, type: type, answer: answer })
                         this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
-                        this.setState({ index: this.state.index + 1 })
+                        this.setState({ index: this.state.index + 1, commentOptionRankInput: '', commentOptionRank: '' })
                         tempRank = [];
                         tempRankid = [];
                         tempRankAns = [];
@@ -1031,7 +1058,7 @@ class Que1 extends Component {
                     else {
                         if (this.state.commentOptionRank == 'Y') {
                             if (this.state.commentOptionRankInput == '') {
-                                this.setState({ commentOptinError: 'Please select answer' })
+                                this.setState({ commentOptinError: 'Please enter answer' })
                             }
                             else {
                                 const { id } = this.props.route.params
@@ -1110,7 +1137,7 @@ class Que1 extends Component {
                     </View>
                 </View>
                 {questionCount == 0 ? <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16 }}>Question </Text> : <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16 }}>Question {currentQuestion} of {questionCount}</Text>}
-                <ScrollView showsVerticalScrollIndicator={false} style={{ marginLeft: 16, marginRight: 24 }} contentContainerStyle={{ paddingBottom: 100 }}>
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: this.state.keyboardStatus == '1' ? 220 : 30, marginLeft: 16, marginRight: 24 }}>
                     <Text style={{ marginTop: 15, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', lineHeight: 20 }}>{this.state.surveyDetailData.length != 0 ? this.state.surveyDetailData[this.state.index].question : null}</Text>
                     {
                         this.state.surveyDetailData.length != 0 ?
@@ -1294,24 +1321,28 @@ class Que1 extends Component {
                                                 {this.state.commentOptinError != '' && <Text style={{ padding: 10, fontFamily: 'Gotham-Medium', color: 'red', alignSelf: 'flex-start', fontSize: 14 }}>{this.state.commentOptinError}</Text>}
                                             </View>
                             :
-                            null
+                            this.state.noData == true &&
+                            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                <Text style={{ fontFamily: 'Gotham-Medium', fontSize: 15 }}>No Data Available</Text>
+                            </View>
                     }
 
                 </ScrollView>
 
-                <View style={{ justifyContent: 'flex-end', marginHorizontal: 27 }}>
+                <View style={{ justifyContent: 'flex-end', marginHorizontal: 27, marginTop: 10 }}>
                     {
-                        currentQuestion == questionCount ?
-                            <TouchableOpacity onPress={() => { this.navigateSubmit() }} activeOpacity={0.6}>
-                                <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
-                                    <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next</Text>
-                                </View>
-                            </TouchableOpacity> :
-                            <TouchableOpacity onPress={() => { this.nextQuestion() }} activeOpacity={0.6}>
-                                <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
-                                    <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next Question</Text>
-                                </View>
-                            </TouchableOpacity>
+                        this.state.surveyDetailData.length !== 0 ?
+                            currentQuestion == questionCount ?
+                                <TouchableOpacity onPress={() => { this.navigateSubmit() }} activeOpacity={0.6}>
+                                    <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
+                                        <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next</Text>
+                                    </View>
+                                </TouchableOpacity> :
+                                <TouchableOpacity onPress={() => { this.nextQuestion() }} activeOpacity={0.6}>
+                                    <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
+                                        <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next Question</Text>
+                                    </View>
+                                </TouchableOpacity> : null
                     }
                 </View>
             </SafeAreaView>

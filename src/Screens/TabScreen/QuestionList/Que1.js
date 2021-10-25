@@ -61,6 +61,7 @@ class Que1 extends Component {
             keyboardStatus: '',
             noData: false,
             selected: false,
+            dropDownFlag: []
         }
     }
 
@@ -272,18 +273,16 @@ class Que1 extends Component {
         let temp = this.state.selectRank;
         temp[index] = item;
         this.setState({ selectRank: temp, type: 'rank', survey_id: value.serve_id, question_id: value.question_id, });
+        if (tempRankid.includes(value.id) == false) {
+            this.state.dropDownFlag.push(value.id)
+        }
         tempRankAns[index] = value.answer_title;
         tempRankid[index] = value.id;
         tempRank[index] = item.name;
-        // if (tempRankAns.includes(value.answer_title) == false) {
 
-        //     // tempRankAns.push(value.answer_title);
-        //     // tempRankid.push(value.id);
-        //     // tempRank.push(item.name)
-        // }
     }
     checkIfDuplicateExists(array) {
-        console.log('check on dropd:', array.length)
+        console.log('set array:', new Set(array).size + ' ' + 'array length', array.length)
         return new Set(array).size !== array.length
     }
     nextQuestion() {
@@ -667,7 +666,7 @@ class Que1 extends Component {
         else {
             console.log('check:', tempRank.length)
 
-            if (this.state.dropDownData.length == tempRank.length) {
+            if (this.state.dropDownData.length == this.state.dropDownFlag.length) {
 
                 if (this.checkIfDuplicateExists(tempRank) == true) {
                     this.setState({ errorRadio: 'You can not select same rank' })
@@ -1084,7 +1083,7 @@ class Que1 extends Component {
 
             if (this.state.dropDownData.length != 0) {
                 console.log('check:', tempRank.length)
-                if (this.state.dropDownData.length == tempRank.length) {
+                if (this.state.dropDownData.length == this.state.dropDownFlag.length) {
                     if (this.checkIfDuplicateExists(tempRank) == true) {
                         this.setState({ errorRadio: 'You can not select same rank' })
                     }
@@ -1156,7 +1155,7 @@ class Que1 extends Component {
         const { currentIndex } = this.state;
         let questionCount = this.state.surveyDetailData.length;
         let currentQuestion = this.state.index + 1;
-        console.log('data rank::', tempRank.length)
+        console.log('data rank::', tempRankid.length)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />

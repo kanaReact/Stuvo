@@ -76,6 +76,7 @@ class Notification extends Component {
 
 
     render() {
+        console.log('dat:::', this.state.notificationData)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -92,7 +93,7 @@ class Notification extends Component {
                                         <View style={{ flexDirection: 'row', paddingVertical: 16, marginLeft: 16, marginRight: 24 }}>
                                             <SVGImg.Notification />
                                             <View style={{ flex: 1, marginHorizontal: 20, justifyContent: 'center' }}>
-                                                <Text style={{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium', lineHeight: 16 }}>{item.title}</Text>
+                                                <Text style={{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium', lineHeight: 16 }}>{item.message}</Text>
                                                 <TouchableOpacity style={{ alignSelf: 'flex-start' }} activeOpacity={1}>
                                                     <Text style={{ fontSize: 10, color: '#919191', fontFamily: 'Gotham-Medium', marginTop: 5 }}>View now</Text>
                                                 </TouchableOpacity>

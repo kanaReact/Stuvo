@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity, Image, SafeAreaView, TextInput, FlatList, Keyboard, ActivityIndicator, ScrollView } from 'react-native'
+import { Text, View, TouchableOpacity, Image, SafeAreaView, TextInput, FlatList, Keyboard, ActivityIndicator, ScrollView, Dimensions } from 'react-native'
 import styles from '../../../style/styles'
 import Header from '../../../Components/Header'
 import SVGImg from '../../../Source/SVGImg'
@@ -14,6 +14,7 @@ var tempid = [];
 var tempRankAns = [];
 var tempRankid = [];
 var tempRank = [];
+const { width, height } = Dimensions.get('window')
 class Que1 extends Component {
     constructor(props) {
         super(props);
@@ -58,7 +59,8 @@ class Que1 extends Component {
             otherOptionError: '',
             commentOptinError: '',
             keyboardStatus: '',
-            noData: false
+            noData: false,
+            selected: false,
         }
     }
 
@@ -92,7 +94,7 @@ class Que1 extends Component {
 
     componentWillReceiveProps(nextProps) {
         this.setState({ loading: false })
-        this.setState({ otherOptionError: '', commentOptinError: '' })
+        this.setState({ otherOptionError: '', commentOptinError: '', selected: false })
         if (nextProps.surveyDetailData != this.state.surveyDetailData) {
             this.setState({ surveyDetailData: nextProps.surveyDetailData, type: '', textInputAnswer: '' })
         }
@@ -182,7 +184,8 @@ class Que1 extends Component {
                     question: data.question,
                     answeroption: data.answer_title,
                     type: data.answeroption,
-                    otherOption: data.other_option
+                    otherOption: data.other_option,
+                    selected: true
                 })
             }
             else {
@@ -195,7 +198,8 @@ class Que1 extends Component {
                     answeroption: data.answer_title,
                     type: data.answeroption,
                     otherOptionInput: '',
-                    otherOptionError: ''
+                    otherOptionError: '',
+                    selected: false
                 })
             }
         })
@@ -215,7 +219,8 @@ class Que1 extends Component {
                     question: data.question,
                     answeroption: data.answer_title,
                     type: data.answeroption,
-                    otherOptionRadioImage: data.other_option
+                    otherOptionRadioImage: data.other_option,
+                    selected: true
                 })
             }
             else {
@@ -228,7 +233,8 @@ class Que1 extends Component {
                     answeroption: data.answer_title,
                     type: data.answeroption,
                     otherOptionRadioImageInput: '',
-                    otherOptionError: ''
+                    otherOptionError: '',
+                    selected: false
                 })
             }
         })
@@ -265,12 +271,19 @@ class Que1 extends Component {
         this.setState({ errorRadio: '' })
         let temp = this.state.selectRank;
         temp[index] = item;
-        tempRankAns[index] = value.answer_title
-        tempRankid[index] = value.id
-        tempRank[index] = item.name
         this.setState({ selectRank: temp, type: 'rank', survey_id: value.serve_id, question_id: value.question_id, });
+        tempRankAns[index] = value.answer_title;
+        tempRankid[index] = value.id;
+        tempRank[index] = item.name;
+        // if (tempRankAns.includes(value.answer_title) == false) {
+
+        //     // tempRankAns.push(value.answer_title);
+        //     // tempRankid.push(value.id);
+        //     // tempRank.push(item.name)
+        // }
     }
     checkIfDuplicateExists(array) {
+        console.log('check on dropd:', array.length)
         return new Set(array).size !== array.length
     }
     nextQuestion() {
@@ -318,8 +331,9 @@ class Que1 extends Component {
                                 let other_option = this.state.otherOption
                                 let otherOptionAnswer = this.state.otherOptionInput
                                 let comment = this.state.commentOption
-                                let commentOptionAnswer = this.state.commentOptionInput
-                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                                let commentOptionAnswer = this.state.commentOptionInput;
+                                let select = this.state.selected
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                                 this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                                 this.setState({ index: this.state.index + 1, otherOptionInput: '', commentOptionInput: '', otherOption: '', commentOption: '' })
                             }
@@ -338,7 +352,8 @@ class Que1 extends Component {
                             let otherOptionAnswer = this.state.otherOptionInput
                             let comment = this.state.commentOption
                             let commentOptionAnswer = this.state.commentOptionInput
-                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            let select = this.state.selected
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                             this.setState({ index: this.state.index + 1, otherOptionInput: '', commentOptionInput: '', otherOption: '', commentOption: '' })
                         }
@@ -364,7 +379,8 @@ class Que1 extends Component {
                             let otherOptionAnswer = this.state.otherOptionInput
                             let comment = this.state.commentOption
                             let commentOptionAnswer = this.state.commentOptionInput
-                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            let select = this.state.selected
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                             this.setState({ index: this.state.index + 1, otherOptionInput: '', commentOptionInput: '', otherOption: '', commentOption: '' })
                         }
@@ -383,7 +399,8 @@ class Que1 extends Component {
                         let otherOptionAnswer = this.state.otherOptionInput
                         let comment = this.state.commentOption
                         let commentOptionAnswer = this.state.commentOptionInput
-                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                        let select = this.state.selected
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                         this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                         this.setState({ index: this.state.index + 1, otherOptionInput: '', commentOptionInput: '', otherOption: '', commentOption: '' })
                     }
@@ -419,7 +436,8 @@ class Que1 extends Component {
                                 let otherOptionAnswer = this.state.otherOptionRadioImageInput;
                                 let comment = this.state.commentOptionRadioImage;
                                 let commentOptionAnswer = this.state.commentOptionRadioImageInput;
-                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                                let select = this.state.selected
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                                 this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                                 this.setState({ index: this.state.index + 1, otherOptionRadioImage: '', otherOptionRadioImageInput: '', commentOptionRadioImage: '', commentOptionRadioImageInput: '' })
                             }
@@ -438,7 +456,8 @@ class Que1 extends Component {
                             let otherOptionAnswer = this.state.otherOptionRadioImageInput;
                             let comment = this.state.commentOptionRadioImage;
                             let commentOptionAnswer = this.state.commentOptionRadioImageInput;
-                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            let select = this.state.selected
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                             this.setState({ index: this.state.index + 1, otherOptionRadioImage: '', otherOptionRadioImageInput: '', commentOptionRadioImage: '', commentOptionRadioImageInput: '' })
 
@@ -465,7 +484,8 @@ class Que1 extends Component {
                             let otherOptionAnswer = this.state.otherOptionRadioImageInput;
                             let comment = this.state.commentOptionRadioImage;
                             let commentOptionAnswer = this.state.commentOptionRadioImageInput;
-                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            let select = this.state.selected
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                             this.setState({ index: this.state.index + 1, otherOptionRadioImage: '', otherOptionRadioImageInput: '', commentOptionRadioImage: '', commentOptionRadioImageInput: '' })
 
@@ -485,7 +505,8 @@ class Que1 extends Component {
                         let otherOptionAnswer = this.state.otherOptionRadioImageInput;
                         let comment = this.state.commentOptionRadioImage;
                         let commentOptionAnswer = this.state.commentOptionRadioImageInput;
-                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                        let select = this.state.selected
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                         this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                         this.setState({ index: this.state.index + 1, otherOptionRadioImage: '', otherOptionRadioImageInput: '', commentOptionRadioImage: '', commentOptionRadioImageInput: '' })
                     }
@@ -644,8 +665,10 @@ class Que1 extends Component {
             }
         }
         else {
+            console.log('check:', tempRank.length)
 
             if (this.state.dropDownData.length == tempRank.length) {
+
                 if (this.checkIfDuplicateExists(tempRank) == true) {
                     this.setState({ errorRadio: 'You can not select same rank' })
                 }
@@ -701,6 +724,7 @@ class Que1 extends Component {
                 }
             }
             else {
+                console.log('check:', tempRank.length)
                 this.setState({ errorRadio: 'Please select answer' })
             }
         }
@@ -747,7 +771,8 @@ class Que1 extends Component {
                                 let otherOptionAnswer = this.state.otherOptionInput
                                 let comment = this.state.commentOption
                                 let commentOptionAnswer = this.state.commentOptionInput
-                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                                let select = this.state.selected
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                                 this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                                 this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
 
@@ -765,7 +790,8 @@ class Que1 extends Component {
                             let otherOptionAnswer = this.state.otherOptionInput
                             let comment = this.state.commentOption
                             let commentOptionAnswer = this.state.commentOptionInput
-                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            let select = this.state.selected
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                             this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
                         }
@@ -789,7 +815,8 @@ class Que1 extends Component {
                             let otherOptionAnswer = this.state.otherOptionInput
                             let comment = this.state.commentOption
                             let commentOptionAnswer = this.state.commentOptionInput
-                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            let select = this.state.selected
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                             this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
 
@@ -807,7 +834,8 @@ class Que1 extends Component {
                         let otherOptionAnswer = this.state.otherOptionInput
                         let comment = this.state.commentOption
                         let commentOptionAnswer = this.state.commentOptionInput
-                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                        let select = this.state.selected
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                         this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                         this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
 
@@ -842,7 +870,8 @@ class Que1 extends Component {
                                 let otherOptionAnswer = this.state.otherOptionRadioImageInput;
                                 let comment = this.state.commentOptionRadioImage;
                                 let commentOptionAnswer = this.state.commentOptionRadioImageInput;
-                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                                let select = this.state.selected
+                                this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                                 this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                                 this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
                             }
@@ -859,7 +888,8 @@ class Que1 extends Component {
                             let otherOptionAnswer = this.state.otherOptionRadioImageInput;
                             let comment = this.state.commentOptionRadioImage;
                             let commentOptionAnswer = this.state.commentOptionRadioImageInput;
-                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            let select = this.state.selected
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                             this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
                         }
@@ -883,7 +913,8 @@ class Que1 extends Component {
                             let otherOptionAnswer = this.state.otherOptionRadioImageInput;
                             let comment = this.state.commentOptionRadioImage;
                             let commentOptionAnswer = this.state.commentOptionRadioImageInput;
-                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                            let select = this.state.selected
+                            this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                             this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                             this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
                         }
@@ -900,7 +931,8 @@ class Que1 extends Component {
                         let otherOptionAnswer = this.state.otherOptionRadioImageInput;
                         let comment = this.state.commentOptionRadioImage;
                         let commentOptionAnswer = this.state.commentOptionRadioImageInput;
-                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer })
+                        let select = this.state.selected
+                        this.state.answerArray.push({ survey_id: survey_id, question_id: question_id, anstitle_id: answer_id, question: question, answeroption: answeroption, type: type, answer: answer, other_option: other_option, otherOptionAnswer: otherOptionAnswer, select: select })
                         this.state.questionListArray.push({ question_id: question_id, comment: comment, commentOptionAnswer: commentOptionAnswer })
                         this.props.navigation.navigate('QueSubmit', { answerArray: this.state.answerArray, questionList: this.state.questionListArray });
                     }
@@ -1051,6 +1083,7 @@ class Que1 extends Component {
         else {
 
             if (this.state.dropDownData.length != 0) {
+                console.log('check:', tempRank.length)
                 if (this.state.dropDownData.length == tempRank.length) {
                     if (this.checkIfDuplicateExists(tempRank) == true) {
                         this.setState({ errorRadio: 'You can not select same rank' })
@@ -1105,6 +1138,7 @@ class Que1 extends Component {
 
                 }
                 else {
+                    console.log('check:', tempRank.length)
                     this.setState({ errorRadio: 'Please select answer' })
                 }
             }
@@ -1122,7 +1156,7 @@ class Que1 extends Component {
         const { currentIndex } = this.state;
         let questionCount = this.state.surveyDetailData.length;
         let currentQuestion = this.state.index + 1;
-        console.log('data rank::', this.state.surveyDetailData)
+        console.log('data rank::', tempRank.length)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
@@ -1197,6 +1231,7 @@ class Que1 extends Component {
                                                         checkedCheckBoxColor={'#00AFF0'}
                                                         isChecked={this.state.checkboxArray[index] == true ? true : false}
                                                         rightText={item.answer_title}
+                                                        rightTextStyle={{ minWidth: width / 1.2 }}
                                                     />
                                                 </View>
                                             ))
@@ -1299,6 +1334,7 @@ class Que1 extends Component {
                                                                 value={this.state.selectRank[index]}
                                                                 onSelect={(value, key) => {
                                                                     this.onDropDown(value, index, item);
+
                                                                 }}
                                                                 Style={{ width: '45%', marginTop: 0, marginHorizontal: 0, flex: 1 }}
                                                             />

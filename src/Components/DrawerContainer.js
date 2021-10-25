@@ -58,7 +58,7 @@ class DrawerContainer extends Component {
         return (
             <SafeAreaView style={[styles.container, { backgroundColor: '#000000', }]}>
                 <Spinner visible={this.state.loading} />
-                <ScrollView contentContainerStyle={{ paddingBottom: height / 4, }}>
+                <ScrollView contentContainerStyle={{ paddingBottom: 40 }}>
                     <View style={{ flexDirection: 'row', paddingTop: 50 }}>
                         <TouchableOpacity onPress={() => { this.props.navigation.closeDrawer() }}>
                             <View style={{ justifyContent: 'center', flex: 1, flexDirection: 'column', marginLeft: 26 }}>

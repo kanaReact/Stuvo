@@ -96,7 +96,7 @@ class MyProfile extends Component {
                     textStyle: { color: 'white' },
                 })
             }
-            else if (this.state.age == '0') {
+            else if (this.state.age == '0' || this.state.age == '00') {
                 Toast.show('Please enter valid age', {
                     position: Toast.position.BOTTOM,
                     containerStyle: { backgroundColor: 'black' },
@@ -104,7 +104,14 @@ class MyProfile extends Component {
                 })
             }
             else if (this.state.mobile.length != 10) {
-                Toast.show('Please enter valid number', {
+                Toast.show('Please enter valid contact number', {
+                    position: Toast.position.BOTTOM,
+                    containerStyle: { backgroundColor: 'black' },
+                    textStyle: { color: 'white' },
+                })
+            }
+            else if (this.state.mobile.includes('.') == true || this.state.mobile.includes(',') == true) {
+                Toast.show('Please enter valid contact number', {
                     position: Toast.position.BOTTOM,
                     containerStyle: { backgroundColor: 'black' },
                     textStyle: { color: 'white' },
@@ -147,7 +154,7 @@ class MyProfile extends Component {
 
                         <View style={styles.myProfileView}>
                             <View>
-                                <Text style={styles.myProfileTxt}>School</Text>
+                                <Text style={styles.myProfileTxt}>Academy</Text>
                             </View>
                             <View>
                                 {this.state.userdetailData.School != undefined ? <Text style={styles.myProfileText}>{this.state.userdetailData.School.name}</Text> : null}

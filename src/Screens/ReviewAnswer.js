@@ -159,6 +159,7 @@ class ReviewAnswer extends Component {
     async openEditAnsModal(index, item) {
         let tempRadioBtn = [];
         let tempImageRadioBtn = [];
+
         this.setState({ index: index, editAnsModal: true })
         if (item.type == "radiobutton") {
             let questionIndex = this.state.questionList.findIndex(val => val.question_id == item.question_id)
@@ -174,8 +175,10 @@ class ReviewAnswer extends Component {
                 let otherComment = item.otherOptionAnswer
                 this.setState({ otherOptionInput: otherComment })
             }
+
             this.props.surveyDetailData[index].anslist.map((item, key) => {
-                if (item.answer_title == this.state.answerArray[index].answeroption) {
+                console.log('external id:', this.state.answerArray[index].anstitle_id + ' ' + 'loop id :', item.id)
+                if (this.state.answerArray[index].anstitle_id == item.id) {
                     this.setState({ answeroption: item.answer_title })
                     tempRadioBtn.push({
                         answer_title: item.answer_title,
@@ -217,7 +220,7 @@ class ReviewAnswer extends Component {
                 this.setState({ otherOptionInput: otherComment })
             }
             this.props.surveyDetailData[index].anslist.map((item, key) => {
-                if (item.answer_title == this.state.answerArray[index].answeroption) {
+                if (this.state.answerArray[index].anstitle_id == item.id) {
                     this.setState({ answeroption: item.answer_title })
                     tempImageRadioBtn.push({
                         answer_title: item.answer_title,
@@ -703,7 +706,7 @@ class ReviewAnswer extends Component {
     render() {
         let questionCount = this.props.surveyDetailData.length;
         let currentQuestion = this.state.index + 1
-        // console.log('Answer Arr:', this.state.answerArray)
+        console.log('Answer Arr:', this.state.answerArray)
         // console.log('Question Arr:', this.state.questionList)
         return (
             <SafeAreaView style={styles.container}>
@@ -742,7 +745,7 @@ class ReviewAnswer extends Component {
                                         <View style={{ flexDirection: 'row', marginTop: 25, marginBottom: 16, alignItems: 'center' }}>
                                             <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>Answer. </Text>
                                             {
-                                                this.getExtension(item.answeroption) == 'jpg' || this.getExtension(item.answeroption) == 'png' ?
+                                                item.other_option == 'N' ?
                                                     <Image source={{ uri: item.answeroption }} style={{ width: 50, height: 50, borderRadius: 10, marginLeft: 10 }} />
                                                     :
                                                     <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>{item.answeroption}</Text>
@@ -767,7 +770,7 @@ class ReviewAnswer extends Component {
                                             :
                                             <View style={{ flexDirection: 'row', marginTop: 25, marginBottom: 16, alignItems: 'center' }}>
                                                 <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>Answer.</Text>
-                                                <Text style={{ marginLeft: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', flex: 1 }}>{item.answeroption != '' ? item.type == "checkbox" ? item.answeroption.toString() : item.answeroption : item.type == "textbox" ? item.answer : item.answeroption}</Text>
+                                                <Text style={{ marginLeft: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', flex: 1, textAlign: 'justify' }}>{item.answeroption != '' ? item.type == "checkbox" ? item.answeroption.toString() : item.answeroption : item.type == "textbox" ? item.answer : item.answeroption}</Text>
                                             </View>
                                 }
                             </View>

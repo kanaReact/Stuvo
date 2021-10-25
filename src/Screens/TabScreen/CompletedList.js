@@ -97,7 +97,7 @@ class CompletedList extends Component {
                                                         {
                                                             val.comment == 'Y' &&
                                                             <View>
-                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, }}>Comment : {val.commenta_option_answer}</Text>
                                                             </View>
                                                         }
                                                     </View>
@@ -105,26 +105,23 @@ class CompletedList extends Component {
                                                     val.type == "textbox" ?
                                                         <View>
                                                             <View>
-                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{val.answer}</Text>
+                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26, textAlign: 'justify', paddingRight: 15 }}>{val.answer}</Text>
                                                             </View>
                                                         </View>
                                                         :
                                                         val.type == "radiobutton" ?
                                                             <View>
                                                                 <View>
-                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{val.anserData}</Text>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>Answer : {val.anserData}</Text>
                                                                 </View>
                                                                 {
                                                                     val.comment == 'Y' &&
-                                                                    <View>
-                                                                        <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
-                                                                    </View>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, marginLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
                                                                 }
                                                                 {
                                                                     val.other_option == 'Y' &&
-                                                                    <View>
-                                                                        <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Other Comment : {val.other_option_answer}</Text>
-                                                                    </View>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, marginLeft: 13, paddingTop: 20 }}>Other Comment : {val.other_option_answer}</Text>
+
                                                                 }
                                                             </View>
                                                             :

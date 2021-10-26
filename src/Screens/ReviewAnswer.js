@@ -122,9 +122,22 @@ class ReviewAnswer extends Component {
                 this.explosion.start()
                 await this.setState({ isVisible: true, showBtn: true })
             }
+            else {
+                Toast.show(responseJson.data.message, {
+                    position: Toast.position.BOTTOM,
+                    containerStyle: { backgroundColor: 'black' },
+                    textStyle: { color: 'white' },
+                })
+                this.props.navigation.navigate('Question')
+            }
 
         }).catch(error => {
             this.setState({ loading: false })
+            Toast.show('Internal server error, Please try again !!', {
+                position: Toast.position.BOTTOM,
+                containerStyle: { backgroundColor: 'black' },
+                textStyle: { color: 'white' },
+            })
         })
     }
     checkboxCheck(index, item) {
@@ -764,13 +777,12 @@ class ReviewAnswer extends Component {
                                                             )
                                                         })
                                                     }
-
                                                 </View>
                                             </View>
                                             :
-                                            <View style={{ flexDirection: 'row', marginTop: 25, marginBottom: 16, alignItems: 'center' }}>
+                                            <View style={{ flexDirection: 'row', marginTop: 25, marginBottom: 16, alignItems: 'center', }}>
                                                 <Text style={{ fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727' }}>Answer.</Text>
-                                                <Text style={{ marginLeft: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', flex: 1, textAlign: 'justify' }}>{item.answeroption != '' ? item.type == "checkbox" ? item.answeroption.toString() : item.answeroption : item.type == "textbox" ? item.answer : item.answeroption}</Text>
+                                                <Text style={{ paddingLeft: 10, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', }}>{item.answeroption != '' ? item.type == "checkbox" ? item.answeroption.toString() : item.answeroption : item.type == "textbox" ? item.answer : item.answeroption}</Text>
                                             </View>
                                 }
                             </View>
@@ -890,6 +902,7 @@ class ReviewAnswer extends Component {
                                                                     checkedCheckBoxColor={'#00AFF0'}
                                                                     isChecked={this.state.checkboxArray[index]}
                                                                     rightText={item.answer_title}
+                                                                    rightTextStyle={{ minWidth: width / 1.2 }}
                                                                 />
                                                             </View>
                                                         ))

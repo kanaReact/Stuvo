@@ -112,15 +112,15 @@ class CompletedList extends Component {
                                                         val.type == "radiobutton" ?
                                                             <View>
                                                                 <View>
-                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>Answer : {val.anserData}</Text>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{val.anserData}</Text>
                                                                 </View>
                                                                 {
                                                                     val.comment == 'Y' &&
-                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, marginLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, marginLeft: 13, paddingTop: 10 }}>Comment : {val.commenta_option_answer}</Text>
                                                                 }
                                                                 {
                                                                     val.other_option == 'Y' &&
-                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, marginLeft: 13, paddingTop: 20 }}>Other Comment : {val.other_option_answer}</Text>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, marginLeft: 13, paddingTop: 10 }}>Other Comment : {val.other_option_answer}</Text>
 
                                                                 }
                                                             </View>
@@ -131,12 +131,7 @@ class CompletedList extends Component {
                                                                         val.anserData.map((value, newKey) => {
                                                                             const newVal = val.anserRank.map((val) => { return val })
                                                                             return (
-                                                                                <View>
-                                                                                    <View>
-                                                                                        <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{value} ({newVal[newKey]})</Text>
-                                                                                    </View>
-
-                                                                                </View>
+                                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{value} ({newVal[newKey]})</Text>
                                                                             )
                                                                         })}
                                                                     {val.comment == 'Y' &&
@@ -150,7 +145,7 @@ class CompletedList extends Component {
                                                                 <View>
                                                                     <View>
                                                                         {
-                                                                            val.other_option_answer == null ?
+                                                                            val.other_option == 'N' ?
                                                                                 <Image source={{ uri: val.anserData }} style={{ width: 50, height: 50, marginTop: 10, marginLeft: 10, borderRadius: 10 }} />
                                                                                 :
                                                                                 <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{val.anserData}</Text>

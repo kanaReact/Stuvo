@@ -1139,10 +1139,11 @@ class Que1 extends Component {
         const { currentIndex } = this.state;
         let questionCount = this.state.surveyDetailData.length;
         let currentQuestion = this.state.index + 1;
-        console.log('data rank::', tempRankid.length)
+        console.log('data rank::', this.state.surveyDetailData)
         return (
             <SafeAreaView style={styles.container}>
                 <Spinner visible={this.state.loading} />
+
                 <View style={[styles.headerMain, { marginTop: 20, marginHorizontal: 16 }]}>
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginLeft: 32 }}>
                         <SVGImg.HeaderLogo />
@@ -1153,7 +1154,7 @@ class Que1 extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                {questionCount == 0 ? <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16 }}>Question </Text> : <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16 }}>Question {currentQuestion} of {questionCount}</Text>}
+                {questionCount == 0 ? <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16 }}>Question </Text> : <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0', marginLeft: 16, paddingBottom: 10 }}>Question {currentQuestion} of {questionCount}</Text>}
                 <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingBottom: this.state.keyboardStatus == '1' ? 220 : 30, marginLeft: 16, marginRight: 24 }}>
                     <Text style={{ marginTop: 15, fontSize: 14, fontFamily: 'Gotham-Medium', color: '#272727', lineHeight: 20 }}>{this.state.surveyDetailData.length != 0 ? this.state.surveyDetailData[this.state.index].question : null}</Text>
                     {
@@ -1178,7 +1179,7 @@ class Que1 extends Component {
                                     {
                                         this.state.otherOption == 'Y' &&
                                         <TextInput
-                                            style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                            style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3', lineHeight: 20 }}
                                             placeholder="Write other comment..."
                                             multiline={true}
                                             value={this.state.otherOptionInput}
@@ -1191,7 +1192,7 @@ class Que1 extends Component {
                                     {
                                         this.state.commentOption == 'Y' &&
                                         <TextInput
-                                            style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                            style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3', lineHeight: 20 }}
                                             placeholder="Write comment..."
                                             multiline={true}
                                             value={this.state.commentOptionInput}
@@ -1223,7 +1224,7 @@ class Que1 extends Component {
                                         {
                                             this.state.commentOptionCheckBox == 'Y' &&
                                             <TextInput
-                                                style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3', lineHeight: 20 }}
                                                 placeholder="Write comment..."
                                                 multiline={true}
                                                 value={this.state.commentOptionCheckBoxInput}
@@ -1238,7 +1239,7 @@ class Que1 extends Component {
                                     this.state.surveyDetailData[this.state.index].answeroption == "textbox" ?
                                         <View >
                                             <TextInput
-                                                style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3', lineHeight: 20 }}
                                                 placeholder="Write something..."
                                                 multiline={true}
                                                 value={this.state.textInputAnswer}
@@ -1281,7 +1282,7 @@ class Que1 extends Component {
                                                 {
                                                     this.state.otherOptionRadioImage == 'Y' &&
                                                     <TextInput
-                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3', lineHeight: 20 }}
                                                         placeholder="Write other comment..."
                                                         multiline={true}
                                                         value={this.state.otherOptionRadioImageInput}
@@ -1294,7 +1295,7 @@ class Que1 extends Component {
                                                 {
                                                     this.state.commentOptionRadioImage == 'Y' &&
                                                     <TextInput
-                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3', lineHeight: 20 }}
                                                         placeholder="Write comment..."
                                                         multiline={true}
                                                         value={this.state.commentOptionRadioImageInput}
@@ -1328,7 +1329,7 @@ class Que1 extends Component {
                                                 {
                                                     this.state.commentOptionRank == 'Y' &&
                                                     <TextInput
-                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3' }}
+                                                        style={{ textAlignVertical: 'top', paddingLeft: 18, paddingRight: 5, paddingTop: 15, fontFamily: 'Gotham-Medium', color: '#919191', fontSize: 14, marginTop: 20, height: 131, borderRadius: 10, backgroundColor: '#F3F3F3', lineHeight: 20 }}
                                                         placeholder="Write something..."
                                                         multiline={true}
                                                         value={this.state.commentOptionRankInput}
@@ -1345,10 +1346,10 @@ class Que1 extends Component {
                                 <Text style={{ fontFamily: 'Gotham-Medium', fontSize: 15 }}>No Data Available</Text>
                             </View>
                     }
-
                 </ScrollView>
 
-                <View style={{ justifyContent: 'flex-end', marginHorizontal: 27, marginTop: 10 }}>
+
+                <View style={{ justifyContent: 'flex-end', marginHorizontal: 27, marginTop: 20, }}>
                     {
                         this.state.surveyDetailData.length !== 0 ?
                             currentQuestion == questionCount ?
@@ -1364,6 +1365,7 @@ class Que1 extends Component {
                                 </TouchableOpacity> : null
                     }
                 </View>
+
             </SafeAreaView>
         )
     }

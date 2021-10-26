@@ -48,10 +48,16 @@ class QueSubmit extends Component {
                     containerStyle: { backgroundColor: 'black' },
                     textStyle: { color: 'white' },
                 })
+                this.props.navigation.navigate('Question')
             }
         }).catch(error => {
             console.log('err:', error)
             this.setState({ loading: false })
+            Toast.show('Internal server error, Please try again !!', {
+                position: Toast.position.BOTTOM,
+                containerStyle: { backgroundColor: 'black' },
+                textStyle: { color: 'white' },
+            })
         })
 
     }

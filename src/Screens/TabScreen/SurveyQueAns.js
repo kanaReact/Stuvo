@@ -117,6 +117,7 @@ class SurveyQueAns extends Component {
 
     render() {
         const { title, showResult } = this.props.route.params
+        console.log('data:', this.state.surveyCompleteList)
         return (
             <SafeAreaView style={[styles.container, { backgroundColor: 'white' }]}>
                 <Spinner visible={this.state.loading} />
@@ -147,7 +148,7 @@ class SurveyQueAns extends Component {
                                                             {
                                                                 val.comment == 'Y' &&
                                                                 <View>
-                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer}</Text>
                                                                 </View>
                                                             }
                                                         </View>
@@ -155,7 +156,7 @@ class SurveyQueAns extends Component {
                                                         val.type == "textbox" ?
                                                             <View>
                                                                 <View>
-                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26 }}>{val.answer}</Text>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26, textAlign: "justify", paddingRight: 13 }}>{val.answer}</Text>
                                                                 </View>
                                                             </View>
                                                             :
@@ -167,13 +168,13 @@ class SurveyQueAns extends Component {
                                                                     {
                                                                         val.comment == 'Y' &&
                                                                         <View>
-                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer}</Text>
                                                                         </View>
                                                                     }
                                                                     {
                                                                         val.other_option == 'Y' &&
                                                                         <View>
-                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Other Comment : {val.other_option_answer}</Text>
+                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Other Comment : {val.other_option_answer}</Text>
                                                                         </View>
                                                                     }
                                                                 </View>
@@ -194,7 +195,7 @@ class SurveyQueAns extends Component {
                                                                             })}
                                                                         {val.comment == 'Y' &&
                                                                             <View>
-                                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer}</Text>
                                                                             </View>
                                                                         }
                                                                     </View>
@@ -202,7 +203,7 @@ class SurveyQueAns extends Component {
                                                                     <View>
                                                                         <View>
                                                                             {
-                                                                                val.other_option_answer == null ?
+                                                                                val.other_option == 'N' ?
                                                                                     <View>
                                                                                         <Image source={{ uri: val.anserData }} onLoadStart={() => { this.setState({ imageLoad: true }) }} onLoadEnd={() => { this.setState({ imageLoad: false }) }} style={{ width: 50, height: 50, marginTop: 10, marginLeft: 10, borderRadius: 10 }} />
                                                                                         <ActivityIndicator animating={this.state.imageLoad} size="small" color="black" style={{ position: "absolute", top: 0, bottom: 0, left: 25 }} />
@@ -215,13 +216,13 @@ class SurveyQueAns extends Component {
                                                                             {
                                                                                 val.comment == 'Y' &&
                                                                                 <View>
-                                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer}</Text>
                                                                                 </View>
                                                                             }
                                                                             {
                                                                                 val.other_option == 'Y' &&
                                                                                 <View>
-                                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Other Comment : {val.other_option_answer}</Text>
+                                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Other Comment : {val.other_option_answer}</Text>
                                                                                 </View>
                                                                             }
                                                                         </View>

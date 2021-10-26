@@ -60,13 +60,16 @@ class Question extends Component {
             headers: { 'Authorization': 'Bearer ' + this.props.AUTH }
         }).then(async (responseJson) => {
             this.setState({ loading: false })
-            console.log('pending survey count:', responseJson.data.status)
+            console.log('pending survey count:', responseJson.data)
             if (responseJson.data.status == 1) {
                 let count = 0;
                 responseJson.data.data[0].Survey.map((item) => {
                     count += item.list.length
                 })
                 await this.setState({ pendingCount: count })
+            }
+            else {
+                await this.setState({ pendingCount: '' })
             }
         }).catch(error => { this.setState({ loading: false }) })
     }
@@ -83,6 +86,8 @@ class Question extends Component {
                     count += item.list.length
                 })
                 await this.setState({ completedCount: count })
+            } else {
+                await this.setState({ completedCount: '' })
             }
         })
             .catch(error => { this.setState({ loading: false }) })

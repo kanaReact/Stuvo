@@ -16,8 +16,8 @@ export default class Header extends Component {
             <View style={[styles.headerMain, { marginTop: 20 }]}>
                 <View>
                     {this.props.btn == true ?
-                        <TouchableOpacity onPress={this.props.leftPress} activeOpacity={0.6} style={{ padding: 16 }}>
-                            <Text style={[{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium' }, this.props.lefttxt]}>Back</Text>
+                        <TouchableOpacity onPress={this.props.leftPress} activeOpacity={0.6} style={{ padding: 16, }}>
+                            <Text style={[{ fontSize: 14, color: '#272727', fontFamily: 'Gotham-Medium', height: 20 }, this.props.lefttxt]}>Back</Text>
                         </TouchableOpacity> :
                         <TouchableOpacity onPress={this.props.leftImagePress} activeOpacity={0.6} style={{ padding: 16 }}>
                             <SVGImg.SideBar />

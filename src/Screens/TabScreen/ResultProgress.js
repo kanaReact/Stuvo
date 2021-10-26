@@ -108,9 +108,9 @@ class ResultProgress extends Component {
                                     {
                                         this.state.answerGraphData.length != 0 ?
                                             this.state.answerGraphData.map((item, index) => (
-                                                <View style={{ flexDirection: 'row', marginTop: 24, alignItems: 'center' }}>
+                                                <View style={{ flexDirection: 'row', marginTop: 24, alignItems: 'center', }}>
                                                     <View style={{ height: 5, width: 15, borderRadius: 20, backgroundColor: item.color }} />
-                                                    <Text style={{ marginLeft: 13, fontSize: 12, fontFamily: 'Gotham-Medium', color: '#272727' }}>{item.ans} - <Text style={{ marginLeft: 14, fontSize: 12, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>{this.percentage(item)}</Text></Text>
+                                                    <Text style={{ paddingLeft: 13, fontSize: 12, fontFamily: 'Gotham-Medium', color: '#272727', }}>{item.ans} - <Text style={{ marginLeft: 14, fontSize: 12, color: '#00AFF0', fontFamily: 'Gotham-Medium' }}>{this.percentage(item)}</Text></Text>
                                                 </View>
                                             ))
                                             : null

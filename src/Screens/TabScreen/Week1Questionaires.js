@@ -163,23 +163,25 @@ class Week1Questionaires extends Component {
                             transparent={true}
                             visible={this.state.isVisible}
                         >
-                            <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', alignItems: 'center', justifyContent: 'center' }}>
-                                <View style={{ backgroundColor: '#FFFFFF', borderRadius: 20, width: '90%', alignItems: 'center', paddingHorizontal: 23 }}>
-                                    <View style={{ marginTop: 45 }}>
-                                        <SVGImg.QATBlack />
-                                    </View>
-
-                                    <Text style={{ fontSize: 20, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>Before you proceed</Text>
-
-                                    <Text style={{ fontSize: 14, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#272727', textAlign: 'center', lineHeight: 22 }}>This new set of questions are strictly{'\n'}time-based. You only have 7 days to{'\n'}submit your answers.</Text>
-
-                                    <TouchableOpacity onPress={() => { this.props.navigation.navigate('Que1', { id: this.state.id }); this.setState({ isVisible: false }); this.surveyView(this.state.id) }} activeOpacity={0.6}>
-                                        <View style={{ backgroundColor: '#00AFF0', marginTop: 30, height: 47, justifyContent: 'center', paddingHorizontal: 40, borderRadius: 50, marginBottom: 33 }}>
-                                            <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Continue</Text>
+                            <TouchableOpacity activeOpacity={1} onPress={() => { this.setState({ isVisible: false }) }} style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.7)', alignItems: 'center', justifyContent: 'center' }}>
+                                < >
+                                    <View style={{ backgroundColor: '#FFFFFF', borderRadius: 20, width: '90%', alignItems: 'center', paddingHorizontal: 23 }}>
+                                        <View style={{ marginTop: 45 }}>
+                                            <SVGImg.QATBlack />
                                         </View>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
+
+                                        <Text style={{ fontSize: 20, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>Before you proceed</Text>
+
+                                        <Text style={{ fontSize: 14, paddingTop: 20, fontFamily: 'Gotham-Medium', color: '#272727', textAlign: 'center', lineHeight: 22 }}>This new set of questions are strictly{'\n'}time-based. You only have 7 days to{'\n'}submit your answers.</Text>
+
+                                        <TouchableOpacity onPress={() => { this.props.navigation.navigate('Que1', { id: this.state.id }); this.setState({ isVisible: false }); this.surveyView(this.state.id) }} activeOpacity={0.6}>
+                                            <View style={{ backgroundColor: '#00AFF0', marginTop: 30, height: 47, justifyContent: 'center', paddingHorizontal: 40, borderRadius: 50, marginBottom: 33 }}>
+                                                <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Continue</Text>
+                                            </View>
+                                        </TouchableOpacity>
+                                    </View>
+                                </>
+                            </TouchableOpacity>
                         </Modal>
                     </View>
                 </ImageBackground>

@@ -36,6 +36,7 @@ class ResultRank extends Component {
         this.setState({ loading: false })
         if (nextProps.answerGraphData != this.state.answerGraphData) {
             this.setState({ answerGraphData: nextProps.answerGraphData })
+            console.log('graph data:', nextProps.answerGraphData)
         }
     }
     displayTotal(obj) {

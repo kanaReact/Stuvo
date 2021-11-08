@@ -91,6 +91,11 @@ class Que1 extends Component {
     componentWillUnmount() {
         this.keyboardDidShowSubscription.remove();
         this.keyboardDidHideSubscription.remove();
+        temp = [];
+        tempid = [];
+        tempRank = [];
+        tempRankAns = [];
+        tempRankid = [];
     }
 
     componentWillReceiveProps(nextProps) {
@@ -1127,6 +1132,7 @@ class Que1 extends Component {
             }
         }
     }
+
     onClose() {
         this.props.navigation.goBack();
         temp = [];

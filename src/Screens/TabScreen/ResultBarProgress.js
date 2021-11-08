@@ -93,11 +93,13 @@ class ResultBarProgress extends Component {
                         this.state.answerGraphData.length != 0 ?
                             <FlatList
                                 data={this.state.answerGraphData}
+                                showsVerticalScrollIndicator={false}
+                                contentContainerStyle={{ paddingBottom: 25 }}
                                 renderItem={({ item, index }) => (
                                     <View>
                                         <Text style={{ marginTop: 30, fontSize: 16, fontFamily: 'Gotham-Medium', }}>{item.ans}</Text>
                                         <View style={{ paddingTop: 15 }}>
-                                            <Progress.Bar borderRadius={0} width={width / 1.1} color="#00AFF0" progress={item.count} animationType="timing" unfilledColor="rgba(0,175,240,0.4)" height={25} children={<Text style={{ top: 5, position: 'absolute', left: item.count * 100 <= 10 ? (item.count * 100 - 7.5).toString() + '%' : (item.count * 100 - 12).toString() + '%', color: "white", fontSize: 13, fontFamily: 'Gotham-Medium', textAlign: 'right' }}>{item.count * 100 + '%'}</Text>} />
+                                            <Progress.Bar borderRadius={0} width={width / 1.1} color="#00AFF0" progress={item.count} animationType="timing" unfilledColor="rgba(0,175,240,0.4)" height={25} children={<Text style={{ top: 5, position: 'absolute', left: item.count * 100 <= 10 ? (item.count * 100 - 7.5).toString() + '%' : (item.count * 100 - 12).toString() + '%', color: "white", fontSize: 13, fontFamily: 'Gotham-Medium', textAlign: 'right' }}>{(item.count * 100).toFixed(0) + '%'}</Text>} />
                                         </View>
                                     </View>
 

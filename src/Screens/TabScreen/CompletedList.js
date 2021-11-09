@@ -97,7 +97,7 @@ class CompletedList extends Component {
                                                         {
                                                             val.comment == 'Y' &&
                                                             <View>
-                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, }}>Comment : {val.commenta_option_answer}</Text>
+                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: 'justify', marginRight: 13 }}>Comment : {val.commenta_option_answer.trim()}</Text>
                                                             </View>
                                                         }
                                                     </View>
@@ -105,7 +105,7 @@ class CompletedList extends Component {
                                                     val.type == "textbox" ?
                                                         <View>
                                                             <View>
-                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26, textAlign: 'justify', paddingRight: 15 }}>{val.answer}</Text>
+                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26, textAlign: 'justify', paddingRight: 13 }}>{val.answer.trim()}</Text>
                                                             </View>
                                                         </View>
                                                         :
@@ -116,11 +116,11 @@ class CompletedList extends Component {
                                                                 </View>
                                                                 {
                                                                     val.comment == 'Y' &&
-                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, marginLeft: 13, paddingTop: 10 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, marginLeft: 13, paddingTop: 10, textAlign: 'justify', marginRight: 13 }}>Comment : {val.commenta_option_answer.trim()}</Text>
                                                                 }
                                                                 {
                                                                     val.other_option == 'Y' &&
-                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, marginLeft: 13, paddingTop: 10 }}>Other Comment : {val.other_option_answer}</Text>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, marginLeft: 13, paddingTop: 10, textAlign: 'justify', marginRight: 13 }}>Other Comment : {val.other_option_answer.trim()}</Text>
 
                                                                 }
                                                             </View>
@@ -136,7 +136,7 @@ class CompletedList extends Component {
                                                                         })}
                                                                     {val.comment == 'Y' &&
                                                                         <View>
-                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: 'justify', marginRight: 13 }}>Comment : {val.commenta_option_answer.trim()}</Text>
                                                                         </View>
                                                                     }
                                                                 </View>
@@ -154,13 +154,13 @@ class CompletedList extends Component {
                                                                     {
                                                                         val.comment == 'Y' &&
                                                                         <View>
-                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: 'justify', marginRight: 13 }}>Comment : {val.commenta_option_answer.trim()}</Text>
                                                                         </View>
                                                                     }
                                                                     {
                                                                         val.other_option == 'Y' &&
                                                                         <View>
-                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20 }}>Other Comment : {val.other_option_answer}</Text>
+                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: 'justify', marginRight: 13 }}>Other Comment : {val.other_option_answer.trim()}</Text>
                                                                         </View>
                                                                     }
                                                                 </View>

@@ -1355,17 +1355,17 @@ class Que1 extends Component {
                 </ScrollView>
 
 
-                <View style={{ justifyContent: 'flex-end', marginHorizontal: 27, marginTop: 20, }}>
+                <View style={{ marginHorizontal: 27, paddingVertical: 25 }}>
                     {
                         this.state.surveyDetailData.length !== 0 ?
                             currentQuestion == questionCount ?
                                 <TouchableOpacity onPress={() => { this.navigateSubmit() }} activeOpacity={0.6}>
-                                    <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
+                                    <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 0, height: 47, justifyContent: 'center', borderRadius: 50, }}>
                                         <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next</Text>
                                     </View>
                                 </TouchableOpacity> :
-                                <TouchableOpacity onPress={() => { this.nextQuestion() }} activeOpacity={0.6}>
-                                    <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 50, height: 47, justifyContent: 'center', borderRadius: 50, }}>
+                                <TouchableOpacity onPress={() => { this.nextQuestion() }} activeOpacity={0.6} style={{ marginTop: 50 }}>
+                                    <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 0, height: 47, justifyContent: 'center', borderRadius: 50, }}>
                                         <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next Question</Text>
                                     </View>
                                 </TouchableOpacity> : null

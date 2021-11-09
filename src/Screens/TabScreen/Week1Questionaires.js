@@ -54,7 +54,8 @@ class Week1Questionaires extends Component {
         }
     }
     formatTime(timeCreated) {
-        let endDate = moment(timeCreated).fromNow(true)
+        // console.log('time:', timeCreated + ' 24:00:00')
+        let endDate = moment(timeCreated + ' 24:00:00').fromNow(true)
         return endDate + ' left to complete'
     }
     surveyView(id) {

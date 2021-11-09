@@ -270,8 +270,9 @@ class ReviewAnswer extends Component {
                 let quesComment = this.state.questionList[questionIndex].commentOptionAnswer
                 this.setState({ commentOptionInput: quesComment })
             }
+            console.log('check satyam:', this.state.answerArray[index])
             this.props.surveyDetailData[index].anslist.map((item, key) => {
-                if (this.state.answerArray[index].answeroption.includes(item.answer_title) == true) {
+                if (this.state.answerArray[index].anstitle_id.includes(item.id) == true) {
                     this.setState({ checkboxFlag: true })
                     this.changeCheckboxValue(key, true)
                     temp.push(item.answer_title)

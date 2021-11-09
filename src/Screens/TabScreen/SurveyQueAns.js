@@ -148,7 +148,7 @@ class SurveyQueAns extends Component {
                                                             {
                                                                 val.comment == 'Y' &&
                                                                 <View>
-                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer.trim()}</Text>
                                                                 </View>
                                                             }
                                                         </View>
@@ -156,7 +156,7 @@ class SurveyQueAns extends Component {
                                                         val.type == "textbox" ?
                                                             <View>
                                                                 <View>
-                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26, textAlign: "justify", paddingRight: 13 }}>{val.answer}</Text>
+                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 26, textAlign: "justify", paddingRight: 13 }}>{val.answer.trim()}</Text>
                                                                 </View>
                                                             </View>
                                                             :
@@ -168,13 +168,13 @@ class SurveyQueAns extends Component {
                                                                     {
                                                                         val.comment == 'Y' &&
                                                                         <View>
-                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer.trim()}</Text>
                                                                         </View>
                                                                     }
                                                                     {
                                                                         val.other_option == 'Y' &&
                                                                         <View>
-                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Other Comment : {val.other_option_answer}</Text>
+                                                                            <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Other Comment : {val.other_option_answer.trim()}</Text>
                                                                         </View>
                                                                     }
                                                                 </View>
@@ -195,7 +195,7 @@ class SurveyQueAns extends Component {
                                                                             })}
                                                                         {val.comment == 'Y' &&
                                                                             <View>
-                                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                                <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer.trim()}</Text>
                                                                             </View>
                                                                         }
                                                                     </View>
@@ -216,13 +216,13 @@ class SurveyQueAns extends Component {
                                                                             {
                                                                                 val.comment == 'Y' &&
                                                                                 <View>
-                                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer}</Text>
+                                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Comment : {val.commenta_option_answer.trim()}</Text>
                                                                                 </View>
                                                                             }
                                                                             {
                                                                                 val.other_option == 'Y' &&
                                                                                 <View>
-                                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Other Comment : {val.other_option_answer}</Text>
+                                                                                    <Text style={{ color: "#272727", fontFamily: 'Gotham-Medium', fontSize: 14, paddingLeft: 13, paddingTop: 20, textAlign: "justify", paddingRight: 13 }}>Other Comment : {val.other_option_answer.trim()}</Text>
                                                                                 </View>
                                                                             }
                                                                         </View>

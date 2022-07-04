@@ -1,82 +1,228 @@
-import React, { Component } from 'react';
-import { View, Image, SafeAreaView, Dimensions, Text, TouchableOpacity, StatusBar } from 'react-native'
+import React, {Component} from 'react';
+import {
+  View,
+  Image,
+  SafeAreaView,
+  Dimensions,
+  Text,
+  TouchableOpacity,
+  StatusBar,
+  Modal,
+  ActivityIndicator,
+} from 'react-native';
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
-import styles from '../style/styles'
+import styles from '../style/styles';
 import SVGImg from '../Source/SVGImg';
-import { connect } from 'react-redux'
+import {connect, useDispatch} from 'react-redux';
+import WebView from 'react-native-webview';
+import Header from '../Components/Header';
+import Spinner from '../Components/Spinner';
+import axios from 'axios';
+import {loginSuccess} from '../Redux/Action';
+import constant from '../Redux/config/constant';
 class Splash extends Component {
-    constructor(props) {
-        super(props)
+  constructor(props) {
+    super(props);
+    this.state = {
+      isWebview: false,
+      visible: true,
+      loading: false,
+    };
+  }
+  check_navigation() {
+    if (this.props.rememberMe == undefined) {
+      this.props.navigation.replace('Welcome');
     }
-    check_navigation() {
+    if (this.props.isLoggedIn == false && this.props.rememberMe == false) {
+      this.props.navigation.replace('Login');
+    } else if (
+      this.props.rememberMe == true &&
+      this.props.isLoggedIn == false
+    ) {
+      this.props.navigation.replace('Login');
+    } else if (this.props.rememberMe == true && this.props.isLoggedIn == true) {
+      this.props.navigation.replace('tabs');
+    } else if (
+      this.props.isLoggedIn == true &&
+      this.props.rememberMe == false
+    ) {
+      this.props.navigation.replace('Welcome');
+    }
+  }
+  componentDidMount() {
+    if (this.props.isLoggedIn == true) {
+      setTimeout(() => {
         if (this.props.rememberMe == undefined) {
-            this.props.navigation.replace('Welcome')
+          this.props.navigation.replace('Welcome');
         }
         if (this.props.isLoggedIn == false && this.props.rememberMe == false) {
-            this.props.navigation.replace('Login')
+          this.props.navigation.replace('Login');
+        } else if (
+          this.props.rememberMe == true &&
+          this.props.isLoggedIn == false
+        ) {
+          this.props.navigation.replace('Login');
+        } else if (
+          this.props.rememberMe == true &&
+          this.props.isLoggedIn == true
+        ) {
+          this.props.navigation.replace('tabs');
+        } else if (
+          this.props.isLoggedIn == true &&
+          this.props.rememberMe == false
+        ) {
+          this.props.navigation.replace('Welcome');
         }
-        else if (this.props.rememberMe == true && this.props.isLoggedIn == false) {
-            this.props.navigation.replace('Login')
-        }
-        else if (this.props.rememberMe == true && this.props.isLoggedIn == true) {
-            this.props.navigation.replace('tabs')
-        }
-        else if (this.props.isLoggedIn == true && this.props.rememberMe == false) {
-            this.props.navigation.replace('Welcome')
-        }
+      }, 1500);
     }
-    componentDidMount() {
-        if (this.props.isLoggedIn == true) {
-            setTimeout(() => {
-                if (this.props.rememberMe == undefined) {
-                    this.props.navigation.replace('Welcome')
-                }
-                if (this.props.isLoggedIn == false && this.props.rememberMe == false) {
-                    this.props.navigation.replace('Login')
-                }
-                else if (this.props.rememberMe == true && this.props.isLoggedIn == false) {
-                    this.props.navigation.replace('Login')
-                }
-                else if (this.props.rememberMe == true && this.props.isLoggedIn == true) {
-                    this.props.navigation.replace('tabs')
-                }
-                else if (this.props.isLoggedIn == true && this.props.rememberMe == false) {
-                    this.props.navigation.replace('Welcome')
-                }
-            }, 1500)
-        }
-    }
-    render() {
-        return (
-            <View style={[styles.container, { backgroundColor: '#00AFF0' }]}>
-                <StatusBar backgroundColor="#00AFF0" barStyle={'dark-content'} />
+  }
+  hideSpinner() {
+    this.setState({visible: false});
+  }
 
-                <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', }}>
-                    <Image source={require('../images/splash_logo.png')} resizeMode="contain" />
+  webviewOnNavigationStateChange(webViewState) {
+    console.log('Test : ', webViewState?.url);
+    let url = webViewState?.url;
+    var urlRegex = /[?&]([^=#]+)=([^&#]*)/g,
+      params = {},
+      match;
+    while ((match = urlRegex.exec(url))) {
+      params[match[1]] = match[2];
+    }
+    let newObj = {};
+    Object.keys(params).map(item => {
+      newObj[item] = decodeURIComponent(params[item] + '').replace(/\+/g, ' ');
+    });
+    this.setState({isWebview: false});
+    this.loginDetail(newObj);
+    // console.log('encode12s', newObj);
+  }
+
+  loginDetail(dataObj) {
+    let url = constant.BASE_URL + 'sso-login-detail';
+
+    this.setState({loading: true});
+    let data = new FormData();
+    data.append('emailaddress', dataObj.emailaddress);
+    data.append('Logouturl', dataObj.Logouturl);
+    data.append('authnmethodsreferences', dataObj.Logouturl);
+    data.append('displayname', dataObj.Logouturl);
+    data.append('givenname', dataObj.Logouturl);
+    data.append('identityprovider', dataObj.Logouturl);
+    data.append('name', dataObj.Logouturl);
+    data.append('objectidentifier', dataObj.Logouturl);
+    data.append('surname', dataObj.Logouturl);
+    data.append('tenantid', dataObj.tenantid);
+
+    axios
+      .post(url, data, {
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      })
+      .then(responseJson => {
+        this.setState({loading: false});
+
+        console.log('res', responseJson);
+        if (responseJson.data.status == 1) {
+          this.props.loginSuccess(responseJson.data);
+          this.props.navigation.replace('Welcome');
+        }
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  }
+  render() {
+    return (
+      <View style={[styles.container, {backgroundColor: '#00AFF0'}]}>
+        <StatusBar backgroundColor="#00AFF0" barStyle={'dark-content'} />
+        <Spinner visible={this.state.loading} />
+
+        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <Image
+            source={require('../images/splash_logo.png')}
+            resizeMode="contain"
+          />
+        </View>
+        <View style={{alignItems: 'center'}}>
+          {this.props.isLoggedIn == false ? (
+            <View style={{position: 'absolute', bottom: 50, width: '90%'}}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.setState({isWebview: true});
+                }}
+                activeOpacity={0.6}>
+                <View
+                  style={{
+                    alignItems: 'center',
+                    height: 47,
+                    justifyContent: 'center',
+                    backgroundColor: '#FFFFFF',
+                    borderRadius: 50,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontFamily: 'Gotham-Medium',
+                      color: '#00AFF0',
+                    }}>
+                    Sign in
+                  </Text>
                 </View>
-                <View style={{ alignItems: 'center' }}>
-                    {
-                        this.props.isLoggedIn == false ?
-                            <View style={{ position: 'absolute', bottom: 50, width: '90%' }}>
-                                <TouchableOpacity onPress={() => { this.check_navigation() }} activeOpacity={0.6}>
-                                    <View style={{ alignItems: 'center', height: 47, justifyContent: 'center', backgroundColor: '#FFFFFF', borderRadius: 50 }}>
-                                        <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#00AFF0' }}>Sign in</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
-                            : null
-                    }
-                </View>
+              </TouchableOpacity>
             </View>
-        );
-    }
-}
-const mapStateToProps = (state) => {
+          ) : null}
+          <Modal visible={this.state.isWebview} statusBarTranslucent>
+            <SafeAreaView style={{flex: 1}}>
+              <View
+                style={{
+                  height: 40,
+                  backgroundColor: '#fff',
+                  width: '100%',
+                  shadowColor: '#000',
+                  shadowOffset: {
+                    width: 0,
+                    height: 2,
+                  },
+                  shadowOpacity: 0.23,
+                  shadowRadius: 2.62,
 
-    const isLoggedIn = state.LoginData.isLoggedIn;
-    const rememberMe = state.LoginData.rememberMe;
-    return { isLoggedIn, rememberMe }
+                  elevation: 4,
+                }}>
+                <TouchableOpacity
+                  style={{padding: 10}}
+                  onPress={() =>
+                    this.setState({isWebview: false, visible: true})
+                  }>
+                  <SVGImg.Close fill={'#000'} />
+                </TouchableOpacity>
+              </View>
+              <Spinner visible={this.state.visible} />
+              <WebView
+                onLoad={() => {
+                  this.hideSpinner();
+                }}
+                style={{marginTop: 5}}
+                onNavigationStateChange={webViewState => {
+                  this.webviewOnNavigationStateChange(webViewState);
+                }}
+                javaScriptEnabled={true}
+                domStorageEnabled={true}
+                // injectedJavaScript={this.state.cookie}
+                startInLoadingState={false}
+                source={{uri: constant.webLink}}
+              />
+            </SafeAreaView>
+          </Modal>
+        </View>
+      </View>
+    );
+  }
 }
+const mapStateToProps = state => {
+  const isLoggedIn = state.LoginData.isLoggedIn;
+  const rememberMe = state.LoginData.rememberMe;
+  return {isLoggedIn, rememberMe};
+};
 
-export default connect(mapStateToProps, null)(Splash)
+export default connect(mapStateToProps, {loginSuccess})(Splash);

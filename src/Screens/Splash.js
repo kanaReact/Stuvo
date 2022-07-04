@@ -172,8 +172,9 @@ class Splash extends Component {
               </TouchableOpacity>
             </View>
           ) : null}
-          <Modal visible={this.state.isWebview} statusBarTranslucent>
+          <Modal visible={this.state.isWebview}>
             <SafeAreaView style={{flex: 1}}>
+              <StatusBar backgroundColor={'#fff'} />
               <View
                 style={{
                   height: 40,
@@ -203,9 +204,9 @@ class Splash extends Component {
                   this.hideSpinner();
                 }}
                 style={{marginTop: 5}}
-                onNavigationStateChange={webViewState => {
-                  this.webviewOnNavigationStateChange(webViewState);
-                }}
+                // onNavigationStateChange={this.webviewOnNavigationStateChange.bind(
+                //   this,
+                // )}
                 javaScriptEnabled={true}
                 domStorageEnabled={true}
                 // injectedJavaScript={this.state.cookie}

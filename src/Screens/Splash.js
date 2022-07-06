@@ -21,6 +21,7 @@ import Spinner from '../Components/Spinner';
 import axios from 'axios';
 import {loginSuccess} from '../Redux/Action';
 import constant from '../Redux/config/constant';
+var url = '';
 class Splash extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +29,7 @@ class Splash extends Component {
       isWebview: false,
       visible: true,
       loading: false,
+      responseUrl: null,
     };
   }
   check_navigation() {
@@ -80,29 +82,52 @@ class Splash extends Component {
   hideSpinner() {
     this.setState({visible: false});
   }
+  // componentDidUpdate() {
+  //   if (url) {
+  //     if (url !== constant.webLink) {
+  //       // alert(this.state.responseUrl);
+  //       this.webviewOnNavigationStateChange(url);
+  //     }
+  //   }
+  // }
+  webviewOnNavigationStateChange(link) {
+    let matchParamTwo = link.includes('success.php');
+    if (matchParamTwo) {
+      let url = link;
+      var urlRegex = /[?&]([^=#]+)=([^&#]*)/g,
+        params = {},
+        match;
+      while ((match = urlRegex.exec(url))) {
+        params[match[1]] = match[2];
+      }
+      let newObj = {};
+      Object.keys(params).map(item => {
+        newObj[item] = decodeURIComponent(params[item] + '').replace(
+          /\+/g,
+          ' ',
+        );
+      });
+      this.setState({isWebview: false});
+      this.loginDetail(newObj);
 
-  webviewOnNavigationStateChange(webViewState) {
-    console.log('Test : ', webViewState?.url);
-    let url = webViewState?.url;
-    var urlRegex = /[?&]([^=#]+)=([^&#]*)/g,
-      params = {},
-      match;
-    while ((match = urlRegex.exec(url))) {
-      params[match[1]] = match[2];
+      console.log('encode12s', newObj);
     }
-    let newObj = {};
-    Object.keys(params).map(item => {
-      newObj[item] = decodeURIComponent(params[item] + '').replace(/\+/g, ' ');
-    });
-    this.setState({isWebview: false});
-    this.loginDetail(newObj);
-    // console.log('encode12s', newObj);
   }
-
+  callAzureLogout(url) {
+    console.log('logout url', url);
+    axios
+      .get(url)
+      .then(res => {
+        console.log('Res Azure logout:', res.data);
+      })
+      .catch(err => {
+        console.log('Err:', err);
+      });
+  }
   loginDetail(dataObj) {
     let url = constant.BASE_URL + 'sso-login-detail';
 
-    this.setState({loading: true});
+    // this.setState({loading: true});
     let data = new FormData();
     data.append('emailaddress', dataObj.emailaddress);
     data.append('Logouturl', dataObj.Logouturl);
@@ -114,17 +139,18 @@ class Splash extends Component {
     data.append('objectidentifier', dataObj.Logouturl);
     data.append('surname', dataObj.Logouturl);
     data.append('tenantid', dataObj.tenantid);
-
+    console.log('Data:', dataObj);
     axios
       .post(url, data, {
         headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       })
       .then(responseJson => {
-        this.setState({loading: false});
+        // this.setState({loading: false});
 
         console.log('res', responseJson);
         if (responseJson.data.status == 1) {
           this.props.loginSuccess(responseJson.data);
+          this.callAzureLogout(dataObj.Logouturl);
           this.props.navigation.replace('Welcome');
         }
       })
@@ -132,6 +158,10 @@ class Splash extends Component {
         console.log('error', error);
       });
   }
+  _bridge(event) {
+    console.log('Event:', event);
+  }
+
   render() {
     return (
       <View style={[styles.container, {backgroundColor: '#00AFF0'}]}>
@@ -204,13 +234,16 @@ class Splash extends Component {
                   this.hideSpinner();
                 }}
                 style={{marginTop: 5}}
-                // onNavigationStateChange={this.webviewOnNavigationStateChange.bind(
-                //   this,
-                // )}
+                onNavigationStateChange={webviewState => {
+                  console.log('web:', webviewState);
+                  this.webviewOnNavigationStateChange(webviewState?.url);
+                }}
                 javaScriptEnabled={true}
                 domStorageEnabled={true}
                 // injectedJavaScript={this.state.cookie}
                 startInLoadingState={false}
+                cacheMode="LOAD_NO_CACHE"
+                cacheEnabled={false}
                 source={{uri: constant.webLink}}
               />
             </SafeAreaView>

@@ -108,58 +108,33 @@ class Splash extends Component {
         );
       });
       this.setState({isWebview: false});
-      this.loginDetail(newObj);
-
-      console.log('encode12s', newObj);
+      this.checkEmailCall(newObj.emailaddress, newObj);
     }
+  }
+  checkEmailCall(email, newObj) {
+    const formData = new FormData();
+    formData.append('emailaddress', email);
+    let uri = constant.BASE_URL + 'check-email';
+    axios.post(uri, formData).then(response => {
+      if (response.data.status == 1) {
+        this.props.loginSuccess(response.data);
+        r;
+        this.props.navigation.navigate('Welcome');
+      } else {
+        this.props.navigation.navigate('SchoolList', {items: newObj});
+      }
+    });
   }
   callAzureLogout(url) {
     console.log('logout url', url);
     axios
       .get(url)
       .then(res => {
-        console.log('Res Azure logout:', res.data);
+        // console.log('Res Azure logout:', res.data);
       })
       .catch(err => {
         console.log('Err:', err);
       });
-  }
-  loginDetail(dataObj) {
-    let url = constant.BASE_URL + 'sso-login-detail';
-
-    // this.setState({loading: true});
-    let data = new FormData();
-    data.append('emailaddress', dataObj.emailaddress);
-    data.append('Logouturl', dataObj.Logouturl);
-    data.append('authnmethodsreferences', dataObj.Logouturl);
-    data.append('displayname', dataObj.Logouturl);
-    data.append('givenname', dataObj.Logouturl);
-    data.append('identityprovider', dataObj.Logouturl);
-    data.append('name', dataObj.Logouturl);
-    data.append('objectidentifier', dataObj.Logouturl);
-    data.append('surname', dataObj.Logouturl);
-    data.append('tenantid', dataObj.tenantid);
-    console.log('Data:', dataObj);
-    axios
-      .post(url, data, {
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      })
-      .then(responseJson => {
-        // this.setState({loading: false});
-
-        console.log('res', responseJson);
-        if (responseJson.data.status == 1) {
-          this.props.loginSuccess(responseJson.data);
-          this.callAzureLogout(dataObj.Logouturl);
-          this.props.navigation.replace('Welcome');
-        }
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
-  }
-  _bridge(event) {
-    console.log('Event:', event);
   }
 
   render() {

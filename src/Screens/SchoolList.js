@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   Modal,
   KeyboardAvoidingView,
+  ActivityIndicator,
 } from 'react-native';
 
 import Spinner from '../Components/Spinner';
@@ -31,6 +32,7 @@ class SchoolList extends Component {
       selectYear: null,
       years: null,
       paramsObj: null,
+      isLoading: false,
     };
   }
   componentDidMount() {
@@ -87,6 +89,7 @@ class SchoolList extends Component {
     }
   }
   userListCall() {
+    this.setState({isLoading: true});
     const formData = new FormData();
     console.log(this.state.schoolId);
 
@@ -98,6 +101,8 @@ class SchoolList extends Component {
     axios
       .post(url, formData)
       .then(response => {
+        this.setState({isLoading: false});
+
         this.setState({modalVisible: false});
         this.props.navigation.navigate('UserList', {
           data: response.data.data,
@@ -188,14 +193,18 @@ class SchoolList extends Component {
                   style={styles.submitBtn}
                   activeOpacity={0.7}
                   onPress={() => this.validation()}>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontFamily: 'Gotham-Medium',
-                      color: '#fff',
-                    }}>
-                    Submit
-                  </Text>
+                  {!this.state.isLoading ? (
+                    <Text
+                      style={{
+                        fontSize: 16,
+                        fontFamily: 'Gotham-Medium',
+                        color: '#fff',
+                      }}>
+                      Submit
+                    </Text>
+                  ) : (
+                    <ActivityIndicator size={'large'} />
+                  )}
                 </TouchableOpacity>
               </KeyboardAvoidingView>
             </View>

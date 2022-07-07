@@ -8,6 +8,7 @@ import axios from 'axios';
 import constant from '../Redux/config/constant';
 import {loginSuccess} from '../Redux/Action';
 import {connect} from 'react-redux';
+import Spinner from '../Components/Spinner';
 
 class UserList extends Component {
   constructor(props) {
@@ -15,6 +16,7 @@ class UserList extends Component {
     this.state = {
       userData: [],
       paramsObj: null,
+      loading: false,
     };
   }
   componentDidMount() {
@@ -23,6 +25,7 @@ class UserList extends Component {
     this.setState({userData: data.data, paramsObj: data.webViewObj});
   }
   setUserCall(id) {
+    this.setState({loading: true});
     const formData = new FormData();
     formData.append('emailaddress', this.state.paramsObj.emailaddress);
     formData.append('user_id', id);
@@ -30,6 +33,8 @@ class UserList extends Component {
     axios
       .post(url, formData)
       .then(response => {
+        this.setState({loading: false});
+
         if (response.data.status == 1) {
           this.props.loginSuccess(response.data);
           this.props.navigation.replace('Welcome');
@@ -44,6 +49,8 @@ class UserList extends Component {
           <View style={styles.headerView}>
             <SVGImg.HeaderLogo />
           </View>
+          <Spinner visible={this.state.loading} />
+
           <FlatList
             data={this.state.userData}
             style={{marginTop: 18}}

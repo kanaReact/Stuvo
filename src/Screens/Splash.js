@@ -118,7 +118,7 @@ class Splash extends Component {
     axios.post(uri, formData).then(response => {
       if (response.data.status == 1) {
         this.props.loginSuccess(response.data);
-        r;
+
         this.props.navigation.navigate('Welcome');
       } else {
         this.props.navigation.navigate('SchoolList', {items: newObj});

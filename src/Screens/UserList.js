@@ -53,31 +53,16 @@ class UserList extends Component {
 
           <FlatList
             data={this.state.userData}
-            style={{marginTop: 18}}
+            style={styles.userList}
             keyExtractor={index => index}
             renderItem={({item, index}) => (
               <TouchableOpacity
                 onPress={() => {
                   this.setUserCall(item.id);
                 }}
-                style={{
-                  borderBottomWidth: 0.5,
-                  paddingVertical: 18,
-                  paddingHorizontal: 15,
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  borderBottomColor: '#E5E5E5',
-                }}
+                style={styles.userContainer}
                 activeOpacity={0.7}>
-                <Text
-                  style={{
-                    fontSize: 16,
-                    color: '#000',
-                    fontFamily: 'Poppins-Bold',
-                    flex: 1,
-                  }}>
-                  {item.name}
-                </Text>
+                <Text style={styles.userNameStyle}>{item.name}</Text>
                 <SVGImg.Arrow />
               </TouchableOpacity>
             )}

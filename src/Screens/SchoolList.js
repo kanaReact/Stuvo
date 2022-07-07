@@ -67,9 +67,7 @@ class SchoolList extends Component {
 
     this.setState({schoolList: filerData});
   }
-  // school_id:12
-  // name:Abbey Miles
-  // date_of_year:2011
+
   listEmpty() {
     return (
       <View style={styles.emptyConatiner}>
@@ -161,22 +159,13 @@ class SchoolList extends Component {
           }}>
           <View style={styles.containerModal}>
             <View style={styles.mainContainer}>
-              <KeyboardAvoidingView style={{flexGrow: 1}}>
+              <KeyboardAvoidingView style={styles.keyboardStyle}>
                 <TouchableOpacity
-                  style={{
-                    padding: 10,
-
-                    alignSelf: 'flex-end',
-                  }}
+                  style={styles.closeButton}
                   onPress={() => this.setState({modalVisible: false})}>
                   <SVGImg.Close fill={'#000'} />
                 </TouchableOpacity>
-                <Text
-                  style={{
-                    marginTop: 10,
-                    fontSize: 16,
-                    fontFamily: 'Poppins-Bold',
-                  }}>
+                <Text style={styles.displayname}>
                   Name: {this.state.paramsObj.displayname}
                 </Text>
                 <TextInput
@@ -194,14 +183,7 @@ class SchoolList extends Component {
                   activeOpacity={0.7}
                   onPress={() => this.validation()}>
                   {!this.state.isLoading ? (
-                    <Text
-                      style={{
-                        fontSize: 16,
-                        fontFamily: 'Gotham-Medium',
-                        color: '#fff',
-                      }}>
-                      Submit
-                    </Text>
+                    <Text style={styles.modalSubmitbtn}>Submit</Text>
                   ) : (
                     <ActivityIndicator size={'large'} />
                   )}

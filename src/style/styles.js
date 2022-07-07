@@ -283,6 +283,37 @@ export default StyleSheet.create({
     paddingVertical: 16,
     borderRadius: 10,
   },
+  closeButton: {
+    padding: 10,
+
+    alignSelf: 'flex-end',
+  },
+  displayname: {
+    marginTop: 10,
+    fontSize: 16,
+    fontFamily: 'Poppins-Bold',
+  },
+  modalSubmitbtn: {
+    fontSize: 16,
+    fontFamily: 'Gotham-Medium',
+    color: '#fff',
+  },
+  keyboardStyle: {flexGrow: 1},
   //userList screen
   viewFlex: {flex: 1, paddingHorizontal: 16},
+  userContainer: {
+    borderBottomWidth: 0.5,
+    paddingVertical: 18,
+    paddingHorizontal: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderBottomColor: '#E5E5E5',
+  },
+  userNameStyle: {
+    fontSize: 16,
+    color: '#000',
+    fontFamily: 'Poppins-Bold',
+    flex: 1,
+  },
+  userList: {marginTop: 18},
 });

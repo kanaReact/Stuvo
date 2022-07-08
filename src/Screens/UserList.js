@@ -55,6 +55,11 @@ class UserList extends Component {
             data={this.state.userData}
             style={styles.userList}
             keyExtractor={index => index}
+            ListEmptyComponent={() => (
+              <View style={styles.emptyConatiner}>
+                <Text style={styles.noDataText}>No Data</Text>
+              </View>
+            )}
             renderItem={({item, index}) => (
               <TouchableOpacity
                 onPress={() => {

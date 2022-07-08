@@ -254,7 +254,7 @@ export default StyleSheet.create({
     paddingLeft: 5,
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 15,
   },
   dropDownStyle: {
     marginTop: 0,
@@ -279,6 +279,7 @@ export default StyleSheet.create({
   mainContainer: {
     backgroundColor: '#fff',
     width: '90%',
+
     paddingHorizontal: 16,
     paddingVertical: 16,
     borderRadius: 10,
@@ -316,4 +317,25 @@ export default StyleSheet.create({
     flex: 1,
   },
   userList: {marginTop: 18},
+  // datePicker
+  doneButtonView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    borderTopColor: '#0000003B',
+    borderTopWidth: 1,
+    backgroundColor: '#00AFF0',
+  },
+  doneButtonContainer: {
+    paddingVertical: 5,
+    paddingHorizontal: 25,
+  },
+  textStyle: {
+    fontSize: 16,
+    color: '#000',
+  },
+  CancelText: {
+    fontSize: 16,
+    color: '#000',
+  },
 });

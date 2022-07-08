@@ -13,13 +13,13 @@ import {
   KeyboardAvoidingView,
   ActivityIndicator,
 } from 'react-native';
-
+import DatePicker from '../Components/DatePicker';
 import Spinner from '../Components/Spinner';
-
 import constant from '../Redux/config/constant';
 import SVGImg from '../Source/SVGImg';
 import styles from '../style/styles';
-
+import {loginSuccess} from '../Redux/Action';
+import {connect} from 'react-redux';
 class SchoolList extends Component {
   constructor(props) {
     super(props);
@@ -33,6 +33,7 @@ class SchoolList extends Component {
       years: null,
       paramsObj: null,
       isLoading: false,
+      dateVisible: false,
     };
   }
   componentDidMount() {
@@ -75,37 +76,48 @@ class SchoolList extends Component {
       </View>
     );
   }
-  validation() {
-    const currentYear = moment().get('years');
-    let isValidate = true;
-    if (!this.state.years) {
-      alert('Enter year');
-    } else if (this.state.years > currentYear) {
-      alert('Future year is not accepted');
-    } else {
-      this.userListCall();
-    }
-  }
+
   userListCall() {
     this.setState({isLoading: true});
     const formData = new FormData();
-    console.log(this.state.schoolId);
+    console.log('schoolid', this.state.schoolId);
 
     formData.append('school_id', this.state.schoolId);
     formData.append('name', this.state.paramsObj.displayname);
-    formData.append('date_of_year', this.state.years);
+    formData.append('date_of_year', moment(this.state.years).format('YYYY'));
     console.log(formData);
     let url = constant.BASE_URL + 'user-list';
     axios
       .post(url, formData)
       .then(response => {
         this.setState({isLoading: false});
+        if (response.data.data.length == 1) {
+          this.setUserCall(response.data.data[0].id);
+        } else {
+          this.setState({modalVisible: false});
+          this.props.navigation.navigate('UserList', {
+            data: response.data.data,
+            webViewObj: this.state.paramsObj,
+          });
+        }
+      })
+      .catch(error => console.log('error', error));
+  }
+  setUserCall(id) {
+    this.setState({loading: true});
+    const formData = new FormData();
+    formData.append('emailaddress', this.state.paramsObj.emailaddress);
+    formData.append('user_id', id);
+    let url = constant.BASE_URL + 'set-user';
+    axios
+      .post(url, formData)
+      .then(response => {
+        this.setState({loading: false});
 
-        this.setState({modalVisible: false});
-        this.props.navigation.navigate('UserList', {
-          data: response.data.data,
-          webViewObj: this.state.paramsObj,
-        });
+        if (response.data.status == 1) {
+          this.props.loginSuccess(response.data);
+          this.props.navigation.replace('Welcome');
+        }
       })
       .catch(error => console.log('error', error));
   }
@@ -155,39 +167,54 @@ class SchoolList extends Component {
           transparent={true}
           visible={this.state.modalVisible}
           onRequestClose={() => {
-            this.setState({modalVisible: false});
+            this.setState({modalVisible: false, dateVisible: true});
           }}>
           <View style={styles.containerModal}>
             <View style={styles.mainContainer}>
               <KeyboardAvoidingView style={styles.keyboardStyle}>
                 <TouchableOpacity
                   style={styles.closeButton}
-                  onPress={() => this.setState({modalVisible: false})}>
+                  onPress={() =>
+                    this.setState({modalVisible: false, dateVisible: false})
+                  }>
                   <SVGImg.Close fill={'#000'} />
                 </TouchableOpacity>
                 <Text style={styles.displayname}>
                   Name: {this.state.paramsObj.displayname}
                 </Text>
-                <TextInput
-                  placeholder="Enter year"
-                  placeholderTextColor={'#000'}
+
+                <TouchableOpacity
                   style={styles.modalInput}
-                  onChangeText={text => this.setState({years: text})}
-                  value={this.state.years}
-                  keyboardType={'number-pad'}
-                  maxLength={4}
-                  returnKeyType={'done'}
-                />
+                  activeOpacity={0.7}
+                  onPress={() => this.setState({dateVisible: true})}>
+                  <Text style={{fontSize: 16, fontFamily: 'Poppins-Medium'}}>
+                    {this.state.years
+                      ? moment(this.state.years).format('DD-MM-YYYY')
+                      : 'Enter DOB'}
+                  </Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   style={styles.submitBtn}
                   activeOpacity={0.7}
-                  onPress={() => this.validation()}>
+                  onPress={() => this.userListCall()}>
                   {!this.state.isLoading ? (
                     <Text style={styles.modalSubmitbtn}>Submit</Text>
                   ) : (
-                    <ActivityIndicator size={'large'} />
+                    <ActivityIndicator size={'small'} color={'#fff'} />
                   )}
                 </TouchableOpacity>
+                <DatePicker
+                  show={this.state.dateVisible}
+                  date={new Date()}
+                  mode={'date'}
+                  maximumDate={new Date()}
+                  onClick={date => {
+                    this.setState({years: date, dateVisible: false});
+                  }}
+                  onCancelClick={() => {
+                    this.setState({dateVisible: false});
+                  }}
+                />
               </KeyboardAvoidingView>
             </View>
           </View>
@@ -196,4 +223,9 @@ class SchoolList extends Component {
     );
   }
 }
-export default SchoolList;
+const mapStateToProps = state => {
+  const isLoggedIn = state.LoginData.isLoggedIn;
+  const rememberMe = state.LoginData.rememberMe;
+  return {isLoggedIn, rememberMe};
+};
+export default connect(mapStateToProps, {loginSuccess})(SchoolList);

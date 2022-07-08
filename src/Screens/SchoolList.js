@@ -92,6 +92,7 @@ class SchoolList extends Component {
       .then(response => {
         this.setState({isLoading: false});
         if (response.data.data.length == 1) {
+          this.setState({modalVisible: false});
           this.setUserCall(response.data.data[0].id);
         } else {
           this.setState({modalVisible: false});
@@ -189,7 +190,7 @@ class SchoolList extends Component {
                   onPress={() => this.setState({dateVisible: true})}>
                   <Text style={{fontSize: 16, fontFamily: 'Poppins-Medium'}}>
                     {this.state.years
-                      ? moment(this.state.years).format('DD-MM-YYYY')
+                      ? moment(this.state.years).format('MM-DD-YYYY')
                       : 'Enter DOB'}
                   </Text>
                 </TouchableOpacity>

@@ -207,7 +207,7 @@ class SchoolList extends Component {
                 <DatePicker
                   show={this.state.dateVisible}
                   date={new Date()}
-                  mode={'date'}
+                  // mode={'date'}
                   maximumDate={new Date()}
                   onClick={date => {
                     this.setState({years: date, dateVisible: false});

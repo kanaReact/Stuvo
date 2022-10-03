@@ -115,15 +115,18 @@ class Splash extends Component {
     const formData = new FormData();
     formData.append('emailaddress', email);
     let uri = constant.BASE_URL + 'check-email';
-    axios.post(uri, formData).then(response => {
-      if (response.data.status == 1) {
-        this.props.loginSuccess(response.data);
+    axios
+      .post(uri, formData)
+      .then(response => {
+        if (response.data.status == 1) {
+          this.props.loginSuccess(response.data);
 
-        this.props.navigation.navigate('Welcome');
-      } else {
-        this.props.navigation.navigate('SchoolList', {items: newObj});
-      }
-    });
+          this.props.navigation.navigate('Welcome');
+        } else {
+          this.props.navigation.navigate('SchoolList', {items: newObj});
+        }
+      })
+      .catch(err => console.log('Err', err));
   }
   callAzureLogout(url) {
     console.log('logout url', url);

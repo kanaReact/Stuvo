@@ -36,6 +36,7 @@
 		7666BBDC526E4D97A544932B /* Gotham-BookItalic.otf in Resources */ = {isa = PBXBuildFile; fileRef = A2344B3AB6594269AB489740 /* Gotham-BookItalic.otf */; };
 		7975139D2BE44C458106C509 /* Poppins-ExtraLight.otf in Resources */ = {isa = PBXBuildFile; fileRef = 4F1E665D37DB4815A0D32D5C /* Poppins-ExtraLight.otf */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		84FDF73E28EB0187008EBF2B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 84FDF73D28EB0187008EBF2B /* GoogleService-Info.plist */; };
 		86A6A5A070D9484A9376A38E /* Poppins-Light.otf in Resources */ = {isa = PBXBuildFile; fileRef = AD1362BBCE9B48F6935510EC /* Poppins-Light.otf */; };
 		8994285336CE4C5CA1A40325 /* Gotham-Black.otf in Resources */ = {isa = PBXBuildFile; fileRef = 2F3CFCA6A80A45C7A869D199 /* Gotham-Black.otf */; };
 		8B6504F25B7B4457BE9A0F7D /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 77192138E4174826BEC29CF5 /* Rubik-Bold.ttf */; };
@@ -115,6 +116,8 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Stuvo/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		83835E941891C61B599D5590 /* Pods-Stuvo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Stuvo.debug.xcconfig"; path = "Target Support Files/Pods-Stuvo/Pods-Stuvo.debug.xcconfig"; sourceTree = "<group>"; };
 		847B65E233B341308BB93328 /* Poppins-SemiBoldItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-SemiBoldItalic.otf"; path = "../assets/fonts/Poppins-SemiBoldItalic.otf"; sourceTree = "<group>"; };
+		84FDF73D28EB0187008EBF2B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		84FDF73F28EB0193008EBF2B /* Stuvo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = Stuvo.entitlements; path = Stuvo/Stuvo.entitlements; sourceTree = "<group>"; };
 		88F4473245524751A816E3BE /* Poppins-LightItalic.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-LightItalic.otf"; path = "../assets/fonts/Poppins-LightItalic.otf"; sourceTree = "<group>"; };
 		8903BCAB482E9300E08FEDA3 /* libPods-Stuvo-StuvoTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Stuvo-StuvoTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BFF0538C549463C8A7C55E6 /* GothamBook.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = GothamBook.ttf; path = ../assets/fonts/GothamBook.ttf; sourceTree = "<group>"; };
@@ -178,7 +181,9 @@
 		13B07FAE1A68108700A75B9A /* Stuvo */ = {
 			isa = PBXGroup;
 			children = (
+				84FDF73F28EB0193008EBF2B /* Stuvo.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				84FDF73D28EB0187008EBF2B /* GoogleService-Info.plist */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -437,6 +442,7 @@
 				D533FCF763DB4625A4613742 /* Poppins-SemiBoldItalic.otf in Resources */,
 				61C87EC9895B46EBB99665E2 /* Poppins-Thin.otf in Resources */,
 				DF11A368B6AF48ECA40E36ED /* Poppins-ThinItalic.otf in Resources */,
+				84FDF73E28EB0187008EBF2B /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -689,10 +695,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_ENTITLEMENTS = Stuvo/Stuvo.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YAVM8VPHKR;
+				DEVELOPMENT_TEAM = YHV5FT6TWK;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stuvo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -705,9 +712,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.wildcardapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.stuvo;
 				PRODUCT_NAME = Stuvo;
-				PROVISIONING_PROFILE_SPECIFIER = "WildCard Deve";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -720,10 +727,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_ENTITLEMENTS = Stuvo/Stuvo.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = YAVM8VPHKR;
+				DEVELOPMENT_TEAM = YHV5FT6TWK;
 				INFOPLIST_FILE = Stuvo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -735,9 +743,9 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.app.wildcardapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.app.stuvo;
 				PRODUCT_NAME = Stuvo;
-				PROVISIONING_PROFILE_SPECIFIER = "WildCard Deve";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};

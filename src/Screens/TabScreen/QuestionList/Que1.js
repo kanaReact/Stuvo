@@ -1364,7 +1364,7 @@ class Que1 extends Component {
                                         <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next</Text>
                                     </View>
                                 </TouchableOpacity> :
-                                <TouchableOpacity onPress={() => { this.nextQuestion() }} activeOpacity={0.6} style={{ marginTop: 50 }}>
+                                <TouchableOpacity onPress={() => { this.nextQuestion() }} activeOpacity={0.6}>
                                     <View style={{ alignItems: 'center', backgroundColor: '#00AFF0', marginBottom: 0, height: 47, justifyContent: 'center', borderRadius: 50, }}>
                                         <Text style={{ fontSize: 16, fontFamily: 'Gotham-Medium', color: '#FFFFFF' }}>Next Question</Text>
                                     </View>

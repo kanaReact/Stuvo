@@ -50,7 +50,7 @@ class Question extends Component {
         this.get_completed_survey_count()
     }
     refreshData = () => {
-        this.setState({ loading: false })
+        this.setState({ loading: true })
         this.get_pending_survey_count()
         this.get_completed_survey_count()
     }

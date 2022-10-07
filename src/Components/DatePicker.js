@@ -17,7 +17,6 @@ const DatePickerComponent = props => {
       props.onClick(selectedDate);
     } else {
       setSelecteddateIOS(selectedDate);
-      console.log('date ', selecteddateIOS);
     }
   };
 

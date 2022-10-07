@@ -83,7 +83,7 @@ class SchoolList extends Component {
     formData.append('school_id', this.state.schoolId);
     formData.append('name', this.state.paramsObj.displayname);
     formData.append('date_of_year', moment(this.state.years).format('YYYY'));
-    
+
     let url = constant.BASE_URL + 'user-list';
     axios
       .post(url, formData)
@@ -97,14 +97,14 @@ class SchoolList extends Component {
           this.props.navigation.navigate('UserList', {
             data: response.data.data,
             webViewObj: this.state.paramsObj,
-           schoolId: this.state.schoolId
+            schoolId: this.state.schoolId,
           });
         }
       })
       .catch(error => {
-        this.setState({ isLoading: false });
-        alert("cache")
-        console.log('error user list', error)
+        this.setState({isLoading: false});
+        alert('cache');
+        console.log('error user list', error);
       });
   }
   setUserCall(id) {
@@ -112,20 +112,21 @@ class SchoolList extends Component {
     const formData = new FormData();
     formData.append('emailaddress', this.state.paramsObj.emailaddress);
     formData.append('user_id', id);
-        formData.append('school_id', this.state.schoolId)
+    formData.append('school_id', this.state.schoolId);
 
     let url = constant.BASE_URL + 'set-user';
     axios
       .post(url, formData)
       .then(response => {
         this.setState({loading: false});
-console.log('response set user', response)
         if (response.data.status == 1) {
           this.props.loginSuccess(response.data);
           this.props.navigation.replace('Welcome');
         }
       })
-      .catch(error => {console.log('error set user', error)});
+      .catch(error => {
+        console.log('error set user', error);
+      });
   }
   render() {
     return (

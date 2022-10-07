@@ -129,12 +129,9 @@ class Splash extends Component {
       .catch(err => console.log('Err', err));
   }
   callAzureLogout(url) {
-    console.log('logout url', url);
     axios
       .get(url)
-      .then(res => {
-        // console.log('Res Azure logout:', res.data);
-      })
+      .then(res => {})
       .catch(err => {
         console.log('Err:', err);
       });
@@ -213,7 +210,6 @@ class Splash extends Component {
                 }}
                 style={{marginTop: 5}}
                 onNavigationStateChange={webviewState => {
-                  console.log('web:', webviewState);
                   this.webviewOnNavigationStateChange(webviewState?.url);
                 }}
                 javaScriptEnabled={true}

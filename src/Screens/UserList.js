@@ -17,18 +17,26 @@ class UserList extends Component {
       userData: [],
       paramsObj: null,
       loading: false,
+      schoolId: null,
     };
   }
   componentDidMount() {
     const data = this.props.route.params;
     console.log(data);
-    this.setState({userData: data.data, paramsObj: data.webViewObj});
+    this.setState({
+      userData: data.data,
+      paramsObj: data.webViewObj,
+      schoolId: data.schoolId,
+    });
   }
   setUserCall(id) {
+    alert('set');
     this.setState({loading: true});
     const formData = new FormData();
     formData.append('emailaddress', this.state.paramsObj.emailaddress);
     formData.append('user_id', id);
+    formData.append('school_id', this.state.schoolId);
+
     let url = constant.BASE_URL + 'set-user';
     axios
       .post(url, formData)
@@ -40,8 +48,9 @@ class UserList extends Component {
           this.props.navigation.replace('Welcome');
         }
       })
-      .catch(error => console.log('error', error));
+      .catch(error => console.log('error set user', error));
   }
+
   render() {
     return (
       <SafeAreaView style={styles.container}>

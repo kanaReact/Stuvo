@@ -698,7 +698,7 @@
 				CODE_SIGN_ENTITLEMENTS = Stuvo/Stuvo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = YHV5FT6TWK;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Stuvo/Info.plist;
@@ -730,7 +730,7 @@
 				CODE_SIGN_ENTITLEMENTS = Stuvo/Stuvo.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = YHV5FT6TWK;
 				INFOPLIST_FILE = Stuvo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
